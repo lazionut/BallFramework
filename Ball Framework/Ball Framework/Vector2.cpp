@@ -33,6 +33,61 @@ float Vector2::getY()
 	return m_y;
 }
 
+Vector2 Vector2::operator+(const Vector2& other) const
+{
+	return Vector2(this->m_x + other.m_x, this->m_y + other.m_y);
+}
+
+Vector2& Vector2::operator+=(const Vector2& other)
+{
+	m_x += other.m_x;
+	m_y += other.m_y;
+	return *this;
+}
+
+Vector2 Vector2::operator-(const Vector2& other) const
+{
+	return Vector2(this->m_x - other.m_x, this->m_y - other.m_y);
+}
+
+Vector2& Vector2::operator-=(const Vector2& other)
+{
+	m_x -= other.m_x;
+	m_y -= other.m_y;
+	return *this;
+}
+
+Vector2 Vector2::operator*(float scalar) const
+{
+	return Vector2(m_x * scalar, m_y * scalar);
+}
+
+Vector2& Vector2::operator*=(float scalar)
+{
+	m_x = m_x * scalar;
+	m_y = m_y * scalar;
+	return *this;
+}
+
+Vector2 Vector2::operator/(float scalar) const
+{
+	return Vector2(m_x / scalar, m_y / scalar);
+}
+
+Vector2& Vector2::operator/=(float scalar)
+{
+	m_x = m_x / scalar;
+	m_y = m_y / scalar;
+	return *this;
+}
+
+Vector2& Vector2::operator=(const Vector2& other)
+{
+	m_x = other.m_x;
+	m_y = other.m_y;
+	return *this;
+}
+
 std::istream& operator>>(std::istream& input, Vector2& other)
 {
 	input >> other.m_x >> other.m_y;
