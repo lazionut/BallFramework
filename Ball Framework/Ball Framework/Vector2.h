@@ -13,6 +13,16 @@ public:
 	void setY(float yCoordinate);
 	float getY();
 
+	Vector2 operator+(const Vector2& other) const;
+	Vector2& operator+=(const Vector2& other);
+	Vector2 operator-(const Vector2& other) const;
+	Vector2& operator-=(const Vector2& other);
+	Vector2 operator*(float scalar) const;
+	Vector2& operator*=(float scalar);
+	Vector2 operator/(float scalar) const;
+	Vector2& operator/=(float scalar);
+	Vector2& operator=(const Vector2& other);
+
 	friend std::istream& operator>>(std::istream& input, Vector2& other);
 	friend std::ostream& operator<<(std::ostream& output, const Vector2& other);
 
