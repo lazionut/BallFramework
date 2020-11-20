@@ -4,7 +4,6 @@
 class Time
 {
 private:
-
 	class TimeAux
 	{
 	private:
@@ -27,7 +26,6 @@ private:
 	Time();
 
 public:
-
 	Time(const Time&) = delete;
 	Time& operator=(const Time&) = delete;
 

@@ -1,6 +1,7 @@
 #include "Rectangle.h"
+
 Rectangle::Rectangle() :
-    m_position{ Vector2::Vector2(0.0,0.0) }, m_width{ 0.0 }, m_height{ 0.0 }
+    m_position{ Vector2::Vector2(0.0f,0.0f) }, m_width{ 0.0f }, m_height{ 0.0f }
 {
 
 }
@@ -20,6 +21,7 @@ Rectangle::Rectangle(Rectangle&& other) noexcept
 {
     *this = std::move(other);
 }
+
 void Rectangle::setWidth(const float& width)
 {
     m_width = width;
@@ -39,6 +41,7 @@ float Rectangle::getHeight(const float& height) const
 {
     return m_height;
 }
+
 void Rectangle::setPosition(const Vector2& position)
 {
     m_position = position;

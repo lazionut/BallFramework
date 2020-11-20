@@ -1,7 +1,8 @@
 #include "Vector2.h"
+#include <cmath>
 
 Vector2::Vector2() :
-	m_x{ 0 }, m_y{ 0 } {
+	m_x{ 0.0f }, m_y{ 0.0f } {
 }
 
 Vector2::Vector2(float x, float y) :
@@ -31,6 +32,16 @@ void Vector2::setY(float yCoordinate)
 float Vector2::getY()
 {
 	return m_y;
+}
+
+float Vector2::getLength() const
+{
+	return sqrt(m_x * m_x + m_y * m_y);
+}
+
+float Vector2::getSquareLength() const
+{
+	return m_x * m_x + m_y * m_y;
 }
 
 Vector2 Vector2::operator+(const Vector2& other) const
@@ -86,6 +97,36 @@ Vector2& Vector2::operator=(const Vector2& other)
 	m_x = other.m_x;
 	m_y = other.m_y;
 	return *this;
+}
+
+bool Vector2::operator<(const Vector2& other) const
+{
+	return getSquareLength() < other.getSquareLength();
+}
+
+bool Vector2::operator<=(const Vector2& other) const
+{
+	return getSquareLength() <= other.getSquareLength();
+}
+
+bool Vector2::operator>(const Vector2& other) const
+{
+	return getSquareLength() > other.getSquareLength();
+}
+
+bool Vector2::operator>=(const Vector2& other) const
+{
+	return getSquareLength() >= other.getSquareLength();
+}
+
+bool Vector2::operator==(const Vector2& other) const
+{
+	return m_x == other.m_x && m_y == other.m_y;
+}
+
+bool Vector2::operator!=(const Vector2& other) const
+{
+	return getSquareLength() != other.getSquareLength();
 }
 
 std::istream& operator>>(std::istream& input, Vector2& other)
