@@ -1,15 +1,11 @@
 #include "Rectangle.h"
 
 Rectangle::Rectangle() :
-    m_position{ Vector2::Vector2(0.0f,0.0f) }, m_width{ 0.0f }, m_height{ 0.0f }
-{
-
+    m_position{ Vector2::Vector2(0.0f,0.0f) }, m_width{ 0.0f }, m_height{ 0.0f }{
 }
 
 Rectangle::Rectangle(const Vector2& position, const float& width, const float& height) :
-    m_position{ position }, m_width(width), m_height{ height }
-{
-
+    m_position{ position }, m_width(width), m_height{ height }{
 }
 
 Rectangle::Rectangle(const Rectangle& other)
