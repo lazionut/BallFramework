@@ -11,6 +11,11 @@ private:
 		double realDelta;
 		double timeSinceStart;
 		double realTime;
+		double gameTime;
+		double scaledTimeSinceStart;
+		double unscaledDelta;
+		float timeScale;
+
 		std::chrono::time_point<std::chrono::system_clock> last;
 		std::chrono::time_point<std::chrono::system_clock> now;
 
@@ -29,15 +34,22 @@ private:
 
 	Time();
 
+	static void resetTime();
+	static void updateTime();
+	static void updateDone();
+
+	//friend class Game;
+
 public:
 	Time(const Time&) = delete;
 	Time& operator=(const Time&) = delete;
 
-	static void resetTime();
-	static void updateTime();
-	static void updateDone();
 	static double getRealDelta();
 	static double getTimeSinceStartUp();
 	static double getDeltaTime();
 	static double getRealTime();
+	static double getUnscladeDeltaTime();
+	static double getScaledTimeSinceStart();
+	static float getTimeScale();
+	static void setTimeScale(float timeScale);
 };
