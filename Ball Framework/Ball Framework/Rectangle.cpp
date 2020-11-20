@@ -20,7 +20,25 @@ Rectangle::Rectangle(Rectangle&& other) noexcept
 {
     *this = std::move(other);
 }
+void Rectangle::setWidth(const float& width)
+{
+    m_width = width;
+}
 
+float Rectangle::getWidth() const
+{
+    return m_width;
+}
+
+void Rectangle::setHeight(const float& height)
+{
+    m_height = height;
+}
+
+float Rectangle::getHeight(const float& height) const
+{
+    return m_height;
+}
 Rectangle& Rectangle::operator=(const Rectangle& other)
 {
     m_position = other.m_position;
