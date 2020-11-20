@@ -39,6 +39,22 @@ float Rectangle::getHeight(const float& height) const
 {
     return m_height;
 }
+void Rectangle::setPosition(const Vector2& position)
+{
+    m_position = position;
+}
+
+void Rectangle::setPosition(const float& x, const float& y)
+{
+    m_position.setX(x);
+    m_position.setY(y);
+}
+
+Vector2 Rectangle::getPosition() const
+{
+    return m_position;
+}
+
 Rectangle& Rectangle::operator=(const Rectangle& other)
 {
     m_position = other.m_position;
@@ -54,4 +70,21 @@ Rectangle& Rectangle::operator=(Rectangle&& other) noexcept
     m_height = other.m_height;
     new(&other) Rectangle;
     return *this;
+}
+
+std::istream& operator>>(std::istream& in, Rectangle& other)
+{
+    in >> other.m_position;
+    in >> other.m_width;
+    in >> other.m_height;
+    return in;
+
+}
+
+std::ostream& operator<<(std::ostream& out, Rectangle& other)
+{
+    out << "Position" << other.m_position;
+    out << " Width: " << other.m_width;
+    out << " Height: " << other.m_height;
+    return out;
 }
