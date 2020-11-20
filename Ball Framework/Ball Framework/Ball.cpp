@@ -10,6 +10,17 @@ Ball::Ball(const Vector2& position, float size, const Vector2& direction, float 
 {
 }
 
+Ball::Ball(const Ball& other)
+{
+	*this = other;
+}
+
+
+Ball::Ball(Ball&& other) noexcept
+{
+	*this = std::move(other);
+}
+
 Vector2 Ball::getPosition()
 {
 	return m_position;
@@ -60,4 +71,28 @@ void Ball::setDirection(float x, float y)
 void Ball::setSpeed(float speed)
 {
 	m_speed = speed;
+}
+
+void Ball::move()
+{
+	m_position += (m_direction * m_speed * Time::getDeltaTime());
+}
+
+Ball& Ball::operator=(const Ball& other)
+{
+	m_position = other.m_position;
+	m_size = other.m_size;
+	m_direction = other.m_direction;
+	m_speed = other.m_speed;
+	return *this;
+}
+
+Ball& Ball::operator=(Ball&& other) noexcept
+{
+	m_position = other.m_position;
+	m_size = other.m_size;
+	m_direction = other.m_direction;
+	m_speed = other.m_speed;
+	new(&other)Ball;
+	return *this;
 }
