@@ -21,61 +21,61 @@ Ball::Ball(Ball&& other) noexcept
 	*this = std::move(other);
 }
 
-Vector2 Ball::getPosition()
+Vector2 Ball::GetPosition()
 {
 	return m_position;
 }
 
-float Ball::getSize()
+float Ball::GetSize()
 {
 	return m_size;
 }
 
-Vector2 Ball::getDirection()
+Vector2 Ball::GetDirection()
 {
 	return m_direction;
 }
 
-float Ball::getSpeed()
+float Ball::GetSpeed()
 {
 	return m_speed;
 }
 
-void Ball::setPoisiton(const Vector2& position)
+void Ball::SetPoisiton(const Vector2& position)
 {
 	m_position = position;
 }
 
-void Ball::setPosition(float x, float y)
+void Ball::SetPosition(float x, float y)
 {
-	m_position.setX(x);
-	m_position.setY(y);
+	m_position.SetX(x);
+	m_position.SetY(y);
 }
 
-void Ball::setSize(float size)
+void Ball::SetSize(float size)
 {
 	m_size = size;
 }
 
-void Ball::setDirection(const Vector2& direction)
+void Ball::SetDirection(const Vector2& direction)
 {
 	m_direction = direction;
 }
 
-void Ball::setDirection(float x, float y)
+void Ball::SetDirection(float x, float y)
 {
-	m_direction.setX(x);
-	m_direction.setY(y);
+	m_direction.SetX(x);
+	m_direction.SetY(y);
 }
 
-void Ball::setSpeed(float speed)
+void Ball::SetSpeed(float speed)
 {
 	m_speed = speed;
 }
 
-void Ball::move()
+void Ball::Move()
 {
-	m_position += (m_direction * m_speed * Time::getDeltaTime());
+	m_position += (m_direction * m_speed * Time::GetDeltaTime());
 }
 
 Ball& Ball::operator=(const Ball& other)

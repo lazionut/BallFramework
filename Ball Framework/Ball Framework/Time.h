@@ -21,7 +21,7 @@ private:
 
 		TimeAux();
 
-		void resetTime();
+		void ResetTime();
 
 	public:
 		TimeAux(const TimeAux&) = delete;
@@ -34,9 +34,9 @@ private:
 
 	Time();
 
-	static void resetTime();
-	static void updateTime();
-	static void updateDone();
+	static void ResetTime();
+	static void UpdateTime();
+	static void UpdateDone();
 
 	//friend class Game;
 
@@ -44,12 +44,12 @@ public:
 	Time(const Time&) = delete;
 	Time& operator=(const Time&) = delete;
 
-	static double getRealDelta();
-	static double getTimeSinceStartUp();
-	static double getDeltaTime();
-	static double getRealTime();
-	static double getUnscladeDeltaTime();
-	static double getScaledTimeSinceStart();
-	static float getTimeScale();
-	static void setTimeScale(float timeScale);
+	static double GetRealDelta();
+	static double GetTimeSinceStartUp();
+	static double GetDeltaTime();
+	static double GetRealTime();
+	static double GetUnscladeDeltaTime();
+	static double GetScaledTimeSinceStart();
+	static float GetTimeScale();
+	static void SetTimeScale(float timeScale);
 };

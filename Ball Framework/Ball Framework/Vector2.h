@@ -8,11 +8,11 @@ public:
 	Vector2(float x, float y);
 	Vector2(const Vector2& other);
 
-	void setX(float xCoordinate);
-	float getX();
-	void setY(float yCoordinate);
-	float getY();
-	void set(float xCoordinate, float yCoordinate);
+	void SetX(float xCoordinate);
+	float GetX();
+	void SetY(float yCoordinate);
+	float GetY();
+	void Set(float xCoordinate, float yCoordinate);
 
 	float getLength() const;
 	float getSquareLength() const;

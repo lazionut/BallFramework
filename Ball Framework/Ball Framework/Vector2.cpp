@@ -14,27 +14,27 @@ Vector2::Vector2(const Vector2& other)
 	*this = other;
 }
 
-void Vector2::setX(float xCoordinate)
+void Vector2::SetX(float xCoordinate)
 {
 	m_x = xCoordinate;
 }
 
-float Vector2::getX()
+float Vector2::GetX()
 {
 	return m_x;
 }
 
-void Vector2::setY(float yCoordinate)
+void Vector2::SetY(float yCoordinate)
 {
 	m_y = yCoordinate;
 }
 
-float Vector2::getY()
+float Vector2::GetY()
 {
 	return m_y;
 }
 
-void Vector2::set(float xCoordinate, float yCoordinate)
+void Vector2::Set(float xCoordinate, float yCoordinate)
 {
 	m_x = xCoordinate;
 	m_y = yCoordinate;

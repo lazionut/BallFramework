@@ -8,21 +8,21 @@ public:
 	Ball();
 	Ball(const Vector2& position, float size, const Vector2& direction, float speed);
 	Ball(const Ball& other);
-	Ball(Ball&& other)noexcept;
+	Ball(Ball&& other) noexcept;
 
-	Vector2 getPosition();
-	float getSize();
-	Vector2 getDirection();
-	float getSpeed();
+	Vector2 GetPosition();
+	float GetSize();
+	Vector2 GetDirection();
+	float GetSpeed();
 
-	void setPoisiton(const Vector2& position);
-	void setPosition(float x, float y);
-	void setSize(float size);
-	void setDirection(const Vector2& direction);
-	void setDirection(float, float y);
-	void setSpeed(float speed);
+	void SetPoisiton(const Vector2& position);
+	void SetPosition(float x, float y);
+	void SetSize(float size);
+	void SetDirection(const Vector2& direction);
+	void SetDirection(float, float y);
+	void SetSpeed(float speed);
 
-	void move();
+	void Move();
 
 	Ball& operator=(const Ball& other);
 	Ball& operator=(Ball&& other)noexcept;

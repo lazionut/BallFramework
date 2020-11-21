@@ -9,13 +9,13 @@ public:
     Rectangle(const Rectangle& other);
     Rectangle(Rectangle&& other) noexcept;
 
-    void setWidth(const float& width);
-    float getWidth() const;
-    void setHeight(const float& height);
-    float getHeight(const float& height) const;
-    void setPosition(const Vector2& position);
-    void setPosition(const float& x, const float& y);
-    Vector2 getPosition() const;
+    void SetWidth(const float& width);
+    float GetWidth() const;
+    void SetHeight(const float& height);
+    float GetHeight(const float& height) const;
+    void SetPosition(const Vector2& position);
+    void SetPosition(const float& x, const float& y);
+    Vector2 GetPosition() const;
 
     Rectangle& operator=(const Rectangle& other);
     Rectangle& operator=(Rectangle&& other) noexcept;
