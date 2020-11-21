@@ -12,6 +12,7 @@ public:
 	float getX();
 	void setY(float yCoordinate);
 	float getY();
+	void set(float xCoordinate, float yCoordinate);
 
 	float getLength() const;
 	float getSquareLength() const;

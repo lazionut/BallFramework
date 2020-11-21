@@ -34,6 +34,12 @@ float Vector2::getY()
 	return m_y;
 }
 
+void Vector2::set(float xCoordinate, float yCoordinate)
+{
+	m_x = xCoordinate;
+	m_y = yCoordinate;
+}
+
 float Vector2::getLength() const
 {
 	return sqrt(m_x * m_x + m_y * m_y);
