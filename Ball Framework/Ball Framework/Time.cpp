@@ -6,7 +6,7 @@ Time::TimeAux::TimeAux()
 	now{ std::chrono::system_clock::now() },
 	last{ std::chrono::system_clock::now() } {}
 
-void Time::TimeAux::ResetTime()
+void Time::TimeAux::Reset_Time()
 {
 	realTime = 0.0;
 	deltaTime = 0.0;
@@ -18,12 +18,12 @@ void Time::TimeAux::ResetTime()
 
 Time::TimeAux Time::aux;
 
-void Time::ResetTime()
+void Time::Reset_Time()
 {
-	aux.ResetTime();
+	aux.Reset_Time();
 }
 
-void Time::UpdateTime()
+void Time::Update_Time()
 {
 	aux.now = std::chrono::system_clock::now();
 
@@ -39,48 +39,48 @@ void Time::UpdateTime()
 	aux.last = aux.now;
 }
 
-void Time::UpdateDone()
+void Time::Update_Done()
 {
 	aux.deltaTime = 0.0;
 	aux.unscaledDelta = 0.0;
 }
 
-double Time::GetRealDelta()
+double Time::Get_Real_Delta()
 {
 	return aux.realDelta;
 }
 
-double Time::GetTimeSinceStartUp()
+double Time::Get_Time_Since_Startup()
 {
 	return aux.timeSinceStart;
 }
 
-double Time::GetDeltaTime()
+double Time::Get_Delta_Time()
 {
 	return aux.deltaTime;
 }
 
-double Time::GetRealTime()
+double Time::Get_Real_Time()
 {
 	return aux.realTime;
 }
 
-double Time::GetUnscladeDeltaTime()
+double Time::Get_Unscaled_Delta_Time()
 {
 	return aux.unscaledDelta;
 }
 
-double Time::GetScaledTimeSinceStart()
+double Time::Get_Scaled_Time_Since_Start()
 {
 	return aux.scaledTimeSinceStart;
 }
 
-float Time::GetTimeScale()
+float Time::Get_Time_Scale()
 {
 	return aux.timeScale;
 }
 
-void Time::SetTimeScale(float timeScale)
+void Time::Set_Time_Scale(float timeScale)
 {
 	if (timeScale >= 0.0f)
 	{
