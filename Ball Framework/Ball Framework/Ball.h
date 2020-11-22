@@ -10,19 +10,19 @@ public:
 	Ball(const Ball& other);
 	Ball(Ball&& other) noexcept;
 
-	Vector2 Get_Position();
-	float Get_Size();
-	Vector2 Get_Direction();
-	float Get_Speed();
+	Vector2 GetPosition();
+	float GetSize();
+	Vector2 GetDirection();
+	float GetSpeed();
 
-	void Set_Position(const Vector2& position);
-	void Set_Position(float x, float y);
-	void Set_Size(float size);
-	void Set_Direction(const Vector2& direction);
-	void Set_Direction(float, float y);
-	void Set_Speed(float speed);
+	void SetPoisiton(const Vector2& position);
+	void SetPosition(float x, float y);
+	void SetSize(float size);
+	void SetDirection(const Vector2& direction);
+	void SetDirection(float, float y);
+	void SetSpeed(float speed);
 
-	void Move_();
+	void Move();
 
 	Ball& operator=(const Ball& other);
 	Ball& operator=(Ball&& other)noexcept;

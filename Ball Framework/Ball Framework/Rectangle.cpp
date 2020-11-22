@@ -18,38 +18,38 @@ Rectangle::Rectangle(Rectangle&& other) noexcept
     *this = std::move(other);
 }
 
-void Rectangle::Set_Width(const float& width)
+void Rectangle::SetWidth(const float& width)
 {
     m_width = width;
 }
 
-float Rectangle::Get_Width() const
+float Rectangle::GetWidth() const
 {
     return m_width;
 }
 
-void Rectangle::Set_Height(const float& height)
+void Rectangle::SetHeight(const float& height)
 {
     m_height = height;
 }
 
-float Rectangle::Get_Height(const float& height) const
+float Rectangle::GetHeight(const float& height) const
 {
     return m_height;
 }
 
-void Rectangle::Set_Position(const Vector2& position)
+void Rectangle::SetPosition(const Vector2& position)
 {
     m_position = position;
 }
 
-void Rectangle::Set_Position(const float& x, const float& y)
+void Rectangle::SetPosition(const float& x, const float& y)
 {
-    m_position.Set_X(x);
-    m_position.Set_Y(y);
+    m_position.SetX(x);
+    m_position.SetY(y);
 }
 
-Vector2 Rectangle::Get_Position() const
+Vector2 Rectangle::GetPosition() const
 {
     return m_position;
 }

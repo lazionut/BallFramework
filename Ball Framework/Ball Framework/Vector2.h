@@ -8,14 +8,14 @@ public:
 	Vector2(float x, float y);
 	Vector2(const Vector2& other);
 
-	void Set_X(float xCoordinate);
-	float Get_X();
-	void Set_Y(float yCoordinate);
-	float Get_Y();
-	void Set_(float xCoordinate, float yCoordinate);
+	void SetX(float xCoordinate);
+	float GetX();
+	void SetY(float yCoordinate);
+	float GetY();
+	void Set(float xCoordinate, float yCoordinate);
 
-	float get_Length() const;
-	float get_Square_Length() const;
+	float getLength() const;
+	float getSquareLength() const;
 
 	Vector2 operator+(const Vector2& other) const;
 	Vector2& operator+=(const Vector2& other);
