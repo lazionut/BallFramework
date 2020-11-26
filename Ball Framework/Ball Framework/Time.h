@@ -38,7 +38,7 @@ private:
 	static void UpdateTime();
 	static void UpdateDone();
 
-	//friend class Game;
+	friend class Game;
 
 public:
 	Time(const Time&) = delete;
