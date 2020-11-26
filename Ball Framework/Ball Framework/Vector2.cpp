@@ -40,14 +40,21 @@ void Vector2::Set(float xCoordinate, float yCoordinate)
 	m_y = yCoordinate;
 }
 
-float Vector2::getLength() const
+float Vector2::GetLength() const
 {
 	return sqrt(m_x * m_x + m_y * m_y);
 }
 
-float Vector2::getSquareLength() const
+float Vector2::GetSquareLength() const
 {
 	return m_x * m_x + m_y * m_y;
+}
+
+void Vector2::Normalize()
+{
+	float length = GetLength();
+	m_x /= length;
+	m_y /= length;
 }
 
 Vector2 Vector2::operator+(const Vector2& other) const
@@ -107,22 +114,22 @@ Vector2& Vector2::operator=(const Vector2& other)
 
 bool Vector2::operator<(const Vector2& other) const
 {
-	return getSquareLength() < other.getSquareLength();
+	return GetSquareLength() < other.GetSquareLength();
 }
 
 bool Vector2::operator<=(const Vector2& other) const
 {
-	return getSquareLength() <= other.getSquareLength();
+	return GetSquareLength() <= other.GetSquareLength();
 }
 
 bool Vector2::operator>(const Vector2& other) const
 {
-	return getSquareLength() > other.getSquareLength();
+	return GetSquareLength() > other.GetSquareLength();
 }
 
 bool Vector2::operator>=(const Vector2& other) const
 {
-	return getSquareLength() >= other.getSquareLength();
+	return GetSquareLength() >= other.GetSquareLength();
 }
 
 bool Vector2::operator==(const Vector2& other) const
@@ -132,7 +139,7 @@ bool Vector2::operator==(const Vector2& other) const
 
 bool Vector2::operator!=(const Vector2& other) const
 {
-	return getSquareLength() != other.getSquareLength();
+	return GetSquareLength() != other.GetSquareLength();
 }
 
 std::istream& operator>>(std::istream& input, Vector2& other)

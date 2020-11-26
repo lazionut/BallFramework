@@ -48,7 +48,7 @@ public:
 	static double GetTimeSinceStartUp();
 	static double GetDeltaTime();
 	static double GetRealTime();
-	static double GetUnscladeDeltaTime();
+	static double GetUnscaledDeltaTime();
 	static double GetScaledTimeSinceStart();
 	static float GetTimeScale();
 	static void SetTimeScale(float timeScale);

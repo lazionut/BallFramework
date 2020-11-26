@@ -41,7 +41,7 @@ float Ball::GetSpeed()
 	return m_speed;
 }
 
-void Ball::SetPoisiton(const Vector2& position)
+void Ball::SetPosition(const Vector2& position)
 {
 	m_position = position;
 }

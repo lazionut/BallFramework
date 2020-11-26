@@ -65,7 +65,7 @@ double Time::GetRealTime()
 	return aux.realTime;
 }
 
-double Time::GetUnscladeDeltaTime()
+double Time::GetUnscaledDeltaTime()
 {
 	return aux.unscaledDelta;
 }

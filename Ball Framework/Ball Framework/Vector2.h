@@ -14,8 +14,9 @@ public:
 	float GetY();
 	void Set(float xCoordinate, float yCoordinate);
 
-	float getLength() const;
-	float getSquareLength() const;
+	float GetLength() const;
+	float GetSquareLength() const;
+	void Normalize();
 
 	Vector2 operator+(const Vector2& other) const;
 	Vector2& operator+=(const Vector2& other);
@@ -32,6 +33,13 @@ public:
 	bool operator>=(const Vector2& other) const;
 	bool operator==(const Vector2& other) const;
 	bool operator!=(const Vector2& other) const;
+
+	const static Vector2 zero;
+
+	const static Vector2 up;
+	const static Vector2 down;
+	const static Vector2 left;
+	const static Vector2 right;
 
 	friend std::istream& operator>>(std::istream& input, Vector2& other);
 	friend std::ostream& operator<<(std::ostream& output, const Vector2& other);

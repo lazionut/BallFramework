@@ -15,7 +15,7 @@ public:
 	Vector2 GetDirection();
 	float GetSpeed();
 
-	void SetPoisiton(const Vector2& position);
+	void SetPosition(const Vector2& position);
 	void SetPosition(float x, float y);
 	void SetSize(float size);
 	void SetDirection(const Vector2& direction);
