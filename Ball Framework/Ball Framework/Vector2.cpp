@@ -1,6 +1,12 @@
 #include "Vector2.h"
 #include <cmath>
 
+const Vector2 Vector2::zero = Vector2(0.0f, 0.0f);
+const Vector2 Vector2::up = Vector2(0.0f, 1.0f);
+const Vector2 Vector2::down = Vector2(0.0f, -1.0f);
+const Vector2 Vector2::left = Vector2(-1.0f, 0.0f);
+const Vector2 Vector2::right = Vector2(1.0f, 0.0f);
+
 Vector2::Vector2() :
 	m_x{ 0.0f }, m_y{ 0.0f } {
 }
@@ -55,6 +61,13 @@ void Vector2::Normalize()
 	float length = GetLength();
 	m_x /= length;
 	m_y /= length;
+}
+
+Vector2 Vector2::GetNormalized()
+{
+	Vector2 aux = *this;
+	aux.Normalize();
+	return aux;
 }
 
 Vector2 Vector2::operator+(const Vector2& other) const
