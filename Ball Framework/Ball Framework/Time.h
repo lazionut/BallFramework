@@ -4,47 +4,23 @@
 class Time
 {
 private:
-	class TimeAux
-	{
-	private:
-		double deltaTime;
-		double realDelta;
-		double timeSinceStart;
-		double realTime;
-		double gameTime;
-		double scaledTimeSinceStart;
-		double unscaledDelta;
-		float timeScale;
+	friend class Game;
+	//friend class Game::TimeAux;
 
-		std::chrono::time_point<std::chrono::system_clock> last;
-		std::chrono::time_point<std::chrono::system_clock> now;
-
-		TimeAux();
-
-		void ResetTime();
-
-	public:
-		TimeAux(const TimeAux&) = delete;
-		TimeAux& operator=(const TimeAux&) = delete;
-
-		friend class Time;
-	};
-
-	static TimeAux aux;
+	static double deltaTime;
+	static double timeSinceStart;
+	static double realTime;
+	static double gameTime;
+	static double scaledTimeSinceStart;
+	static double unscaledDelta;
+	static float timeScale;
 
 	Time();
-
-	static void ResetTime();
-	static void UpdateTime();
-	static void UpdateDone();
-
-	friend class Game;
-
-public:
 	Time(const Time&) = delete;
 	Time& operator=(const Time&) = delete;
 
-	static double GetRealDelta();
+public:
+
 	static double GetTimeSinceStartUp();
 	static double GetDeltaTime();
 	static double GetRealTime();
