@@ -5,8 +5,7 @@ class Pong : public Game
 {
 public:
 	Pong();
-	Pong(const char* title, int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS = 0);
-	Pong(const std::string& title, int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS = 0);
+	Pong( int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS = 0);
 
 private:
 	void start() override;

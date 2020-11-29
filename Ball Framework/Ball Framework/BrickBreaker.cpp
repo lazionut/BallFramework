@@ -5,13 +5,8 @@ BrickBreaker::BrickBreaker() : Game()
 
 }
 
-BrickBreaker::BrickBreaker(const char* title, int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS) :
-	Game(title, x, y, width, height, fullscreen, maxFPS)
-{
-}
-
-BrickBreaker::BrickBreaker(const std::string& title, int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS) :
-	Game(title, x, y, width, height, fullscreen, maxFPS)
+BrickBreaker::BrickBreaker( int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS) :
+	Game("BrickBreaker", x, y, width, height, fullscreen, maxFPS)
 {
 }
 

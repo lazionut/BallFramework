@@ -5,14 +5,8 @@ Pong::Pong() : Game()
 
 }
 
-Pong::Pong(const char* title, int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS) :
-	Game(title, x, y, width, height, fullscreen, maxFPS)
-{
-
-}
-
-Pong::Pong(const std::string& title, int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS) :
-	Game(title, x, y, width, height, fullscreen, maxFPS)
+Pong::Pong( int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS) :
+	Game("Pong", x, y, width, height, fullscreen, maxFPS)
 {
 
 }
