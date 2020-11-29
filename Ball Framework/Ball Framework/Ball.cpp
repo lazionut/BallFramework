@@ -42,8 +42,7 @@ void Ball::SetPosition(const Vector2& position)
 
 void Ball::SetPosition(float x, float y)
 {
-	m_position.SetX(x);
-	m_position.SetY(y);
+	m_position.Set(x, y);
 }
 
 void Ball::SetSize(float size)

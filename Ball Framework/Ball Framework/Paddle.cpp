@@ -14,3 +14,50 @@ Paddle::Paddle(const Vector2& leftDirection, const Vector2& rightDirection, cons
 	m_rightLimit{ rightLimit }, m_speed{ speed }
 {
 }
+
+void Paddle::Move()
+{
+	m_position += (m_direction * m_speed * Time::GetDeltaTime());
+}
+
+void Paddle::CheckBounds()
+{
+	if (m_position > m_leftLimit)
+	{
+		m_position = m_leftLimit;
+	}
+	else if (m_position > m_rightLimit)
+	{
+		m_position = m_rightLimit;
+	}
+}
+
+void Paddle::KeyPressed(const SDL_Keycode& key)
+{
+	if (key == m_leftKey)
+	{
+		m_direction = m_leftDirection;
+	}
+	else if (key == m_rightKey)
+	{
+		m_direction = m_rightDirection;
+	}
+}
+
+void Paddle::KeyReleased(const SDL_Keycode& key)
+{
+	if (key == m_leftKey || key == m_rightKey)
+	{
+		m_direction = Vector2::zero;
+	}
+}
+
+float Paddle::GetSpeed() const
+{
+	return m_speed;
+}
+
+void Paddle::SetSpeed(float speed)
+{
+	m_speed = speed;
+}
