@@ -25,7 +25,7 @@ void Vector2::SetX(float xCoordinate)
 	m_x = xCoordinate;
 }
 
-float Vector2::GetX()
+float Vector2::GetX() const
 {
 	return m_x;
 }
@@ -35,7 +35,7 @@ void Vector2::SetY(float yCoordinate)
 	m_y = yCoordinate;
 }
 
-float Vector2::GetY()
+float Vector2::GetY() const
 {
 	return m_y;
 }

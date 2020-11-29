@@ -9,10 +9,10 @@ public:
 	Ball(const Vector2& position, float size, const Vector2& direction, float speed);
 	Ball(const Ball& other);
 
-	Vector2 GetPosition();
-	float GetSize();
-	Vector2 GetDirection();
-	float GetSpeed();
+	Vector2 GetPosition() const;
+	float GetSize() const;
+	Vector2 GetDirection() const;
+	float GetSpeed() const;
 
 	void SetPosition(const Vector2& position);
 	void SetPosition(float x, float y);

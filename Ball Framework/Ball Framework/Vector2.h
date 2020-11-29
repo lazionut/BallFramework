@@ -9,9 +9,9 @@ public:
 	Vector2(const Vector2& other);
 
 	void SetX(float xCoordinate);
-	float GetX();
+	float GetX() const;
 	void SetY(float yCoordinate);
-	float GetY();
+	float GetY() const;
 	void Set(float xCoordinate, float yCoordinate);
 
 	float GetLength() const;

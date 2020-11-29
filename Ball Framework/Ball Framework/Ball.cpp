@@ -15,22 +15,22 @@ Ball::Ball(const Ball& other)
 	*this = other;
 }
 
-Vector2 Ball::GetPosition()
+Vector2 Ball::GetPosition() const
 {
 	return m_position;
 }
 
-float Ball::GetSize()
+float Ball::GetSize() const
 {
 	return m_size;
 }
 
-Vector2 Ball::GetDirection()
+Vector2 Ball::GetDirection() const
 {
 	return m_direction;
 }
 
-float Ball::GetSpeed()
+float Ball::GetSpeed() const
 {
 	return m_speed;
 }
