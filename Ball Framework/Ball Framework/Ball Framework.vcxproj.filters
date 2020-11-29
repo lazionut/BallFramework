@@ -39,6 +39,9 @@
     <ClCompile Include="Pong.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BrickBreaker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pong.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickBreaker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
