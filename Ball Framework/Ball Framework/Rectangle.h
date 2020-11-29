@@ -23,7 +23,7 @@ public:
     friend std::istream& operator>>(std::istream& in, Rectangle& other);
     friend std::ostream& operator<<(std::ostream& out, Rectangle& other);
 
-private:
+protected:
     Vector2 m_position;
     float m_width, m_height;
 };

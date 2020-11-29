@@ -15,12 +15,6 @@ Ball::Ball(const Ball& other)
 	*this = other;
 }
 
-
-Ball::Ball(Ball&& other) noexcept
-{
-	*this = std::move(other);
-}
-
 Vector2 Ball::GetPosition()
 {
 	return m_position;

@@ -8,7 +8,6 @@ public:
 	Ball();
 	Ball(const Vector2& position, float size, const Vector2& direction, float speed);
 	Ball(const Ball& other);
-	Ball(Ball&& other) noexcept;
 
 	Vector2 GetPosition();
 	float GetSize();
