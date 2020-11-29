@@ -13,6 +13,14 @@ public:
 	Vector2 GetDirection() const;
 	float GetSpeed() const;
 
+	void SetPosition(const Vector2& position);
+	void SetDimension(const Vector2& dimension);
+	void SetDirection(const Vector2& direction);
+	void SetSpeed(float speed);
+
+	void InvokeAction();
+	void Move();
+
 private:
 	std::function<void()> m_f_action;
 	Vector2 m_position, m_dimension, m_direction;

@@ -1,5 +1,15 @@
 #include "PickUp.h"
 
+void PickUp::InvokeAction()
+{
+	m_f_action();
+}
+
+void PickUp::Move()
+{
+	m_position += (m_direction * m_speed * Time::GetDeltaTime());
+}
+
 PickUp::PickUp() : m_speed{ 0.0f }
 {
 }
@@ -26,6 +36,26 @@ Vector2 PickUp::GetDirection() const
 float PickUp::GetSpeed() const
 {
 	return m_speed;
+}
+
+void PickUp::SetPosition(const Vector2& position)
+{
+	m_position = position;
+}
+
+void PickUp::SetDimension(const Vector2& dimension)
+{
+	m_dimension = dimension;
+}
+
+void PickUp::SetDirection(const Vector2& direction)
+{
+	m_direction = direction;
+}
+
+void PickUp::SetSpeed(float speed)
+{
+	m_speed = speed;
 }
 
 
