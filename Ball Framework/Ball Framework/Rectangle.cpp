@@ -33,7 +33,7 @@ void Rectangle::SetHeight(const float& height)
     m_height = height;
 }
 
-float Rectangle::GetHeight(const float& height) const
+float Rectangle::GetHeight() const
 {
     return m_height;
 }

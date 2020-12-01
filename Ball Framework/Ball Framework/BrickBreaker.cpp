@@ -1,35 +1,48 @@
 #include "BrickBreaker.h"
 
-BrickBreaker::BrickBreaker() : Game()
+BrickBreaker::BrickBreaker(int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS) :
+	Game("Pong", x, y, width, height, flags, maxFPS)
 {
 
 }
 
-BrickBreaker::BrickBreaker( int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS) :
-	Game("BrickBreaker", x, y, width, height, fullscreen, maxFPS)
+BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
+	: Game("Pong", width, height, flags, maxFPS)
 {
+
 }
 
-void BrickBreaker::start()
+void BrickBreaker::Start()
 {
+
 }
 
-void BrickBreaker::checkCollision()
+void BrickBreaker::OnClose()
 {
+
 }
 
-void BrickBreaker::update()
+void BrickBreaker::CheckCollision()
 {
+
 }
 
-void BrickBreaker::keyPressed(const SDL_Keycode& key)
+void BrickBreaker::Update()
 {
+
 }
 
-void BrickBreaker::keyReleased(const SDL_Keycode& key)
+void BrickBreaker::KeyPressed(const SDL_Keycode& key)
 {
+
 }
 
-void BrickBreaker::render(SDL_Renderer* renderer)
+void BrickBreaker::KeyReleased(const SDL_Keycode& key)
 {
+
+}
+
+void BrickBreaker::Render(SDL_Renderer* renderer)
+{
+
 }

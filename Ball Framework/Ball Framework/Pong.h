@@ -1,17 +1,19 @@
 #pragma once
 #include "Game.h"
+#include "Rectangle.h"
 
 class Pong : public Game
 {
 public:
-	Pong();
-	Pong( int x, int y, int width, int height, bool fullscreen, uint16_t maxFPS = 0);
+	Pong(int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS);
+	Pong(uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
 
 private:
-	void start() override;
-	void checkCollision() override;
-	void update() override;
-	void keyPressed(const SDL_Keycode& key) override;
-	void keyReleased(const SDL_Keycode& key) override;
-	void render(SDL_Renderer* renderer) override;
+	void Start() override;
+	void OnClose() override;
+	void CheckCollision() override;
+	void Update() override;
+	void KeyPressed(const SDL_Keycode& key) override;
+	void KeyReleased(const SDL_Keycode& key) override;
+	void Render(SDL_Renderer* renderer) override;
 };

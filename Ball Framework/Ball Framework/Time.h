@@ -4,8 +4,7 @@
 class Time
 {
 private:
-	friend class Game;
-	//friend class Game::TimeAux;
+	friend class TimeManager;
 
 	static double deltaTime;
 	static double timeSinceStart;

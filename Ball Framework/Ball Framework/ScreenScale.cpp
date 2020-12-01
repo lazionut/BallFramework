@@ -2,12 +2,22 @@
 
 ScreenScale::ScreenScale(const uint16_t& widthUnits, const uint16_t& heightUnits,
 	const uint16_t& width, const uint16_t& height)
-	:m_widthUnits{ widthUnits }, m_heightUnits{ height }, m_width{ width }, m_height{ height }
+	:m_widthUnits{ widthUnits }, m_heightUnits{ heightUnits }, m_width{ width }, m_height{ height }
 {
-	m_widthUnit = m_width / m_widthUnits;
-	m_heightUnit = m_height / m_heightUnits;
-	m_widthCenter = m_width / 2;
-	m_heightCenter = m_height / 2;
+	m_widthUnit = width / m_widthUnits;
+	m_heightUnit = height / m_heightUnits;
+	m_widthCenter = width / 2;
+	m_heightCenter = height / 2;
+
+	std::cout << m_widthUnit << " " << m_heightUnit << "\n";
+}
+
+void ScreenScale::Set(uint16_t width, uint16_t height)
+{
+	m_widthUnit = width / m_widthUnits;
+	m_heightUnit = height / m_heightUnits;
+	m_widthCenter = width / 2;
+	m_heightCenter = height / 2;
 }
 
 void ScreenScale::PointToPixel(SDL_Rect& rect, float x, float y, float w, float h) const

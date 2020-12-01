@@ -12,7 +12,7 @@ public:
     void SetWidth(const float& width);
     float GetWidth() const;
     void SetHeight(const float& height);
-    float GetHeight(const float& height) const;
+    float GetHeight() const;
     void SetPosition(const Vector2& position);
     void SetPosition(const float& x, const float& y);
     Vector2 GetPosition() const;

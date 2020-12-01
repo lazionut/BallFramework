@@ -7,6 +7,8 @@ class ScreenScale {
 public:
 	ScreenScale(const uint16_t& widthUnits, const uint16_t& heightUnits, const uint16_t& width, const uint16_t& height);
 
+	void Set(uint16_t width, uint16_t height);
+
 	void PointToPixel(SDL_Rect& rect, float x, float y, float w, float h) const;
 	void PointToPixel(SDL_Rect& rect, const Vector2& position, const Vector2& size) const;
 
