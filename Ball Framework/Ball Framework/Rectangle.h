@@ -9,12 +9,15 @@ public:
     Rectangle(const Rectangle& other);
     Rectangle(Rectangle&& other) noexcept;
 
-    void SetWidth(const float& width);
+    void Set(const Vector2& position, float width, float height);
+    void Set(float x, float y, float width, float height);
+
+    void SetWidth(float width);
     float GetWidth() const;
-    void SetHeight(const float& height);
+    void SetHeight(float height);
     float GetHeight() const;
     void SetPosition(const Vector2& position);
-    void SetPosition(const float& x, const float& y);
+    void SetPosition(float x, float y);
     Vector2 GetPosition() const;
 
     Rectangle& operator=(const Rectangle& other);

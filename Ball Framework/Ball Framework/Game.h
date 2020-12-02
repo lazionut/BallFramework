@@ -1,25 +1,22 @@
 #pragma once
-#include <SDL_image.h>
-#include <iostream>
-#include "ScreenScale.h"
+#include "Renderer.h"
 #include "Time.h"
 #include "TimeManager.h"
 
 class Game
 {
 public:
-	Game(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
-	Game(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
-	Game(const char* title, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
-	Game(const std::string& title, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
+
+	Game(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
+	Game(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
+	Game(const char* title, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
+	Game(const std::string& title, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 
 	void Run();
 
 	virtual ~Game();
 
 protected:
-
-	ScreenScale scale;
 
 	virtual void Start() = 0;
 	virtual void OnClose() = 0;
@@ -29,15 +26,18 @@ protected:
 	virtual void KeyReleased(const SDL_Keycode& key) = 0;
 	virtual void Render(SDL_Renderer* renderer) = 0;
 
+	const ScreenScale& GetScale();
+	void SetBackgroundColor(const SDL_Color& color);
+	void SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+
 	void Stop();
 
 private:
 
-	SDL_Window* m_window;
-	SDL_Renderer* m_renderer;
-	SDL_Event* m_gameEvent;
 	TimeManager m_timeManager;
-
+	Renderer m_renderer;
+	SDL_Event* m_gameEvent;
+	
 	uint16_t m_maxFPS;
 	bool m_running = false;
 	float m_lastTimeScale;

@@ -153,6 +153,7 @@
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Pong.cpp" />
     <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="ScreenScale.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="Pong.h" />
     <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="ScreenScale.h" />
     <ClInclude Include="Time.h" />

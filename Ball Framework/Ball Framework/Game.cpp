@@ -1,55 +1,28 @@
 #include "Game.h"
 
-Game::Game(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
-	: m_window{ nullptr }, m_renderer{ nullptr }, m_maxFPS{ maxFPS },
-	m_gameEvent{ nullptr }, m_running{ false }, scale{ 10, 10, width, height }
+Game::Game(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit)
+	: m_maxFPS{ maxFPS }, m_gameEvent{ nullptr }, m_running{ false }, m_renderer{ widthUnit, heightUnit }
 {
 	InitGame(title, x, y, width, height, flags, maxFPS);
 }
 
-Game::Game(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
-	: m_window{ nullptr }, m_renderer{ nullptr }, m_maxFPS{ maxFPS },
-	m_gameEvent{ nullptr }, m_running{ false }, scale{ 10, 10, width, height }
-{
-	InitGame(title.c_str(), x, y, width, height, flags, maxFPS);
-}
+Game::Game(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit)
+	: Game(title.c_str(), x, y, width, height, flags, maxFPS, widthUnit, heightUnit) {}
 
-Game::Game(const char* title, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
-	: Game(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS) {}
+Game::Game(const char* title, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit)
+	: Game(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS, widthUnit, heightUnit) {}
 
-Game::Game(const std::string& title, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
-	: Game(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS) {}
+Game::Game(const std::string& title, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit)
+	: Game(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS, widthUnit, heightUnit) {}
 
 void Game::InitGame(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+	if (m_renderer.InitRenderer(title, x, y, width, height, flags))
 	{
-		std::cout << "Subsystem initialised!\n";
-		m_window = SDL_CreateWindow(title, x, y, width, height, flags);
-
-		if (m_window)
-		{
-			std::cout << "Window created\n";
-
-			m_renderer = SDL_CreateRenderer(m_window, -1, 0);
-
-			if (m_renderer)
-			{
-				SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
-				std::cout << "Renderer created!\n";
-
-				if (IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)
-				{
-					std::cout << "SDL_IMAGE initialized!\n";
-
-					m_maxFPS = maxFPS;
-					m_gameEvent = new SDL_Event;
-					m_running = true;
-					m_lastTimeScale = Time::GetTimeScale();
-					return;
-				}
-			}
-		}
+		m_maxFPS = maxFPS;
+		m_gameEvent = new SDL_Event;
+		m_lastTimeScale = Time::GetTimeScale();
+		m_running = true;
 	}
 }
 
@@ -71,15 +44,32 @@ void Game::Run()
 void Game::Clean()
 {
 	delete m_gameEvent;
-	SDL_DestroyWindow(m_window);
-	SDL_DestroyRenderer(m_renderer);
-	SDL_Quit();
 	std::cout << "Game cleaned!\n";
 }
 
 void Game::Stop()
 {
 	m_running = false;
+}
+
+const ScreenScale& Game::GetScale()
+{
+	return m_renderer.GetScale();
+}
+
+void Game::SetBackgroundColor(const SDL_Color& color)
+{
+	m_renderer.SetBackgroundColor(color);
+}
+
+void Game::SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+{
+	SDL_Color color;
+	color.r = red;
+	color.g = green;
+	color.b = blue;
+	color.a = alpha;
+	m_renderer.SetBackgroundColor(color);
 }
 
 void Game::GameLoop()
@@ -109,9 +99,13 @@ void Game::GameLoop()
 		if (delta >= ns)
 		{
 			HandleEvents();
-			CheckCollision();
-			Update();
-			RenderAux();
+
+			if (Time::GetTimeScale())
+			{
+				CheckCollision();
+				Update();
+				RenderAux();
+			}
 
 			m_timeManager.UpdateDone();
 
@@ -130,11 +124,13 @@ void Game::GameLoop()
 
 void Game::RenderAux()
 {
-	SDL_RenderClear(m_renderer);
+	SDL_Renderer* renderer = m_renderer.GetRenderer();
+	SDL_Color color = m_renderer.GetBackgroundColor();
 
-	Render(m_renderer);
-
-	SDL_RenderPresent(m_renderer);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderClear(renderer);
+	Render(renderer);
+	SDL_RenderPresent(renderer);
 }
 
 void Game::HandleEvents()
@@ -176,11 +172,10 @@ void Game::HandleWindowEvents(const SDL_Event* gameEvent)
 	case SDL_WINDOWEVENT_MOVED:
 		m_timeManager.UpdateTime();
 		m_timeManager.UpdateDone();
+		std::cout << "windows moved\n";
 		break;
 	case SDL_WINDOWEVENT_RESIZED:
-		//SDL_Log("Window %d resized to %dx%d",
-		//	gameEvent->window.windowID, gameEvent->window.data1,
-		//	gameEvent->window.data2);
+		m_renderer.SetSize(gameEvent->window.data1, gameEvent->window.data2);
 		break;
 	case SDL_WINDOWEVENT_MINIMIZED:
 		m_lastTimeScale = Time::GetTimeScale();
