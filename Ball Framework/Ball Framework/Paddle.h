@@ -3,7 +3,8 @@
 #include "Rectangle.h"
 #include "Time.h"
 
-class Paddle : public Rectangle {
+class Paddle : public Rectangle 
+{
 public:
 	Paddle();
 	Paddle(const Vector2& leftDirection, const Vector2& rightDirection, const SDL_Keycode& leftKey,

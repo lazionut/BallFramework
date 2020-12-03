@@ -1,7 +1,7 @@
 #include "Ball.h"
 
 Ball::Ball()
-	:m_position{ Vector2::Vector2(0.0f, 0.0f) }, m_size{ 0.0f }, m_direction(), m_speed(0)
+	: m_position{ Vector2::Vector2(0.0f, 0.0f) }, m_size{ 0.0f }, m_direction(), m_speed(0)
 {
 }
 
@@ -69,6 +69,53 @@ void Ball::SetSpeed(float speed)
 void Ball::Move()
 {
 	m_position += (m_direction * m_speed * Time::GetDeltaTime());
+}
+
+bool Ball::CheckCollision(const Rectangle& rect)
+{
+	float x, y;
+	float ballx = m_position.GetX(), bally = m_position.GetY();
+	float rectWidth = rect.GetWidth();
+	float rectHeight = rect.GetHeight();
+	float rectx = rect.GetPosition().GetX() - rectWidth / 2;
+	float recty = rect.GetPosition().GetY() - rectHeight / 2;
+	
+	if (ballx < rectx)
+	{
+		x = rectx;
+	}
+	else if (ballx > rectx + rectWidth)
+	{
+		x = rectx + rectHeight;
+	}
+	else
+	{
+		x = ballx;
+	}
+
+	if (bally < recty)
+	{
+		y = recty;
+	}
+	else if (bally > recty + rectHeight)
+	{
+		y = recty + rectHeight;
+	}
+	else
+	{
+		y = bally;
+	}
+
+	float delta1 = x - ballx;
+	float delta2 = y - bally;
+
+	if (delta1 * delta1 + delta2 * delta2 < (m_size * m_size / 4))
+	{
+		return true;
+	}
+
+
+	return false;
 }
 
 Ball& Ball::operator=(const Ball& other)

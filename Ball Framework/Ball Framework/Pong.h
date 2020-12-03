@@ -1,7 +1,7 @@
 #pragma once
 #include "Game.h"
-#include "Rectangle.h"
 #include "Ball.h"
+#include "Paddle.h"
 
 class Pong : public Game
 {

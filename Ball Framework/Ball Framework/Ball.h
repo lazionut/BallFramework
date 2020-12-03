@@ -1,6 +1,7 @@
 #pragma once
 #include"Vector2.h"
 #include"Time.h"
+#include "Rectangle.h"
 
 class Ball
 {
@@ -22,6 +23,7 @@ public:
 	void SetSpeed(float speed);
 
 	void Move();
+	bool CheckCollision(const Rectangle& rect);
 
 	Ball& operator=(const Ball& other);
 	Ball& operator=(Ball&& other)noexcept;

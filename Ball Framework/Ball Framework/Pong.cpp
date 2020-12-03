@@ -22,7 +22,7 @@ void Pong::Start()
 
 void Pong::OnClose()
 {
-
+	
 }
 
 void Pong::CheckCollision()
@@ -37,10 +37,12 @@ void Pong::Update()
 
 void Pong::KeyPressed(const SDL_Keycode& key)
 {
+	
 }
 
 void Pong::KeyReleased(const SDL_Keycode& key)
 {
+	
 }
 
 void Pong::Render(SDL_Renderer* renderer)
