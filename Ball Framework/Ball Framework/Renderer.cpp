@@ -2,7 +2,7 @@
 
 Renderer::Renderer(uint16_t widthUnits, uint16_t heightUnit)
 	: m_renderer{ nullptr }, m_window{ nullptr }, 
-	m_scale{ widthUnits, heightUnit,1 ,1 }, m_backgroundColor{ 255, 255, 255, 255 } {}
+	m_scale{ widthUnits, heightUnit,1 ,1 }, m_backgroundColor{ 15, 15, 15, 255 } {}
 
 bool Renderer::InitRenderer(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags)
 {
@@ -25,19 +25,34 @@ bool Renderer::InitRenderer(const char* title, int32_t x, int32_t y, uint16_t wi
 	return false;
 }
 
-SDL_Renderer* Renderer::GetRenderer()
+SDL_Renderer* Renderer::GetRenderer() const
 {
 	return m_renderer;
 }
 
-const ScreenScale& Renderer::GetScale()
+const ScreenScale& Renderer::GetScale() const
 {
 	return m_scale;
 }
 
-const SDL_Color& Renderer::GetBackgroundColor()
+const SDL_Color& Renderer::GetBackgroundColor() const
 {
 	return m_backgroundColor;
+}
+
+SDL_Texture* Renderer::LoadImage(const std::string& path) const
+{
+	SDL_Surface* loadedImage = IMG_Load(path.c_str());
+
+	if (loadedImage)
+	{
+		SDL_Texture* result = SDL_CreateTextureFromSurface(m_renderer, loadedImage);
+		SDL_FreeSurface(loadedImage);
+		return result;
+	}
+
+	std::cout << "Could not load the image!\n";
+	return nullptr;
 }
 
 void Renderer::SetBackgroundColor(const SDL_Color& color)

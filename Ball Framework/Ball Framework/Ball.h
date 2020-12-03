@@ -18,7 +18,7 @@ public:
 	void SetPosition(float x, float y);
 	void SetSize(float size);
 	void SetDirection(const Vector2& direction);
-	void SetDirection(float, float y);
+	void SetDirection(float x, float y);
 	void SetSpeed(float speed);
 
 	void Move();

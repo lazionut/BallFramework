@@ -52,7 +52,12 @@ void Game::Stop()
 	m_running = false;
 }
 
-const ScreenScale& Game::GetScale()
+SDL_Texture* Game::LoadImage(const std::string& path) const
+{
+	return m_renderer.LoadImage(path);
+}
+
+const ScreenScale& Game::GetScale() const
 {
 	return m_renderer.GetScale();
 }

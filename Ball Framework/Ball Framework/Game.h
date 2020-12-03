@@ -26,7 +26,8 @@ protected:
 	virtual void KeyReleased(const SDL_Keycode& key) = 0;
 	virtual void Render(SDL_Renderer* renderer) = 0;
 
-	const ScreenScale& GetScale();
+	SDL_Texture* LoadImage(const std::string& path) const;
+	const ScreenScale& GetScale() const;
 	void SetBackgroundColor(const SDL_Color& color);
 	void SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
 

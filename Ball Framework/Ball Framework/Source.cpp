@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 
 	if (initializeSDL())
 	{
-		Game* game = new BrickBreaker(500, 500, SDL_WINDOW_RESIZABLE, 60);
+		Game* game = new Pong(1000, 500, SDL_WINDOW_RESIZABLE, 60);
 
 		game->Run();
 
