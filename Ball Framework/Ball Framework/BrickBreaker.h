@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "Paddle.h"
 #include <SDL_ttf.h>
-#include <unordered_map>
 
 class BrickBreaker : public Game
 {
@@ -19,10 +18,6 @@ private:
 	void Render(SDL_Renderer* renderer) override;
 	void Update() override;
 
-	void InitBricks();
-	void RenderBricks(SDL_Renderer* renderer);
-
 	Paddle m_paddle;
-	std::vector<std::vector<Rectangle>> m_bricks;
 };
 
