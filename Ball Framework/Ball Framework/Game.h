@@ -6,6 +6,8 @@
 class Game
 {
 public:
+	static const int SCREENWIDTH = 1280;
+	static const int SCREENHEIGHT = 720;
 
 	Game(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 	Game(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
@@ -38,7 +40,7 @@ private:
 	TimeManager m_timeManager;
 	Renderer m_renderer;
 	SDL_Event* m_gameEvent;
-	
+
 	uint16_t m_maxFPS;
 	bool m_running = false;
 	float m_lastTimeScale;

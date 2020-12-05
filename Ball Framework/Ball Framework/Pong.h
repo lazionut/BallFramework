@@ -18,7 +18,7 @@ private:
 	void KeyReleased(const SDL_Keycode& key) override;
 	void Render(SDL_Renderer* renderer) override;
 
-	SDL_Texture* m_ballImage;
+	SDL_Texture* m_ballImage = nullptr;
 	Paddle m_pongPaddle;
 	Ball m_pongBall;
 };

@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 
 	if (initializeSDL())
 	{
-		Game* game = new BrickBreaker(500, 650, SDL_WINDOW_RESIZABLE, 60);
+		Game* game = new Pong(Game::SCREENWIDTH, Game::SCREENHEIGHT, SDL_WINDOW_RESIZABLE, 60);
 
 		game->Run();
 
