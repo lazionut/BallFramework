@@ -1,5 +1,7 @@
 #pragma once
 #include "Game.h"
+#include "Paddle.h"
+#include <SDL_ttf.h>
 
 class BrickBreaker : public Game
 {
@@ -16,5 +18,6 @@ private:
 	void Render(SDL_Renderer* renderer) override;
 	void Update() override;
 
+	Paddle m_paddle;
 };
 

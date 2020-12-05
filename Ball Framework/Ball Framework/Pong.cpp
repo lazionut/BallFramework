@@ -1,4 +1,5 @@
 #include "Pong.h"
+#include <SDL_ttf.h> 
 
 #define WIDTHUNITS 20
 #define HEIGHTUNITS 10
@@ -22,7 +23,7 @@ void Pong::Start()
 
 void Pong::OnClose()
 {
-	
+
 }
 
 void Pong::CheckCollision()

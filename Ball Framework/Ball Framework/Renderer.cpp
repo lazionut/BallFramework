@@ -22,6 +22,7 @@ bool Renderer::InitRenderer(const char* title, int32_t x, int32_t y, uint16_t wi
 		}
 	}
 
+
 	return false;
 }
 
