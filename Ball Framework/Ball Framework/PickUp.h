@@ -2,6 +2,7 @@
 #include <functional>
 #include "Vector2.h"
 #include "Time.h"
+
 class PickUp
 {
 public:
@@ -25,6 +26,5 @@ private:
 	std::function<void()> m_f_action;
 	Vector2 m_position, m_dimension, m_direction;
 	float m_speed;
-
 };
 

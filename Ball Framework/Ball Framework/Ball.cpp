@@ -57,8 +57,7 @@ void Ball::SetDirection(const Vector2& direction)
 
 void Ball::SetDirection(float x, float y)
 {
-	m_direction.SetX(x);
-	m_direction.SetY(y);
+	m_direction.Set(x, y);
 }
 
 void Ball::SetSpeed(float speed)

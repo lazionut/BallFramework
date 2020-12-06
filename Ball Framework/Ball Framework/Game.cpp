@@ -29,6 +29,7 @@ void Game::InitGame(const char* title, int32_t x, int32_t y, uint16_t width, uin
 void Game::InitGame(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 {
 	InitGame(title.c_str(), x, y, width, height, flags, maxFPS);
+	
 }
 
 void Game::Run()

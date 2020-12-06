@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "ScreenScale.h"
+#include <SDL_TTF.h>
 
 class Renderer
 {

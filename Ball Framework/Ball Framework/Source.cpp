@@ -12,12 +12,19 @@ bool initializeSDL()
 		if (IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)
 		{
 			std::cout << "SDL_IMAGE initialized!\n";
-			return true;
+
+			if (TTF_Init() == 0)
+			{
+				std::cout << "TTF initialized!\n";
+				return true;
+			}
 		}
 	}
 
 	return false;
 }
+
+
 
 int main(int argc, char** argv)
 {
@@ -25,7 +32,7 @@ int main(int argc, char** argv)
 
 	if (initializeSDL())
 	{
-		Game* game = new Pong(Game::SCREENWIDTH, Game::SCREENHEIGHT, SDL_WINDOW_RESIZABLE, 60);
+		Game* game = new BrickBreaker(500, 650, SDL_WINDOW_RESIZABLE, 60);
 
 		game->Run();
 
@@ -33,6 +40,7 @@ int main(int argc, char** argv)
 	}
 
 	SDL_Quit();
+	TTF_Quit();
 
 	return 0;
 }

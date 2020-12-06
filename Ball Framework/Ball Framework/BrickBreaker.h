@@ -1,8 +1,9 @@
 #pragma once
 #include "Game.h"
 #include "Paddle.h"
+#include "Score.h"
 #include <SDL_ttf.h>
-#include <unordered_map>
+#include <vector>
 
 class BrickBreaker : public Game
 {
@@ -22,7 +23,10 @@ private:
 	void InitBricks();
 	void RenderBricks(SDL_Renderer* renderer);
 
+	void RenderScore(SDL_Renderer* renderer);
+
 	Paddle m_paddle;
 	std::vector<std::vector<Rectangle>> m_bricks;
+	Score m_score;
 };
 

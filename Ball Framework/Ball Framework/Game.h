@@ -6,9 +6,6 @@
 class Game
 {
 public:
-	static const int SCREENWIDTH = 1280;
-	static const int SCREENHEIGHT = 720;
-
 	Game(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 	Game(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 	Game(const char* title, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
@@ -29,6 +26,7 @@ protected:
 	virtual void Render(SDL_Renderer* renderer) = 0;
 
 	SDL_Texture* LoadImage(const std::string& path) const;
+
 	const ScreenScale& GetScale() const;
 	void SetBackgroundColor(const SDL_Color& color);
 	void SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
