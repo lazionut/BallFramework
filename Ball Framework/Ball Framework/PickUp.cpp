@@ -57,5 +57,34 @@ void PickUp::SetSpeed(float speed)
 {
 	m_speed = speed;
 }
+void PickUp::Speed()
+{
+	Time::SetTimeScale(2);
+}
+
+void PickUp::SlowDown()
+{
+	Time::SetTimeScale(1);
+}
+
+void PickUp::SmallerPaddle(Paddle& paddle)
+{
+	paddle.SetWidth(paddle.GetWidth() - 2);
+}
+
+void PickUp::BiggerPaddle(Paddle& paddle)
+{
+	paddle.SetWidth(paddle.GetWidth() + 2);
+}
+
+void PickUp::BiggerBall(Ball& ball, float x)
+{
+	ball.SetSize(ball.GetSize() + 1);
+}
+
+void PickUp::SmallerBall(Ball& ball, float x)
+{
+	ball.SetSize(ball.GetSize() - 1);
+}
 
 

@@ -2,6 +2,8 @@
 #include <functional>
 #include "Vector2.h"
 #include "Time.h"
+#include "Paddle.h"
+#include "Ball.h"
 
 class PickUp
 {
@@ -18,6 +20,15 @@ public:
 	void SetDimension(const Vector2& dimension);
 	void SetDirection(const Vector2& direction);
 	void SetSpeed(float speed);
+
+	static void Speed();
+	static void SlowDown();
+
+	static void SmallerPaddle(Paddle& paddle);
+	static void BiggerPaddle(Paddle& paddle);
+
+	static void BiggerBall(Ball& ball, float x);
+	static void SmallerBall(Ball& ball, float x);
 
 	void InvokeAction();
 	void Move();
