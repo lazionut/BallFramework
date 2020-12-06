@@ -51,8 +51,98 @@ void BrickBreaker::CheckCollision()
 	if (m_paddle.GetPosition().GetX() > WIDTHUNITS / 2 - m_paddle.GetWidth()/2 - SPACING) {
 		m_paddle.SetPosition(WIDTHUNITS / 2 - m_paddle.GetWidth()/2 - 0.25f, m_paddle.GetPosition().GetY());
 	}
-}
 
+	CheckBrickBreakerBallWallCollision();
+	if (m_ball.CheckCollision(m_paddle))
+	{
+		m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
+	}
+	for (auto& row : m_bricks)
+	{
+		for (auto element = row.begin(); element < row.end(); element++)
+		{
+			if (m_ball.CheckCollision(*element))//de lucrat aici
+			{
+				ChangeBallDirOnBrickCollision(*element);
+				row.erase(element);
+				m_score.AddPoints(1);
+				return;
+
+			}
+
+		}
+	}
+
+}
+void BrickBreaker::CheckBrickBreakerBallWallCollision()
+{
+	Vector2 ballPosition = m_ball.GetPosition();
+	if (ballPosition.GetX() + m_ball.GetSize() / 2 > WIDTHUNITS / 2 || ballPosition.GetX() - m_ball.GetSize() / 2 < -WIDTHUNITS / 2)
+	{
+		m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+	}
+	if (ballPosition.GetY() > BRICKLIMIT_Y )
+	{
+		m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
+	}
+	if (ballPosition.GetY() < -HEIGHTUNITS / 2)
+	{
+		m_ball.SetSpeed(0);
+	}
+}
+void BrickBreaker::ChangeBallDirOnBrickCollision(Rectangle& rec)
+{
+	float ballX = m_ball.GetPosition().GetX();
+	float ballY = m_ball.GetPosition().GetY();
+	float rectX = rec.GetPosition().GetX();
+	float rectY = rec.GetPosition().GetY();
+
+	if (ballX > rectX && ballY > rectY)
+	{
+		if (ballX - rectX > ballY - rectY)
+		{
+			m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+		}
+		else
+		{
+			m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
+		}
+
+	}
+	if (ballX > rectX && ballY < rectY)
+	{
+		if (ballX - rectX > rectY - ballY)
+		{
+			m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+		}
+		else
+		{
+			m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
+		}
+	}
+	if (ballX < rectX && ballY < rectY)
+	{
+		if (rectX - ballX > rectY - ballY)
+		{
+			m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+		}
+		else
+		{
+			m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
+		}
+	}
+	if (ballX < rectX && ballY > rectY)
+	{
+		if (rectX - ballX > ballY - rectY)
+		{
+			m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+		}
+		else
+		{
+			m_ball.SetDirection(-m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
+		}
+	}
+}
 void BrickBreaker::Update()
 {
 	m_paddle.Move();

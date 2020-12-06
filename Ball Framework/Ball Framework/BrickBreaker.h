@@ -25,7 +25,8 @@ private:
 
 	void InitBricks();
 	void RenderBricks(SDL_Renderer* renderer);
-
+	void CheckBrickBreakerBallWallCollision();
+	void ChangeBallDirOnBrickCollision(Rectangle& rec);
 	void RenderScore(SDL_Renderer* renderer);
 
 	Paddle m_paddle;
