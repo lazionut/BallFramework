@@ -107,8 +107,8 @@ void Game::GameLoop()
 
 			if (Time::GetTimeScale())
 			{
-				CheckCollision();
 				Update();
+				CheckCollision();
 				RenderAux();
 			}
 

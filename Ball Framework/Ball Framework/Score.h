@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-class Score : Game
+class Score 
 {
 public:
 	void AddPoints(uint16_t gameScore);

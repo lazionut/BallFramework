@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Ball.h"
 #include "Paddle.h"
+#include "Score.h"
 
 class Pong : public Game
 {
@@ -18,7 +19,13 @@ private:
 	void KeyReleased(const SDL_Keycode& key) override;
 	void Render(SDL_Renderer* renderer) override;
 
+	void PlayerScore(SDL_Renderer* renderer, TTF_Font* font);
+
 	SDL_Texture* m_ballImage = nullptr;
-	Paddle m_pongPaddle;
+	Paddle m_pongPaddle1;
+	Paddle m_pongPaddle2;
 	Ball m_pongBall;
+	Score m_pongScore1;
+	Score m_pongScore2;
+	SDL_Rect scoreRectangle;
 };

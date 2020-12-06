@@ -40,3 +40,13 @@ void ScreenScale::PointToPixel(SDL_Rect& rect, const Vector2& position, const Ve
 	rect.x = position.GetX() * m_widthUnit + m_widthCenter - (rect.w >> 1);
 	rect.y = position.GetY() * -1 * m_heightUnit + m_heightCenter - (rect.h >> 1);
 }
+
+float ScreenScale::GetScreenWidth() const
+{
+	return m_width;
+}
+
+float ScreenScale::GetScreenHeight() const
+{
+	return m_height;
+}

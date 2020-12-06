@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <SDL.H>
 
-class ScreenScale 
+class ScreenScale
 {
 public:
 	ScreenScale(uint16_t widthUnits, uint16_t heightUnits, uint16_t width, uint16_t height);
@@ -13,6 +13,9 @@ public:
 	void PointToPixel(SDL_Rect& rect, float x, float y, float w, float h) const;
 	void PointToPixel(SDL_Rect& rect, const Vector2& position, const Vector2& size) const;
 	void PointToPixel(SDL_Rect& rect, const Vector2& position, float w, float h) const;
+
+	float GetScreenWidth() const;
+	float GetScreenHeight() const;
 
 private:
 	const uint16_t m_widthUnits, m_heightUnits;
