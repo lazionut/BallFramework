@@ -2,6 +2,9 @@
 #include "Game.h"
 #include "Paddle.h"
 #include "Score.h"
+#include "Ball.h"
+#include "PickUp.h"
+
 #include <SDL_ttf.h>
 #include <vector>
 
@@ -28,5 +31,8 @@ private:
 	Paddle m_paddle;
 	std::vector<std::vector<Rectangle>> m_bricks;
 	Score m_score;
+	SDL_Texture* m_ballImage = nullptr;
+	Ball m_ball;
+	PickUp BrickBreakerPickUp;
 };
 

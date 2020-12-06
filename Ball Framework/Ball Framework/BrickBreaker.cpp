@@ -13,7 +13,7 @@
 BrickBreaker::BrickBreaker(int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 	: Game("BrickBreaker", x, y, width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
-		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks {BRICKROWS}, m_score {}
+		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks {BRICKROWS}, m_score {}, m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.25f, Vector2(0, 1), 2.0f)
 {
 
 }
@@ -21,7 +21,7 @@ BrickBreaker::BrickBreaker(int32_t x, int32_t y, uint16_t width, uint16_t height
 BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 	: Game("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
-		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score {}
+		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score {}, m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.25f, Vector2(0, 1), 2.0f)
 {
 
 }
@@ -29,11 +29,18 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, uint32_t flags, uint
 void BrickBreaker::Start()
 {
 	InitBricks();
+	m_ballImage = LoadImage("redball.png");
+	if (m_ballImage == nullptr)
+		Stop();
+
+	float xBall;
+	xBall = rand() % 2 - 1;
+	m_ball.SetDirection(xBall, m_ball.GetDirection().GetY());
 }
 
 void BrickBreaker::OnClose()
 {
-
+	SDL_DestroyTexture(m_ballImage);
 }
 
 void BrickBreaker::CheckCollision()
@@ -49,6 +56,7 @@ void BrickBreaker::CheckCollision()
 void BrickBreaker::Update()
 {
 	m_paddle.Move();
+	m_ball.Move();
 }
 
 void BrickBreaker::InitBricks()
@@ -87,6 +95,10 @@ void BrickBreaker::Render(SDL_Renderer* renderer)
 	SDL_RenderFillRect(renderer, &rect);
 	RenderBricks(renderer);
 	RenderScore(renderer);
+
+	GetScale().PointToPixel(rect, m_ball.GetPosition(), m_ball.GetSize(), m_ball.GetSize());
+	SDL_RenderCopy(renderer, m_ballImage, NULL, &rect);
+
 }
 
 void BrickBreaker::RenderBricks(SDL_Renderer* renderer)
