@@ -3,6 +3,7 @@
 #include "Ball.h"
 #include "Paddle.h"
 #include "Score.h"
+#include <SDL_ttf.h>
 
 class Pong : public Game
 {
