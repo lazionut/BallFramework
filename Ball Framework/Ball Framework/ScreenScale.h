@@ -14,8 +14,8 @@ public:
 	void PointToPixel(SDL_Rect& rect, const Vector2& position, const Vector2& size) const;
 	void PointToPixel(SDL_Rect& rect, const Vector2& position, float w, float h) const;
 
-	float GetScreenWidth() const;
-	float GetScreenHeight() const;
+	uint16_t GetScreenWidth() const;
+	uint16_t GetScreenHeight() const;
 
 private:
 	const uint16_t m_widthUnits, m_heightUnits;

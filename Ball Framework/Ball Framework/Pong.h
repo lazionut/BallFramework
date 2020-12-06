@@ -3,12 +3,12 @@
 #include "Ball.h"
 #include "Paddle.h"
 #include "Score.h"
+#include "ScreenScale.h"
 #include <SDL_ttf.h>
 
 class Pong : public Game
 {
 public:
-	Pong(int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS);
 	Pong(uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
 
 private:
@@ -20,13 +20,12 @@ private:
 	void KeyReleased(const SDL_Keycode& key) override;
 	void Render(SDL_Renderer* renderer) override;
 
-	void PlayerScore(SDL_Renderer* renderer, TTF_Font* font);
+	void RenderPlayersScore(SDL_Renderer* renderer);
 
-	SDL_Texture* m_ballImage = nullptr;
 	Paddle m_pongPaddle1;
 	Paddle m_pongPaddle2;
 	Ball m_pongBall;
+	SDL_Texture* m_ballImage;
 	Score m_pongScore1;
 	Score m_pongScore2;
-	SDL_Rect scoreRectangle;
 };
