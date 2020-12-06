@@ -86,7 +86,7 @@ bool Ball::CheckCollision(const Rectangle& rect)
 	}
 	else if (ballx > rectx + rectWidth)
 	{
-		x = rectx + rectHeight;
+		x = rectx + rectWidth;
 	}
 	else
 	{
