@@ -117,6 +117,69 @@ bool Ball::CheckCollision(const Rectangle& rect)
 	return false;
 }
 
+void Ball::ChangeDirection(const Rectangle& rect)
+{
+	auto xRect = rect.GetPosition().GetX();
+	auto yRect = rect.GetPosition().GetY();
+	
+
+	if (m_position.GetY() <= yRect + (rect.GetHeight() / 2) && m_position.GetY() >= yRect - rect.GetHeight() / 2)
+	{
+		
+		if (m_position.GetX() < xRect && m_direction.GetX() < 0)
+		
+			m_position.SetX(m_position.GetX() - m_size);
+		
+		else
+		{
+			if (m_position.GetX() > xRect && m_direction.GetX() > 0)
+
+			m_position.SetX(m_position.GetX() + m_size);
+
+			else
+				m_direction.SetX(m_direction.GetX() * (-1));
+		}
+	}
+
+	else
+	{
+		if (m_position.GetX() <= xRect + (rect.GetWidth() / 2) && m_position.GetX() >= xRect - (rect.GetWidth() / 2))
+		{
+			
+			if (m_position.GetY() < yRect && m_direction.GetY() < 0)
+
+				m_position.SetY(m_position.GetY() - m_size);
+			else
+			{
+				if (m_position.GetY() > yRect && m_direction.GetY() > 0)
+
+					m_position.SetY(m_position.GetY() + m_size);
+				else 
+					m_direction.SetY(m_direction.GetY() * (-1));
+			}
+			
+		}
+		else {
+			
+				if (m_position.GetY() > yRect)
+				{
+					if (m_position.GetX() >= xRect)
+						m_direction.Set(1, 1);
+					else
+						m_direction.Set(-1, 1);
+				}
+				else
+				{
+					if (m_position.GetX() > xRect)
+						m_direction.Set(1, -1);
+					else
+						m_direction.Set(-1, -1);
+				}
+			
+		}
+	}
+}
+
 Ball& Ball::operator=(const Ball& other)
 {
 	m_position = other.m_position;

@@ -24,6 +24,7 @@ public:
 
 	void Move();
 	bool CheckCollision(const Rectangle& rect);
+	void ChangeDirection(const Rectangle& rect);
 
 	Ball& operator=(const Ball& other);
 	Ball& operator=(Ball&& other)noexcept;
