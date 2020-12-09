@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
-#include <SDL_ttf.h>î
+#include <SDL_ttf.h>
 #include <iostream>
 
 class Score 

@@ -11,6 +11,8 @@ ScreenScale::ScreenScale(uint16_t widthUnits, uint16_t heightUnits, uint16_t wid
 
 void ScreenScale::Set(uint16_t width, uint16_t height)
 {
+	m_width = width;
+	m_height = height;
 	m_widthUnit = width / m_widthUnits;
 	m_heightUnit = height / m_heightUnits;
 	m_widthCenter = width >> 1;

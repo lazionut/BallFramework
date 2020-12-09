@@ -2,18 +2,18 @@
 
 #define WIDTHUNITS 20
 #define HEIGHTUNITS 10
-#define EMPTYSPACE 1
 #define PADDLEWIDTH 3.0f
 #define PADDLEHEIGHT 0.5f
-constexpr auto WIDTHPADDLESPACING1 = (WIDTHUNITS * -1) / 2 + 1;
+constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
 constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
+constexpr auto HALFHEIGHTUNITS = HEIGHTUNITS / 2;
 #define HEIGHTPADDLESPACING 0.010f
 
 Pong::Pong(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 	: Game("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 	m_pongPaddle1(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, 4),
 	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, 4),
-	m_ballImage{ nullptr }, m_pongBall{ Vector2(0,0), 0.75f, Vector2(1,0), 3 }
+	m_ballImage{ nullptr }, m_pongBall{ Vector2(0,0), 0.75f, Vector2(pow(-1, (rand() % 2)),3), 3 }
 {
 
 }
@@ -35,21 +35,35 @@ void Pong::CheckCollision()
 	float paddleTop1 = m_pongPaddle1.GetPosition().GetY();
 	float paddleTop2 = m_pongPaddle2.GetPosition().GetY();
 
-	if (paddleTop1 < (HEIGHTUNITS * -1) / 2 + m_pongPaddle1.GetHeight() / 2)
-		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, (HEIGHTUNITS * -1) / 2 + m_pongPaddle1.GetHeight() / 2 + HEIGHTPADDLESPACING);
-	if (paddleTop1 > HEIGHTUNITS / 2 - m_pongPaddle1.GetHeight() / 2)
-		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, HEIGHTUNITS / 2 - m_pongPaddle1.GetHeight() / 2 - HEIGHTPADDLESPACING);
-	if (paddleTop2 < (HEIGHTUNITS * -1) / 2 + m_pongPaddle2.GetHeight() / 2)
-		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, (HEIGHTUNITS * -1) / 2 + m_pongPaddle2.GetHeight() / 2 + HEIGHTPADDLESPACING);
-	if (paddleTop2 > HEIGHTUNITS / 2 - m_pongPaddle2.GetHeight() / 2)
-		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, HEIGHTUNITS / 2 - m_pongPaddle2.GetHeight() / 2 - HEIGHTPADDLESPACING);
+	Vector2 ballPosition = m_pongBall.GetPosition();
+	if (ballPosition.GetY() + m_pongBall.GetSize() / 2 > HALFHEIGHTUNITS ||
+		ballPosition.GetY() - m_pongBall.GetSize() / 2 < -HALFHEIGHTUNITS)
+	{
+		m_pongBall.SetDirection(m_pongBall.GetDirection().GetX(), -m_pongBall.GetDirection().GetY());
+	}
+
+	if (paddleTop1 < -HALFHEIGHTUNITS + m_pongPaddle1.GetHeight() / 2)
+	{
+		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, -HALFHEIGHTUNITS + m_pongPaddle1.GetHeight() / 2 + HEIGHTPADDLESPACING);
+	}
+	if (paddleTop1 > HALFHEIGHTUNITS - m_pongPaddle1.GetHeight() / 2)
+	{
+		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, HALFHEIGHTUNITS - m_pongPaddle1.GetHeight() / 2 - HEIGHTPADDLESPACING);
+	}
+	if (paddleTop2 < -HALFHEIGHTUNITS + m_pongPaddle2.GetHeight() / 2)
+	{
+		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, -HALFHEIGHTUNITS + m_pongPaddle2.GetHeight() / 2 + HEIGHTPADDLESPACING);
+	}
+	if (paddleTop2 > HALFHEIGHTUNITS - m_pongPaddle2.GetHeight() / 2)
+	{
+		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, HALFHEIGHTUNITS - m_pongPaddle2.GetHeight() / 2 - HEIGHTPADDLESPACING);
+	}
 
 	if (m_pongBall.CheckCollision(m_pongPaddle1))
 	{
 		m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
 		m_pongBall.SetSpeed(m_pongBall.GetSpeed() + 0.25f);
 	}
-
 	if (m_pongBall.CheckCollision(m_pongPaddle2))
 	{
 		m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
@@ -63,7 +77,6 @@ void Pong::CheckCollision()
 		m_pongBall.SetDirection(-1, 0);
 		m_pongBall.SetSpeed(3);
 	}
-
 	if (m_pongBall.GetPosition().GetX() > 10)
 	{
 		m_pongScore2.AddPoints(1);
@@ -101,8 +114,10 @@ void Pong::Render(SDL_Renderer* renderer)
 	SDL_RenderFillRect(renderer, &aux);
 	scale.PointToPixel(aux, m_pongPaddle2.GetPosition(), m_pongPaddle2.GetWidth(), m_pongPaddle2.GetHeight());
 	SDL_RenderFillRect(renderer, &aux);
-	for (int index = 0; index < scale.GetScreenHeight(); index += 10)
-		SDL_RenderDrawPoint(renderer, scale.GetScreenWidth() / 2, index);
+	uint16_t scaleHeight = scale.GetScreenHeight();
+	uint16_t scaleHalfWidth = scale.GetScreenWidth() / 2;
+	for (int index = 0; index < scaleHeight; index += 3)
+		SDL_RenderDrawPoint(renderer, scaleHalfWidth, index);
 	scale.PointToPixel(aux, m_pongBall.GetPosition(), m_pongBall.GetSize(), m_pongBall.GetSize());
 	SDL_RenderCopy(renderer, m_ballImage, NULL, &aux);
 	RenderPlayersScore(renderer);
@@ -113,9 +128,9 @@ void Pong::RenderPlayersScore(SDL_Renderer* renderer)
 	SDL_Rect aux1, aux2;
 	const auto& scale = GetScale();
 	SDL_Texture* scoreTexture1 = m_pongScore1.GetText(renderer);
-	scale.PointToPixel(aux1, 2, 3, 0.5f, 0.5f);
+	scale.PointToPixel(aux1, 2, 4, 0.5f, 0.5f);
 	SDL_Texture* scoreTexture2 = m_pongScore2.GetText(renderer);
-	scale.PointToPixel(aux2, -2, 3, 0.5f, 0.5f);
+	scale.PointToPixel(aux2, -2, 4, 0.5f, 0.5f);
 	if (scoreTexture1 != nullptr && scoreTexture2 != nullptr)
 	{
 		SDL_RenderCopy(renderer, scoreTexture1, nullptr, &aux1);
