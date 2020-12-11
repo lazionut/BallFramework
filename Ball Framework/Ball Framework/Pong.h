@@ -21,6 +21,7 @@ private:
 	void Render(SDL_Renderer* renderer) override;
 
 	void RenderPlayersScore(SDL_Renderer* renderer);
+	void ResetBall();
 
 	Paddle m_pongPaddle1;
 	Paddle m_pongPaddle2;

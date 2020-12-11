@@ -15,7 +15,7 @@ Ball::Ball(const Ball& other)
 	*this = other;
 }
 
-Vector2 Ball::GetPosition() const
+const Vector2& Ball::GetPosition() const
 {
 	return m_position;
 }
@@ -25,7 +25,12 @@ float Ball::GetSize() const
 	return m_size;
 }
 
-Vector2 Ball::GetDirection() const
+const Vector2& Ball::GetDirection() const
+{
+	return m_direction;
+}
+
+Vector2& Ball::GetDirection()
 {
 	return m_direction;
 }
@@ -63,6 +68,11 @@ void Ball::SetDirection(float x, float y)
 void Ball::SetSpeed(float speed)
 {
 	m_speed = speed;
+}
+
+void Ball::AddSpeed(float difference)
+{
+	m_speed += difference;
 }
 
 void Ball::Move()

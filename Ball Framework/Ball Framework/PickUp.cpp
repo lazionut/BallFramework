@@ -2,7 +2,7 @@
 
 void PickUp::InvokeAction(float time)
 {
-	m_time = time;
+	m_StopTime = time;
 	m_startAction();
 }
 
@@ -13,40 +13,34 @@ void PickUp::Move()
 
 void PickUp::ContinueAction()
 {
+	m_time += Time::GetDeltaTime();
 
+	if (m_time >= m_StopTime)
+	{
+		m_StopAction();
+	}
 }
 
-void PickUp::StopAction()
-{
-	m_StopAction();
-}
-
-PickUp::PickUp() : m_speed{ 0.0f }, m_time{ 0 }
-{
-}
+PickUp::PickUp() : m_speed{ 0.0f }, m_time{ 0 }, m_StopTime{ 0 } {}
 
 PickUp::PickUp(std::function<void()> startAction, const Vector2& position, const Vector2& dimension, const Vector2& direction, float speed) :
-	m_startAction{ startAction }, m_position{ position }, m_dimension{ dimension }, m_direction{ direction }, m_speed{ speed }, m_time{ 0 }
-{
-
-}
+	m_startAction{ startAction }, m_position{ position }, m_dimension{ dimension }, m_direction{ direction }, 
+	m_speed{ speed }, m_time{ 0 }, m_StopTime{ 0 } {}
 
 PickUp::PickUp(std::function<void()> startAction, std::function<void()> stopAction)
-	: m_startAction{ startAction }, m_StopAction{ stopAction }
-{
-}
+	: m_startAction{ startAction }, m_StopAction{ stopAction }, m_time{ 0 }, m_speed{ 0 }, m_StopTime{ 0 } {}
 
-Vector2 PickUp::GetPosition() const
+const Vector2& PickUp::GetPosition() const
 {
 	return m_position;
 }
 
-Vector2 PickUp::GetDimension() const
+const Vector2& PickUp::GetDimension() const
 {
 	return m_dimension;
 }
 
-Vector2 PickUp::GetDirection() const
+const Vector2& PickUp::GetDirection() const
 {
 	return m_direction;
 }

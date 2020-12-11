@@ -1,17 +1,16 @@
 #pragma once
+#include <SDL_ttf.h>
+#include <vector>
+
 #include "Game.h"
 #include "Paddle.h"
 #include "Score.h"
 #include "Ball.h"
 #include "PickUp.h"
 
-#include <SDL_ttf.h>
-#include <vector>
-
 class BrickBreaker : public Game
 {
 public:
-	BrickBreaker(int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS);
 	BrickBreaker(uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
 
 private:
@@ -27,6 +26,7 @@ private:
 	void RenderBricks(SDL_Renderer* renderer);
 	void CheckBrickBreakerBallWallCollision();
 	void RenderScore(SDL_Renderer* renderer);
+	void ResetBall();
 
 	Paddle m_paddle;
 	std::vector<std::vector<Rectangle>> m_bricks;

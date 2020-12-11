@@ -9,13 +9,14 @@
 class PickUp
 {
 public:
+
 	PickUp();
 	PickUp(std::function<void()> startAction, const Vector2& position, const Vector2& dimension, const Vector2& direction, float speed);
 	PickUp(std::function<void()> startAction, std::function<void()> stopAction);
 
-	Vector2 GetPosition() const;
-	Vector2 GetDimension() const;
-	Vector2 GetDirection() const;
+	const Vector2& GetPosition() const;
+	const Vector2& GetDimension() const;
+	const Vector2& GetDirection() const;
 	float GetSpeed() const;
 
 	void SetPosition(const Vector2& position);
@@ -40,12 +41,11 @@ public:
 
 private:
 
-	void StopAction();
-
 	std::function<void()> m_startAction;
 	std::function<void()> m_StopAction;
 	Vector2 m_position, m_dimension, m_direction;
 	float m_speed;
 	float m_time;
+	float m_StopTime;
 };
 
