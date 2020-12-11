@@ -13,90 +13,108 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Framework">
+      <UniqueIdentifier>{3f4fd243-4813-4def-be89-3da8f7187007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Pong">
+      <UniqueIdentifier>{b30b6310-831d-443a-aa52-05355e964743}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\BrickBreaker">
+      <UniqueIdentifier>{118d4f2f-f910-43dd-968b-eb17dced488a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Pong">
+      <UniqueIdentifier>{22cbf44d-d74a-4def-81c6-ae6af0319367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\BrickBreaker">
+      <UniqueIdentifier>{10daee67-caae-42b3-bba8-e3a4b45200d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework">
+      <UniqueIdentifier>{4c8ab5dc-19cd-4e68-8bc8-0fd4db6d766b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rectangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Ball.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Score.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="BrickBreaker.cpp">
+      <Filter>Source Files\BrickBreaker</Filter>
     </ClCompile>
     <ClCompile Include="Pong.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Pong</Filter>
     </ClCompile>
-    <ClCompile Include="BrickBreaker.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="Paddle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScreenScale.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="PickUp.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="TimeManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Rectangle.cpp">
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenScale.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vector2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rectangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ball.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Score.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="BrickBreaker.h">
+      <Filter>Header Files\BrickBreaker</Filter>
     </ClInclude>
     <ClInclude Include="Pong.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Pong</Filter>
     </ClInclude>
-    <ClInclude Include="BrickBreaker.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Ball.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Paddle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScreenScale.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="PickUp.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="TimeManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Rectangle.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenScale.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

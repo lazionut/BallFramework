@@ -33,6 +33,6 @@ private:
 	Score m_score;
 	SDL_Texture* m_ballImage = nullptr;
 	Ball m_ball;
-	PickUp BrickBreakerPickUp;
+	PickUp m_pickUp;
 };
 

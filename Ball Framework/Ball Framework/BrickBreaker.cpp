@@ -36,6 +36,9 @@ void BrickBreaker::Start()
 	float xBall;
 	xBall = pow(-1, (rand() % 2));
 	m_ball.SetDirection(xBall, m_ball.GetDirection().GetY());
+
+	m_pickUp.SetStartAction(PickUp::SpeedUp);
+	m_pickUp.InvokeAction();
 }
 
 void BrickBreaker::OnClose()

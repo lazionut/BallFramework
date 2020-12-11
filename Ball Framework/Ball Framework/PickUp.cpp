@@ -1,8 +1,9 @@
 #include "PickUp.h"
 
-void PickUp::InvokeAction()
+void PickUp::InvokeAction(float time)
 {
-	m_f_action();
+	m_time = time;
+	m_startAction();
 }
 
 void PickUp::Move()
@@ -10,12 +11,28 @@ void PickUp::Move()
 	m_position += (m_direction * m_speed * Time::GetDeltaTime());
 }
 
-PickUp::PickUp() : m_speed{ 0.0f }
+void PickUp::ContinueAction()
+{
+
+}
+
+void PickUp::StopAction()
+{
+	m_StopAction();
+}
+
+PickUp::PickUp() : m_speed{ 0.0f }, m_time{ 0 }
 {
 }
 
-PickUp::PickUp(std::function<void()> f_action, const Vector2& position, const Vector2& dimension, const Vector2& direction, float speed) :
-	m_f_action{ f_action }, m_position{ position }, m_dimension{ dimension }, m_direction{ direction }, m_speed{ speed }
+PickUp::PickUp(std::function<void()> startAction, const Vector2& position, const Vector2& dimension, const Vector2& direction, float speed) :
+	m_startAction{ startAction }, m_position{ position }, m_dimension{ dimension }, m_direction{ direction }, m_speed{ speed }, m_time{ 0 }
+{
+
+}
+
+PickUp::PickUp(std::function<void()> startAction, std::function<void()> stopAction)
+	: m_startAction{ startAction }, m_StopAction{ stopAction }
 {
 }
 
@@ -57,7 +74,32 @@ void PickUp::SetSpeed(float speed)
 {
 	m_speed = speed;
 }
-void PickUp::Speed()
+
+void PickUp::SetStartAction(std::function<void()> action)
+{
+	m_startAction = action;
+}
+
+void PickUp::SetStopAction(std::function<void()> action)
+{
+	m_StopAction = action;
+}
+
+void PickUp::SetActions(std::function<void()> startAction, std::function<void()> stopAction)
+{
+	m_startAction = startAction;
+	m_StopAction = stopAction;
+}
+
+void PickUp::Set(const Vector2& position, const Vector2& dimension, const Vector2& direction, float speed)
+{
+	m_position = position;
+	m_dimension = dimension;
+	m_direction = direction;
+	m_speed = speed;
+}
+
+void PickUp::SpeedUp()
 {
 	Time::SetTimeScale(2);
 }
