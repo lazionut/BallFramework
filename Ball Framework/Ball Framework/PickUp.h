@@ -28,13 +28,6 @@ public:
 	void SetActions(std::function<void()> startAction, std::function<void()> stopAction);
 	void Set(const Vector2& position, const Vector2& dimension, const Vector2& direction, float speed);
 
-	static void SpeedUp();
-	static void SlowDown();
-	static void SmallerPaddle(Paddle& paddle);
-	static void BiggerPaddle(Paddle& paddle);
-	static void BiggerBall(Ball& ball, float x);
-	static void SmallerBall(Ball& ball, float x);
-
 	void InvokeAction(float time = 0.0f);
 	void Move();
 	void ContinueAction();

@@ -26,7 +26,7 @@ Pong::Pong(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 
 void Pong::Start()
 {
-	m_ballImage = LoadImage("ball.png");
+	m_ballImage = LoadImage("../Assets/ball.png");
 
 	if (m_ballImage == nullptr)
 	{

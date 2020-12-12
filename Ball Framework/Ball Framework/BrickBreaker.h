@@ -7,6 +7,7 @@
 #include "Score.h"
 #include "Ball.h"
 #include "PickUp.h"
+#include "PickUpActions.h"
 
 class BrickBreaker : public Game
 {

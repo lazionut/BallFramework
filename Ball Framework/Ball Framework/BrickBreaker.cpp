@@ -27,7 +27,7 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, uint32_t flags, uint
 void BrickBreaker::Start()
 {
 	InitBricks();
-	m_ballImage = LoadImage("redball.png");
+	m_ballImage = LoadImage("../Assets/redball.png");
 
 	if (m_ballImage == nullptr)
 	{
@@ -37,7 +37,7 @@ void BrickBreaker::Start()
 
 	ResetBall();
 
-	m_pickUp.SetStartAction(PickUp::SpeedUp);
+	m_pickUp.SetStartAction(PickUpActions::SpeedUp);
 	m_pickUp.InvokeAction();
 }
 

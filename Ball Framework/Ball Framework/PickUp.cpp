@@ -17,7 +17,10 @@ void PickUp::ContinueAction()
 
 	if (m_time >= m_StopTime)
 	{
-		m_StopAction();
+		if (m_StopAction)
+		{
+			m_StopAction();
+		}
 	}
 }
 
@@ -92,35 +95,3 @@ void PickUp::Set(const Vector2& position, const Vector2& dimension, const Vector
 	m_direction = direction;
 	m_speed = speed;
 }
-
-void PickUp::SpeedUp()
-{
-	Time::SetTimeScale(2);
-}
-
-void PickUp::SlowDown()
-{
-	Time::SetTimeScale(1);
-}
-
-void PickUp::SmallerPaddle(Paddle& paddle)
-{
-	paddle.SetWidth(paddle.GetWidth() - 2);
-}
-
-void PickUp::BiggerPaddle(Paddle& paddle)
-{
-	paddle.SetWidth(paddle.GetWidth() + 2);
-}
-
-void PickUp::BiggerBall(Ball& ball, float x)
-{
-	ball.SetSize(ball.GetSize() + 1);
-}
-
-void PickUp::SmallerBall(Ball& ball, float x)
-{
-	ball.SetSize(ball.GetSize() - 1);
-}
-
-

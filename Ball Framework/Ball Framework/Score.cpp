@@ -22,7 +22,7 @@ std::string Score::ConvertToString()
 
 SDL_Texture* Score::GetText(SDL_Renderer* renderer)
 {
-	TTF_Font* font = TTF_OpenFont("Adoring.ttf", 24);
+	TTF_Font* font = TTF_OpenFont("../Assets/Adoring.ttf", 24);
 	if (font == NULL) {
 		std::cout << "Could not load the text! " << TTF_GetError()<<std::endl;
 		TTF_CloseFont(font);

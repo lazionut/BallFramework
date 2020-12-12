@@ -84,6 +84,9 @@
     <ClCompile Include="TestGame.cpp">
       <Filter>Source Files\Test</Filter>
     </ClCompile>
+    <ClCompile Include="PickUpActions.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="TestGame.h">
       <Filter>Header Files\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="PickUpActions.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

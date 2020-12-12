@@ -12,7 +12,7 @@ TestGame::TestGame(uint16_t width, uint16_t height, uint32_t flags, uint16_t max
 
 void TestGame::Start()
 {
-	ballImage = LoadImage("ball.png");
+	ballImage = LoadImage("../Assets/ball.png");
 
 	if (ballImage == nullptr)
 	{

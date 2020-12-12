@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Third-Party\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Third-Party\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Third-Party\SDL2-2.0.12\include;$(SolutionDir)\Third-Party\SDL2_image-2.0.5\include;$(SolutionDir)\Third-Party\SDL2_ttf-2.0.15\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Third-Party\SDL2-2.0.12\lib\x86;$(SolutionDir)\Third-Party\SDL2_image-2.0.5\lib\x86;$(SolutionDir)\Third-Party\SDL2_ttf-2.0.15\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -97,6 +97,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2_ttf.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Third-Party\SDL2-2.0.12\lib\x86;$(SolutionDir)\Third-Party\SDL2_image-2.0.5\lib\x86;$(SolutionDir)\Third-Party\SDL2_ttf-2.0.15\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -151,6 +152,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="PickUp.cpp" />
+    <ClCompile Include="PickUpActions.cpp" />
     <ClCompile Include="Pong.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -168,6 +170,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Paddle.h" />
     <ClInclude Include="PickUp.h" />
+    <ClInclude Include="PickUpActions.h" />
     <ClInclude Include="Pong.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Renderer.h" />
