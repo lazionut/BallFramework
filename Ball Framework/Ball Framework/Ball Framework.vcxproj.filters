@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Framework">
       <UniqueIdentifier>{4c8ab5dc-19cd-4e68-8bc8-0fd4db6d766b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Test">
+      <UniqueIdentifier>{100d709a-ff27-499f-affb-76adb3a3c18e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Test">
+      <UniqueIdentifier>{050c53ac-d0f8-4623-b63f-05c4dd6959a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -75,6 +81,9 @@
     <ClCompile Include="Vector2.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
+    <ClCompile Include="TestGame.cpp">
+      <Filter>Source Files\Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -115,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="TestGame.h">
+      <Filter>Header Files\Test</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

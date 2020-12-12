@@ -5,6 +5,7 @@
 #define PADDLEWIDTH 3.0f
 #define PADDLEHEIGHT 0.5f
 #define HEIGHTPADDLESPACING 0.010f
+#define PADDLESPEED 6.0f
 
 constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
 constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
@@ -16,9 +17,9 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 Pong::Pong(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 	: Game("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
-	m_pongPaddle1(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, 6.0f),
-	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, 6.0f),
-	m_ballImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2::zero, 3 }
+	m_pongPaddle1(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED),
+	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED),
+	m_ballImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 3 }
 {
 
 }
@@ -31,6 +32,7 @@ void Pong::Start()
 	{
 		std::cout << "Could not load the ball image!\n";
 		Stop();
+		return;
 	}
 
 	ResetBall();
@@ -43,7 +45,7 @@ void Pong::OnClose()
 
 void Pong::ResetBall()
 {
-	m_pongBall.SetDirection(pow(-1, (rand() % 2)), pow(-1, (rand() % 2)));
+	m_pongBall.SetDirection(pow(-1, (rand() % 2)), 0);
 }
 
 
@@ -59,7 +61,8 @@ void Pong::CheckCollision()
 		ballPosition.GetY() - m_pongBall.GetSize() / 2 < LOWERLIMIT)
 	{
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX(), -m_pongBall.GetDirection().GetY());
-		m_pongBall.GetDirection().SetY(-m_pongBall.GetDirection().GetY());
+		//m_pongBall.GetDirection().SetY(-m_pongBall.GetDirection().GetY());
+		m_pongBall.GetDirection().GetY() *= -1;
 	}
 
 	//check paddle1 wall limits
@@ -86,13 +89,22 @@ void Pong::CheckCollision()
 	if (m_pongBall.GetDirection().GetX() < 0 && m_pongBall.CheckCollision(m_pongPaddle1))
 	{
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
-		m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
+		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
+
+		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle1.GetPosition().GetY();
+		m_pongBall.GetDirection().GetX() *= -1;
+		m_pongBall.GetDirection().SetY(difference);
 		m_pongBall.AddSpeed(0.25f);
+
 	}
 	if (m_pongBall.GetDirection().GetX() > 0 && m_pongBall.CheckCollision(m_pongPaddle2))
 	{
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
-		m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
+		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
+
+		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle2.GetPosition().GetY();
+		m_pongBall.GetDirection().GetX() *= -1;
+		m_pongBall.GetDirection().SetY(difference);
 		m_pongBall.AddSpeed(0.25f);
 	}
 

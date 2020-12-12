@@ -157,6 +157,7 @@
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="ScreenScale.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="TestGame.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Vector2.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="ScreenScale.h" />
+    <ClInclude Include="TestGame.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Vector2.h" />

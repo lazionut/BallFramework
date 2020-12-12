@@ -111,6 +111,7 @@ void BrickBreaker::Update()
 {
 	m_paddle.Move();
 	m_ball.Move();
+	m_pickUp.ContinueAction();
 }
 
 void BrickBreaker::InitBricks()
@@ -181,7 +182,7 @@ void BrickBreaker::RenderScore(SDL_Renderer* renderer)
 
 	if (font != nullptr)
 	{
-		SDL_RenderCopy(renderer, font, NULL, &rect);
+		SDL_RenderCopy(renderer, font, nullptr, &rect);
 		SDL_DestroyTexture(font);
 	}
 	else

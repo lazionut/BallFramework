@@ -118,8 +118,16 @@ bool Ball::CheckCollision(const Rectangle& rect)
 	float delta1 = x - ballx;
 	float delta2 = y - bally;
 
+	//float difference = (m_size * m_size / 4) - (delta1 * delta1 + delta2 * delta2);
+
 	if (delta1 * delta1 + delta2 * delta2 < (m_size * m_size / 4))
 	{
+		Vector2 difference{ delta1, delta2 };
+		difference.Normalize();
+		difference *= m_size / 2;
+
+		m_position = Vector2(x, y) - difference;
+
 		return true;
 	}
 

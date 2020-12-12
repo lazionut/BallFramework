@@ -30,12 +30,22 @@ float Vector2::GetX() const
 	return m_x;
 }
 
+float& Vector2::GetX()
+{
+	return m_x;
+}
+
 void Vector2::SetY(float yCoordinate)
 {
 	m_y = yCoordinate;
 }
 
 float Vector2::GetY() const
+{
+	return m_y;
+}
+
+float& Vector2::GetY()
 {
 	return m_y;
 }

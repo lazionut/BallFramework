@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Pong.h"
 #include "BrickBreaker.h"
+#include "TestGame.h"
 #include <SDL_ttf.h>
 
 bool initializeSDL()
@@ -32,7 +33,7 @@ int main(int argc, char** argv)
 
 	if (initializeSDL())
 	{
-		Game* game = new Pong(1000, 500, SDL_WINDOW_RESIZABLE, 60);
+		Game* game = new TestGame(500, 500, SDL_WINDOW_RESIZABLE, 60);
 
 		game->Run();
 

@@ -10,8 +10,10 @@ public:
 
 	void SetX(float xCoordinate);
 	float GetX() const;
+	float& GetX();
 	void SetY(float yCoordinate);
 	float GetY() const;
+	float& GetY();
 	void Set(float xCoordinate, float yCoordinate);
 
 	float GetLength() const;
