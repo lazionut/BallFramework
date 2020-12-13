@@ -54,6 +54,40 @@ void PlayersStatistics::ReadStatistics(const std::string& inFile)
 	fin.close();
 }
 
+void PlayersStatistics::UpdateStatistics(std::variant<std::string, uint16_t> playerName, const std::string& outFile, bool isWon)
+{
+	//playerName gamesPlayed gamesWon gamesLost
+	for (auto& player : m_statistics)
+	{
+		if (player[0] == playerName)
+		{
+			std::variant<std::string, uint16_t> temp = std::get<uint16_t>(player[1]) + 1;
+			player[1] = temp;
+
+			if (isWon)
+			{
+				temp = std::get<uint16_t>(player[2]) + 1; 
+				player[2] = temp;
+			}
+			else
+			{
+				temp = std::get<uint16_t>(player[3]) + 1; 
+				player[3] = temp;
+			}
+		}
+	}
+
+	std::ofstream fout(outFile);
+
+	for (auto& player : m_statistics)
+	{
+		fout << std::get<std::string>(player[0]) << " ";
+		fout << std::get<std::uint16_t>(player[1]) << " ";
+		fout << std::get<std::uint16_t>(player[2]) << " ";
+		fout << std::get<std::uint16_t>(player[3]) << std::endl;
+	}
+}
+
 void Swap(std::vector<std::variant<std::string, uint16_t>>* first, std::vector<std::variant<std::string, uint16_t>>* second)
 {
 	std::vector<std::variant<std::string, uint16_t>>* temp;

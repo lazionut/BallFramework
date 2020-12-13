@@ -11,7 +11,7 @@ public:
 	PlayersStatistics();
 	PlayersStatistics(uint16_t noPlayers);
 	void ReadStatistics(const std::string& inFile);
-
+	void UpdateStatistics(std::variant<std::string, uint16_t> playerName, const std::string& outFile, bool isWon);
 
 	friend void Swap(std::vector < std::variant <std::string, uint16_t> >* first, std::vector < std::variant <std::string, uint16_t> >* second);
 	friend void OrderStatistiscs(std::vector<std::vector< std::variant <std::string, uint16_t> > >& statistics);
