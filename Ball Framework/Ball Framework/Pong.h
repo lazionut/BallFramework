@@ -5,6 +5,7 @@
 #include "Score.h"
 #include "ScreenScale.h"
 #include <SDL_ttf.h>
+#include <vector>
 
 class Pong : public Game
 {
@@ -22,11 +23,14 @@ private:
 	void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
 	void Render(SDL_Renderer* renderer) override;
 
+	void InitialiseBricks();
+	void RenderBricks(SDL_Renderer* renderer);
 	void RenderPlayersScore(SDL_Renderer* renderer);
 	void ResetBall();
 
 	Paddle m_pongPaddle1;
 	Paddle m_pongPaddle2;
+	std::vector<std::vector<Rectangle>> m_bricks;
 	Ball m_pongBall;
 	SDL_Texture* m_ballImage;
 	TTF_Font* m_font;
