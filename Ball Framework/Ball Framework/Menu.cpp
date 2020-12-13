@@ -53,7 +53,28 @@ void Menu::MouseReleased(const SDL_MouseButtonEvent& mouse)
 
 void Menu::Render(SDL_Renderer* renderer)
 {
+	SDL_Rect rect;
+	const auto& scale = GetScale();
+	SDL_Texture* fontTexture;
 
+	for (auto i = 0; i < m_buttons.size(); i++)
+	{
+		scale.PointToPixel(rect, m_buttons[i].GetPosition(), m_buttons[i].GetWidth(), m_buttons[i].GetHeight());
+		SDL_SetRenderDrawColor(renderer, m_buttons[i].GetColor().r, m_buttons[i].GetColor().g,
+			m_buttons[i].GetColor().b, m_buttons[i].GetColor().a);
+		SDL_RenderFillRect(renderer, &rect);
+		m_buttons[i].SetRect(rect);
+
+		fontTexture = m_buttons[i].GetText(renderer, m_font);
+		GetScale().PointToPixel(rect, m_buttons[i].GetPosition().GetX(), m_buttons[i].GetPosition().GetY(),
+			m_buttons[i].GetWidth() - 0.2f, m_buttons[i].GetHeight());
+
+		if (fontTexture != nullptr)
+		{
+			SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
+			SDL_DestroyTexture(fontTexture);
+		}
+	}
 }
 
 
