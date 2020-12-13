@@ -11,6 +11,7 @@ public:
 
 	const SDL_Color& GetColor();
 	void SetButton(const Vector2& position, const float& width, const float& height, const std::string& name);
+	SDL_Texture* GetText(SDL_Renderer* renderer, TTF_Font* font);
 	SDL_Rect GetRect() const;
 	void SetRect(const SDL_Rect& rect);
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Pong.h"
 #include "BrickBreaker.h"
+#include "Menu.h"
 #include "TestGame.h"
 
 bool initializeSDL()
@@ -34,11 +35,11 @@ int main(int argc, char** argv)
 
 	if (initializeSDL())
 	{
-		Game* game = new BrickBreaker(500, 650, SDL_WINDOW_RESIZABLE, 60);
+		Game* menu = new Menu(500, 650, SDL_WINDOW_RESIZABLE, 60);
 
-		game->Run();
+		menu->Run();
 
-		delete game;
+		delete menu;
 	}
 
 	SDL_Quit();

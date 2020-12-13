@@ -15,7 +15,8 @@ Menu::Menu(int16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS) :
 
 void Menu::InitMenu()
 {
-
+	InitButtons();
+	LoadFont();
 }
 
 void Menu::Start() {
@@ -68,4 +69,19 @@ void Menu::LoadFont()
 TTF_Font* Menu::GetFont()
 {
 	return m_font;
+}
+
+void Menu::InitButtons()
+{
+	for (auto i = 0; i < m_buttons.size(); i++)
+	{
+		switch (i) {
+		case 0:
+			m_buttons[i].SetButton(Vector2(0.0f, 3.0f), 3.0f, 0.7f, "Play Pong");
+			break;
+		case 1:
+			m_buttons[i].SetButton(Vector2(0.0f, 1.5f), 5.0f, 0.7f, "Play BrickBreaker");
+			break;
+		}
+	}
 }

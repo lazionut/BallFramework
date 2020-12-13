@@ -29,3 +29,19 @@ SDL_Rect Button::GetRect() const {
 	return m_rect;
 }
 
+void Button::SetButton(const Vector2& position, const float& width, const float& height, const std::string& name)
+{
+	Set(position, width, height);
+	m_name = name;
+}
+
+SDL_Texture* Button::GetText(SDL_Renderer* renderer, TTF_Font* font)
+{
+	SDL_Surface* loadedText = TTF_RenderText_Solid(font, m_name.c_str(), black);
+	if (loadedText)
+	{
+		SDL_Texture* result = SDL_CreateTextureFromSurface(renderer, loadedText);
+		SDL_FreeSurface(loadedText);
+		return result;
+	}
+}

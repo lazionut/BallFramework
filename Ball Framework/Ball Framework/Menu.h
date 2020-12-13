@@ -30,5 +30,7 @@ public:
 	TTF_Font* GetFont();
 
 private:
+	std::vector<Button> m_buttons;
+	void InitButtons();
 	TTF_Font* m_font;
 };
