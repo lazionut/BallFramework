@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Pong.h"
 #include "BrickBreaker.h"
+#include "Button.h"
 #include <vector>
 #include <SDL_ttf.h>
 
@@ -26,6 +27,9 @@ public:
 	void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
 
 	void Render(SDL_Renderer* renderer) override;
+
+	void IsInBounds(Sint32 x, Sint32 y);
+	void PerformAction(int index);
 
 	TTF_Font* GetFont();
 

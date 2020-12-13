@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 
 	if (initializeSDL())
 	{
-		Game* menu = new Menu(500, 650, SDL_WINDOW_RESIZABLE, 60);
+		Game* menu = new Menu(500, 500, SDL_WINDOW_RESIZABLE, 60);
 
 		menu->Run();
 

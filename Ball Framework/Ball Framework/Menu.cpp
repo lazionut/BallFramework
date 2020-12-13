@@ -2,11 +2,12 @@
 
 #define WIDTHUNITS 10
 #define HEIGHTUNITS 10
-
+constexpr int buttonsNum = 2;
 static SDL_Color black = { 0, 0, 0, 0 };
 
 Menu::Menu(int16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS) :
-	Game("Ball Games", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS)
+	Game("Ball Games", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
+	m_buttons{ buttonsNum }
 	
 {
 	InitMenu();
@@ -45,6 +46,7 @@ void Menu::KeyReleased(const SDL_Keycode& key)
 
 void Menu::MousePressed(const SDL_MouseButtonEvent& mouse)
 {
+	IsInBounds(mouse.x, mouse.y);
 }
 
 void Menu::MouseReleased(const SDL_MouseButtonEvent& mouse)
@@ -77,10 +79,36 @@ void Menu::Render(SDL_Renderer* renderer)
 	}
 }
 
+void Menu::IsInBounds(Sint32 x, Sint32 y)
+{
+	for (auto i = 0; i < m_buttons.size(); i++) {
+		if (x > m_buttons[i].GetRect().x &&
+			x < m_buttons[i].GetRect().x + m_buttons[i].GetRect().w
+			&& y > m_buttons[i].GetRect().y &&
+			y < m_buttons[i].GetRect().y + m_buttons[i].GetRect().h) {
+			PerformAction(i);
+		}
+	}
+}
+
+void Menu::PerformAction(int index)
+{
+	if (index == 0) {
+
+		Game* pong = new Pong(1000, 500, m_font, SDL_WINDOW_RESIZABLE, 60);
+		pong->Run();
+		delete pong;
+	}
+	else {
+		Game* brickb = new BrickBreaker(500, 650, m_font, SDL_WINDOW_RESIZABLE, 60);
+		brickb->Run();
+		delete brickb;
+	}
+}
 
 void Menu::LoadFont()
 {
-	m_font = TTF_OpenFont("Pixel7.ttf", 24);
+	m_font = TTF_OpenFont("../Assets/Pixel7.ttf", 24);
 	if (m_font == NULL) {
 		std::cout << "Could not load the font! " << TTF_GetError() << std::endl;
 		TTF_CloseFont(m_font);
