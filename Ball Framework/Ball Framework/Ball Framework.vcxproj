@@ -154,6 +154,7 @@
     <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="PickUpActions.cpp" />
+    <ClCompile Include="PlayersStatistics.cpp" />
     <ClCompile Include="Pong.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Paddle.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="PickUpActions.h" />
+    <ClInclude Include="PlayersStatistics.h" />
     <ClInclude Include="Pong.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Renderer.h" />

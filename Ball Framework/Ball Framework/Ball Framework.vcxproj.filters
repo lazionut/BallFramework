@@ -87,6 +87,9 @@
     <ClCompile Include="PickUpActions.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
+    <ClCompile Include="PlayersStatistics.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -132,6 +135,9 @@
       <Filter>Header Files\Test</Filter>
     </ClInclude>
     <ClInclude Include="PickUpActions.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayersStatistics.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
