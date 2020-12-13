@@ -29,7 +29,7 @@ void Game::InitGame(const char* title, int32_t x, int32_t y, uint16_t width, uin
 void Game::InitGame(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 {
 	InitGame(title.c_str(), x, y, width, height, flags, maxFPS);
-	
+
 }
 
 void Game::Run()
@@ -154,6 +154,12 @@ void Game::HandleEvents()
 		case SDL_KEYUP:
 			KeyReleased(m_gameEvent->key.keysym.sym);
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			MousePressed(m_gameEvent->button);
+			break;
+		case SDL_MOUSEBUTTONUP:
+			MouseReleased(m_gameEvent->button);
+			break;
 		case SDL_WINDOWEVENT:
 			HandleWindowEvents(m_gameEvent);
 			break;
@@ -196,9 +202,10 @@ void Game::HandleWindowEvents(const SDL_Event* gameEvent)
 		break;
 	case SDL_WINDOWEVENT_FOCUS_LOST:
 		break;
-		//case SDL_WINDOWEVENT_CLOSE:
-		//	SDL_Log("Window %d closed", gameEvent->window.windowID);
-		//	break;
+	case SDL_WINDOWEVENT_CLOSE:
+		m_running = false;
+		SDL_Log("Window %d closed", gameEvent->window.windowID);
+		break;
 	default:
 		break;
 	}

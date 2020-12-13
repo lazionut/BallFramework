@@ -23,6 +23,8 @@ protected:
 	virtual void Update() = 0;
 	virtual void KeyPressed(const SDL_Keycode& key) = 0;
 	virtual void KeyReleased(const SDL_Keycode& key) = 0;
+	virtual void MousePressed(const SDL_MouseButtonEvent& mouse) = 0;
+	virtual void MouseReleased(const SDL_MouseButtonEvent& mouse) = 0;
 	virtual void Render(SDL_Renderer* renderer) = 0;
 
 	SDL_Texture* LoadImage(const std::string& path) const;

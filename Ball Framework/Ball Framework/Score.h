@@ -4,10 +4,10 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
-class Score 
+class Score
 {
 public:
-	Score();
+	Score(TTF_Font* font);
 	void AddPoints(uint16_t points);
 	uint16_t GetScore() const;
 	std::string ConvertToString();
@@ -16,4 +16,5 @@ public:
 
 private:
 	uint16_t m_points;
+	TTF_Font* m_font;
 };

@@ -1,18 +1,17 @@
 #pragma once
 #include <SDL_ttf.h>
 #include <vector>
-
+#include "PickUpActions.h"
 #include "Game.h"
 #include "Paddle.h"
 #include "Score.h"
 #include "Ball.h"
 #include "PickUp.h"
-#include "PickUpActions.h"
 
 class BrickBreaker : public Game
 {
 public:
-	BrickBreaker(uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
+	BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags = 0, uint16_t maxFPS = 0);
 
 private:
 	void Start() override;
@@ -20,6 +19,8 @@ private:
 	void CheckCollision() override;
 	void KeyPressed(const SDL_Keycode& key) override;
 	void KeyReleased(const SDL_Keycode& key) override;
+	void MousePressed(const SDL_MouseButtonEvent& mouse) override;
+	void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
 	void Render(SDL_Renderer* renderer) override;
 	void Update() override;
 
@@ -33,7 +34,7 @@ private:
 	std::vector<std::vector<Rectangle>> m_bricks;
 	Score m_score;
 	SDL_Texture* m_ballImage = nullptr;
+	TTF_Font* m_font;
 	Ball m_ball;
 	PickUp m_pickUp;
 };
-

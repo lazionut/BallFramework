@@ -1,6 +1,7 @@
 #include "Score.h"
 
-Score::Score()
+Score::Score(TTF_Font* font) :
+	m_font{ font }
 {
 	m_points = 0;
 }
@@ -22,24 +23,13 @@ std::string Score::ConvertToString()
 
 SDL_Texture* Score::GetText(SDL_Renderer* renderer)
 {
-	TTF_Font* font = TTF_OpenFont("../Assets/Adoring.ttf", 24);
-	if (font == NULL) {
-		std::cout << "Could not load the text! " << TTF_GetError()<<std::endl;
-		TTF_CloseFont(font);
-		return nullptr;
-	}
 	SDL_Color white = { 255, 255, 255 };
-	SDL_Surface* loadedText = TTF_RenderText_Solid(font, ConvertToString().c_str(), white);
+	SDL_Surface* loadedText = TTF_RenderText_Solid(m_font, ConvertToString().c_str(), white);
 
 	if (loadedText)
 	{
 		SDL_Texture* result = SDL_CreateTextureFromSurface(renderer, loadedText);
 		SDL_FreeSurface(loadedText);
-		TTF_CloseFont(font);
 		return result;
 	}
-
-	std::cout << "Could not load the text!\n";
-	TTF_CloseFont(font);
-	return nullptr;
 }

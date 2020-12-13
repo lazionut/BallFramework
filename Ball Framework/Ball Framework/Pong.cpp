@@ -14,14 +14,14 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
 constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
-Pong::Pong(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
+Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
 	: Game("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 	m_pongPaddle1(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED),
 	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED),
-	m_ballImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 3 }
+	m_ballImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 3 },
+	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }
 {
-
 }
 
 void Pong::Start()
@@ -142,6 +142,14 @@ void Pong::KeyReleased(const SDL_Keycode& key)
 {
 	m_pongPaddle1.KeyReleased(key);
 	m_pongPaddle2.KeyReleased(key);
+}
+
+void Pong::MousePressed(const SDL_MouseButtonEvent& mouse)
+{
+}
+
+void Pong::MouseReleased(const SDL_MouseButtonEvent& mouse)
+{
 }
 
 void Pong::Render(SDL_Renderer* renderer)

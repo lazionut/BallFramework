@@ -14,11 +14,11 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
 constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
-BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
+BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
 	: Game("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-
+	m_font{ font },
 	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
-		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{},
+		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{ font },
 	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.25f, Vector2(0, 1), 2.0f)
 {
 
@@ -144,6 +144,14 @@ void BrickBreaker::KeyReleased(const SDL_Keycode& key)
 	m_paddle.KeyReleased(key);
 }
 
+void BrickBreaker::MousePressed(const SDL_MouseButtonEvent& mouse)
+{
+}
+
+void BrickBreaker::MouseReleased(const SDL_MouseButtonEvent& mouse)
+{
+}
+
 void BrickBreaker::Render(SDL_Renderer* renderer)
 {
 	SDL_Rect rect;
@@ -177,16 +185,20 @@ void BrickBreaker::RenderBricks(SDL_Renderer* renderer)
 void BrickBreaker::RenderScore(SDL_Renderer* renderer)
 {
 	SDL_Rect rect;
-	SDL_Texture* font = m_score.GetText(renderer);
-	GetScale().PointToPixel(rect, 0.0f, 6.0f, 0.5f, 0.5f);
-
-	if (font != nullptr)
+	SDL_Texture* fontTexture = m_score.GetText(renderer);
+	if (m_score.GetScore() < 10) {
+		GetScale().PointToPixel(rect, 0.0f, 6.1f, 0.5f, 0.9f);
+	}
+	else {
+		GetScale().PointToPixel(rect, 0.0f, 6.1f, 1.0f, 0.9f);
+	}
+	if (m_font != nullptr)
 	{
-		SDL_RenderCopy(renderer, font, nullptr, &rect);
-		SDL_DestroyTexture(font);
+		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
+		SDL_DestroyTexture(fontTexture);
 	}
 	else
 	{
-		std::cout << "font not loaded" << std::endl;
+		std::cout << "Font not loaded" << std::endl;
 	}
 }
