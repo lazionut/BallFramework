@@ -23,7 +23,7 @@ Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint
 
 	m_pongPaddle1(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED),
 	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED),
-	m_bricks{ BRICKCOLUMNS }, m_ballImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 5 },
+	m_bricks{ BRICKCOLUMNS }, m_ballImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 10 },
 	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }
 {
 }
@@ -97,10 +97,10 @@ void Pong::CheckCollision()
 		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
 
 		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle1.GetPosition().GetY();
+		m_pongBall.GetDirection().Normalize();
 		m_pongBall.GetDirection().GetX() *= -1;
 		m_pongBall.GetDirection().SetY(difference);
 		m_pongBall.AddSpeed(0.25f);
-
 	}
 	if (m_pongBall.GetDirection().GetX() > 0 && m_pongBall.CheckCollision(m_pongPaddle2))
 	{
@@ -108,6 +108,7 @@ void Pong::CheckCollision()
 		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
 
 		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle2.GetPosition().GetY();
+		m_pongBall.GetDirection().Normalize();
 		m_pongBall.GetDirection().GetX() *= -1;
 		m_pongBall.GetDirection().SetY(difference);
 		m_pongBall.AddSpeed(0.25f);
@@ -117,16 +118,27 @@ void Pong::CheckCollision()
 	if (m_pongBall.GetPosition().GetX() < LEFTLIMIT)
 	{
 		m_pongScore1.AddPoints(1);
+		if (m_pongScore1.GetScore() == 5)
+		{
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player2 won!", NULL);
+			SDL_Quit();
+
+		}
 		m_pongBall.SetPosition(0, 0);
 		m_pongBall.SetDirection(-1, 0);
-		m_pongBall.SetSpeed(5);
+		m_pongBall.SetSpeed(10);
 	}
 	if (m_pongBall.GetPosition().GetX() > RIGHTLIMIT)
 	{
 		m_pongScore2.AddPoints(1);
+		if (m_pongScore2.GetScore() == 5)
+		{
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player1 won!", NULL);
+			SDL_Quit();
+		}
 		m_pongBall.SetPosition(0, 0);
 		m_pongBall.SetDirection(1, 0);
-		m_pongBall.SetSpeed(5);
+		m_pongBall.SetSpeed(10);
 	}
 }
 
@@ -191,7 +203,7 @@ void Pong::InitialiseBricks()
 		for (int column = 0; column < BRICKSPERCOLUMN; ++column)
 		{
 			m_bricks[row][column].Set(Vector2(x, y), BRICKWIDTH, BRICKHEIGHT);
-			y+=2;
+			y += 2;
 		}
 		++x;
 		y = -3;

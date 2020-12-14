@@ -19,7 +19,8 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 	m_font{ font },
 	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
 		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{ font },
-	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.25f, Vector2(0, 1), 2.0f)
+	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.25f, Vector2(0, 1), 2.0f),
+	m_heartCounter{ 3 }
 {
 
 }
@@ -49,8 +50,8 @@ void BrickBreaker::OnClose()
 void BrickBreaker::ResetBall()
 {
 	float xBall;
-	xBall = pow(-1, (rand() % 2));
-	m_ball.SetDirection(xBall, 1);
+	//xBall = pow(-1, (rand() % 2));
+	m_ball.SetDirection(0, 1);
 	m_ball.SetPosition(0, 0);
 }
 
@@ -69,7 +70,10 @@ void BrickBreaker::CheckCollision()
 
 	if (m_ball.CheckCollision(m_paddle))
 	{
-		m_ball.ChangeDirection(m_paddle);
+		//m_ball.ChangeDirection(m_paddle);
+		float difference = m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX();
+		m_ball.GetDirection().GetY() *= -1;
+		m_ball.GetDirection().SetX(difference);
 	}
 
 	for (auto& row : m_bricks)
@@ -103,6 +107,12 @@ void BrickBreaker::CheckBrickBreakerBallWallCollision()
 
 	if (ballPosition.GetY() < LOWERLIMIT)
 	{
+		--m_heartCounter;
+		if (m_heartCounter == 0)
+		{
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", NULL);
+			SDL_Quit();
+		}
 		ResetBall();
 	}
 }

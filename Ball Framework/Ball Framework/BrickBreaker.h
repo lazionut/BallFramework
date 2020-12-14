@@ -37,4 +37,5 @@ private:
 	TTF_Font* m_font;
 	Ball m_ball;
 	PickUp m_pickUp;
+	uint16_t m_heartCounter;
 };
