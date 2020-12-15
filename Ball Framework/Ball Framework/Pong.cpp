@@ -67,6 +67,7 @@ void Pong::CheckCollision()
 	{
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX(), -m_pongBall.GetDirection().GetY());
 		//m_pongBall.GetDirection().SetY(-m_pongBall.GetDirection().GetY());
+
 		m_pongBall.GetDirection().GetY() *= -1;
 	}
 
@@ -113,6 +114,14 @@ void Pong::CheckCollision()
 		m_pongBall.GetDirection().SetY(difference);
 		m_pongBall.AddSpeed(0.25f);
 	}
+
+	for (auto& row : m_bricks)
+		for (auto element = row.begin(); element < row.end(); ++element)
+			if (m_pongBall.CheckCollision(*element))
+			{
+				row.erase(element);
+				return;
+			}
 
 	//check if a player lost the ball
 	if (m_pongBall.GetPosition().GetX() < LEFTLIMIT)
@@ -163,6 +172,7 @@ void Pong::KeyReleased(const SDL_Keycode& key)
 
 void Pong::MousePressed(const SDL_MouseButtonEvent& mouse)
 {
+
 }
 
 void Pong::MouseReleased(const SDL_MouseButtonEvent& mouse)
