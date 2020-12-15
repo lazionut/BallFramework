@@ -1,7 +1,5 @@
 #include "PlayersStatistics.h"
 
-
-
 PlayersStatistics::PlayersStatistics() : m_noPlayers{ 0 }
 {
 }
@@ -47,10 +45,9 @@ void PlayersStatistics::ReadStatistics(const std::string& inFile)
 			m_statistics.emplace(m_statistics.end(), playerEntry);
 
 		}
-
 	}
 	else
-		throw "File could not be opened ";
+		std::cout << "File could not be opened ";
 	fin.close();
 }
 
@@ -66,12 +63,12 @@ void PlayersStatistics::UpdateStatistics(std::variant<std::string, uint16_t> pla
 
 			if (isWon)
 			{
-				temp = std::get<uint16_t>(player[2]) + 1; 
+				temp = std::get<uint16_t>(player[2]) + 1;
 				player[2] = temp;
 			}
 			else
 			{
-				temp = std::get<uint16_t>(player[3]) + 1; 
+				temp = std::get<uint16_t>(player[3]) + 1;
 				player[3] = temp;
 			}
 		}
@@ -94,11 +91,9 @@ void Swap(std::vector<std::variant<std::string, uint16_t>>* first, std::vector<s
 	temp = first;
 	first = second;
 	second = temp;
-
 }
 void OrderStatistiscs(std::vector<std::vector< std::variant <std::string, uint16_t> > >& statistics)
 {
-
 	for (uint16_t index = 0; index < statistics.size() - 1; index++)
 	{
 		for (uint16_t index2 = index; index2 < statistics.size(); index2++)
@@ -117,8 +112,6 @@ void OrderStatistiscs(std::vector<std::vector< std::variant <std::string, uint16
 
 std::ostream& operator<<(std::ostream& outStream, PlayersStatistics& other)
 {
-
-
 	OrderStatistiscs(other.m_statistics);
 
 	for (uint16_t index = 0; index < other.m_noPlayers; index++)

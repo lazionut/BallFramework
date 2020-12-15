@@ -111,7 +111,7 @@ void BrickBreaker::CheckBrickBreakerBallWallCollision()
 		if (m_heartCounter == 0)
 		{
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", NULL);
-			SDL_Quit();
+			Stop();
 		}
 		ResetBall();
 	}

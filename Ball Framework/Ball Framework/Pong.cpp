@@ -56,99 +56,11 @@ void Pong::ResetBall()
 
 void Pong::CheckCollision()
 {
-	float paddleTop1 = m_pongPaddle1.GetPosition().GetY();
-	float paddleTop2 = m_pongPaddle2.GetPosition().GetY();
-
-	const Vector2& ballPosition = m_pongBall.GetPosition();
-
-	//check ball wall collision
-	if (ballPosition.GetY() + m_pongBall.GetSize() / 2 > UPPERLIMIT ||
-		ballPosition.GetY() - m_pongBall.GetSize() / 2 < LOWERLIMIT)
-	{
-		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX(), -m_pongBall.GetDirection().GetY());
-		//m_pongBall.GetDirection().SetY(-m_pongBall.GetDirection().GetY());
-
-		m_pongBall.GetDirection().GetY() *= -1;
-	}
-
-	//check paddle1 wall limits
-	if (paddleTop1 < LOWERLIMIT + m_pongPaddle1.GetHeight() / 2)
-	{
-		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, LOWERLIMIT + m_pongPaddle1.GetHeight() / 2 + HEIGHTPADDLESPACING);
-	}
-	if (paddleTop1 > UPPERLIMIT - m_pongPaddle1.GetHeight() / 2)
-	{
-		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, UPPERLIMIT - m_pongPaddle1.GetHeight() / 2 - HEIGHTPADDLESPACING);
-	}
-
-	//check paddle2 wall limits
-	if (paddleTop2 < LOWERLIMIT + m_pongPaddle2.GetHeight() / 2)
-	{
-		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, LOWERLIMIT + m_pongPaddle2.GetHeight() / 2 + HEIGHTPADDLESPACING);
-	}
-	if (paddleTop2 > UPPERLIMIT - m_pongPaddle2.GetHeight() / 2)
-	{
-		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, UPPERLIMIT - m_pongPaddle2.GetHeight() / 2 - HEIGHTPADDLESPACING);
-	}
-
-	//check ball collision with paddles
-	if (m_pongBall.GetDirection().GetX() < 0 && m_pongBall.CheckCollision(m_pongPaddle1))
-	{
-		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
-		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
-
-		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle1.GetPosition().GetY();
-		m_pongBall.GetDirection().Normalize();
-		m_pongBall.GetDirection().GetX() *= -1;
-		m_pongBall.GetDirection().SetY(difference);
-		m_pongBall.AddSpeed(0.25f);
-	}
-	if (m_pongBall.GetDirection().GetX() > 0 && m_pongBall.CheckCollision(m_pongPaddle2))
-	{
-		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
-		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
-
-		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle2.GetPosition().GetY();
-		m_pongBall.GetDirection().Normalize();
-		m_pongBall.GetDirection().GetX() *= -1;
-		m_pongBall.GetDirection().SetY(difference);
-		m_pongBall.AddSpeed(0.25f);
-	}
-
-	for (auto& row : m_bricks)
-		for (auto element = row.begin(); element < row.end(); ++element)
-			if (m_pongBall.CheckCollision(*element))
-			{
-				row.erase(element);
-				return;
-			}
-
-	//check if a player lost the ball
-	if (m_pongBall.GetPosition().GetX() < LEFTLIMIT)
-	{
-		m_pongScore1.AddPoints(1);
-		if (m_pongScore1.GetScore() == 5)
-		{
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player2 won!", NULL);
-			SDL_Quit();
-
-		}
-		m_pongBall.SetPosition(0, 0);
-		m_pongBall.SetDirection(-1, 0);
-		m_pongBall.SetSpeed(10);
-	}
-	if (m_pongBall.GetPosition().GetX() > RIGHTLIMIT)
-	{
-		m_pongScore2.AddPoints(1);
-		if (m_pongScore2.GetScore() == 5)
-		{
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player1 won!", NULL);
-			SDL_Quit();
-		}
-		m_pongBall.SetPosition(0, 0);
-		m_pongBall.SetDirection(1, 0);
-		m_pongBall.SetSpeed(10);
-	}
+	CheckBallWallCollision();
+	CheckPaddleWallCollision();
+	CheckBallPaddleCollision();
+	CheckBallBrickCollision();
+	CheckScoreCondition();
 }
 
 void Pong::Update()
@@ -202,6 +114,103 @@ void Pong::Render(SDL_Renderer* renderer)
 
 	RenderBricks(renderer);
 	RenderPlayersScore(renderer);
+}
+
+void Pong::CheckBallWallCollision()
+{
+	if (m_pongBall.GetPosition().GetY() + m_pongBall.GetSize() / 2 > UPPERLIMIT ||
+		m_pongBall.GetPosition().GetY() - m_pongBall.GetSize() / 2 < LOWERLIMIT)
+	{
+		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX(), -m_pongBall.GetDirection().GetY());
+		//m_pongBall.GetDirection().SetY(-m_pongBall.GetDirection().GetY());
+
+		m_pongBall.GetDirection().GetY() *= -1;
+	}
+}
+
+void Pong::CheckPaddleWallCollision()
+{
+	if (m_pongPaddle1.GetPosition().GetY() < LOWERLIMIT + m_pongPaddle1.GetHeight() / 2)
+	{
+		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, LOWERLIMIT + m_pongPaddle1.GetHeight() / 2 + HEIGHTPADDLESPACING);
+	}
+	if (m_pongPaddle1.GetPosition().GetY() > UPPERLIMIT - m_pongPaddle1.GetHeight() / 2)
+	{
+		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, UPPERLIMIT - m_pongPaddle1.GetHeight() / 2 - HEIGHTPADDLESPACING);
+	}
+	if (m_pongPaddle2.GetPosition().GetY() < LOWERLIMIT + m_pongPaddle2.GetHeight() / 2)
+	{
+		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, LOWERLIMIT + m_pongPaddle2.GetHeight() / 2 + HEIGHTPADDLESPACING);
+	}
+	if (m_pongPaddle2.GetPosition().GetY() > UPPERLIMIT - m_pongPaddle2.GetHeight() / 2)
+	{
+		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, UPPERLIMIT - m_pongPaddle2.GetHeight() / 2 - HEIGHTPADDLESPACING);
+	}
+}
+
+void Pong::CheckBallPaddleCollision()
+{
+	if (m_pongBall.GetDirection().GetX() < 0 && m_pongBall.CheckCollision(m_pongPaddle1))
+	{
+		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
+		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
+
+		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle1.GetPosition().GetY();
+		m_pongBall.GetDirection().Normalize();
+		m_pongBall.GetDirection().GetX() *= -1;
+		m_pongBall.GetDirection().SetY(difference);
+		m_pongBall.AddSpeed(0.25f);
+	}
+	if (m_pongBall.GetDirection().GetX() > 0 && m_pongBall.CheckCollision(m_pongPaddle2))
+	{
+		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
+		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
+
+		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle2.GetPosition().GetY();
+		m_pongBall.GetDirection().Normalize();
+		m_pongBall.GetDirection().GetX() *= -1;
+		m_pongBall.GetDirection().SetY(difference);
+		m_pongBall.AddSpeed(0.25f);
+	}
+}
+
+void Pong::CheckBallBrickCollision()
+{
+	for (auto& row : m_bricks)
+		for (auto element = row.begin(); element < row.end(); ++element)
+			if (m_pongBall.CheckCollision(*element))
+			{
+				row.erase(element);
+				return;
+			}
+}
+
+void Pong::CheckScoreCondition()
+{
+	if (m_pongBall.GetPosition().GetX() < LEFTLIMIT)
+	{
+		m_pongScore1.AddPoints(1);
+		if (m_pongScore1.GetScore() == 5)
+		{
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player2 won!", NULL);
+			Stop();
+		}
+		m_pongBall.SetPosition(0, 0);
+		m_pongBall.SetDirection(-1, 0);
+		m_pongBall.SetSpeed(10);
+	}
+	if (m_pongBall.GetPosition().GetX() > RIGHTLIMIT)
+	{
+		m_pongScore2.AddPoints(1);
+		if (m_pongScore2.GetScore() == 5)
+		{
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player1 won!", NULL);
+			Stop();
+		}
+		m_pongBall.SetPosition(0, 0);
+		m_pongBall.SetDirection(1, 0);
+		m_pongBall.SetSpeed(10);
+	}
 }
 
 void Pong::InitialiseBricks()

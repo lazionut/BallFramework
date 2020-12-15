@@ -22,7 +22,13 @@ private:
 	void MousePressed(const SDL_MouseButtonEvent& mouse) override;
 	void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
 	void Render(SDL_Renderer* renderer) override;
-
+ 
+	void CheckBallWallCollision();
+	void CheckPaddleWallCollision();
+	void CheckBallPaddleCollision();
+	void CheckBallBrickCollision();
+	void CheckScoreCondition();
+	
 	void InitialiseBricks();
 	void RenderBricks(SDL_Renderer* renderer);
 	void RenderPlayersScore(SDL_Renderer* renderer);
