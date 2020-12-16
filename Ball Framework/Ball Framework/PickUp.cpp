@@ -20,8 +20,14 @@ void PickUp::ContinueAction()
 		if (m_StopAction)
 		{
 			m_StopAction();
+			m_isActionActive = false;
 		}
 	}
+}
+
+void PickUp::StopMoving()
+{
+	m_isMoving = false;
 }
 
 PickUp::PickUp() : m_speed{ 0.0f }, m_time{ 0 }, m_StopTime{ 0 } {}
@@ -50,6 +56,16 @@ const Vector2& PickUp::GetDirection() const
 float PickUp::GetSpeed() const
 {
 	return m_speed;
+}
+
+bool PickUp::IsMoving() const
+{
+	return m_isMoving;
+}
+
+bool PickUp::IsActionActive() const
+{
+	return m_isActionActive;
 }
 
 void PickUp::SetPosition(const Vector2& position)

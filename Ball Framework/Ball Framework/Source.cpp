@@ -27,8 +27,6 @@ bool initializeSDL()
 	return false;
 }
 
-
-
 int main(int argc, char** argv)
 {
 	srand(time(0));

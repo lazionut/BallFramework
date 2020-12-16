@@ -19,6 +19,9 @@ public:
 	const Vector2& GetDirection() const;
 	float GetSpeed() const;
 
+	bool IsMoving() const;
+	bool IsActionActive() const;
+
 	void SetPosition(const Vector2& position);
 	void SetDimension(const Vector2& dimension);
 	void SetDirection(const Vector2& direction);
@@ -32,6 +35,8 @@ public:
 	void Move();
 	void ContinueAction();
 
+	void StopMoving();
+
 private:
 
 	std::function<void()> m_startAction;
@@ -40,5 +45,8 @@ private:
 	float m_speed;
 	float m_time;
 	float m_StopTime;
+
+	bool m_isActionActive;
+	bool m_isMoving;
 };
 

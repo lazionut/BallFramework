@@ -18,7 +18,6 @@ public:
 		BALLSPEEDCHANGE,
 
 		BONUSPOINTS,
-
 		REMOVEPOINTS,
 
 		//numarul de actiuni
@@ -31,6 +30,8 @@ public:
 	PickUp CreatePaddleSizeChangePickUp(Paddle& paddle, float difference);
 	PickUp CreatePaddleSpeedChangePickUp(Paddle& paddle, float speed);
 	PickUp CreateBallSizeChangePickUp(Ball& ball, float difference);
-
+	PickUp CreateBallSpeedChangePickUp(Ball& ball, float speed);
+	PickUp CreateBonusPointsPickUp(Score& score, uint16_t points);
+	PickUp CreateRemovePointsPickUp(Score& score, uint16_t points);
 };
 
