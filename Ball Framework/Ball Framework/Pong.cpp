@@ -182,9 +182,9 @@ void Pong::CheckBallBrickCollision()
 			{
 				row.erase(element);
 
-				--m_brickNumber;
+				--m_bricksNumber;
 
-				if (m_brickNumber < 1)
+				if (m_bricksNumber < 1)
 				{
 					m_bricks.resize(BRICKCOLUMNS);
 					InitialiseBricks();
