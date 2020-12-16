@@ -37,6 +37,18 @@
     <Filter Include="Source Files\Test">
       <UniqueIdentifier>{050c53ac-d0f8-4623-b63f-05c4dd6959a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Framework\Time">
+      <UniqueIdentifier>{3c4153fa-da2c-4ef6-9109-a3cca2dcc2ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Framework\PickUp">
+      <UniqueIdentifier>{15589d86-e670-4129-9dd9-52a85cf8d5fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\Time">
+      <UniqueIdentifier>{7188df00-2097-4830-89dd-bcd6025a8be2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\PickUp">
+      <UniqueIdentifier>{4b1d2ef4-1bb4-4007-92be-a6dd85bc23fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -57,9 +69,6 @@
     <ClCompile Include="Paddle.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="PickUp.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Rectangle.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
@@ -72,20 +81,11 @@
     <ClCompile Include="ScreenScale.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="TimeManager.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Vector2.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="TestGame.cpp">
       <Filter>Source Files\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="PickUpActions.cpp">
-      <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="PlayersStatistics.cpp">
       <Filter>Source Files\Framework</Filter>
@@ -96,8 +96,20 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files\Framework\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Source Files\Framework\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="PickUp.cpp">
+      <Filter>Source Files\Framework\PickUp</Filter>
+    </ClCompile>
+    <ClCompile Include="PickUpActions.cpp">
+      <Filter>Source Files\Framework\PickUp</Filter>
+    </ClCompile>
     <ClCompile Include="PickUpGenerator.cpp">
-      <Filter>Source Files\Framework</Filter>
+      <Filter>Source Files\Framework\PickUp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +128,6 @@
     <ClInclude Include="Paddle.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="PickUp.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Rectangle.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
@@ -131,20 +140,11 @@
     <ClInclude Include="ScreenScale.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeManager.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="TestGame.h">
       <Filter>Header Files\Test</Filter>
-    </ClInclude>
-    <ClInclude Include="PickUpActions.h">
-      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="PlayersStatistics.h">
       <Filter>Header Files\Framework</Filter>
@@ -155,8 +155,20 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Header Files\Framework\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Header Files\Framework\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="PickUp.h">
+      <Filter>Header Files\Framework\PickUp</Filter>
+    </ClInclude>
+    <ClInclude Include="PickUpActions.h">
+      <Filter>Header Files\Framework\PickUp</Filter>
+    </ClInclude>
     <ClInclude Include="PickUpGenerator.h">
-      <Filter>Header Files\Framework</Filter>
+      <Filter>Header Files\Framework\PickUp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

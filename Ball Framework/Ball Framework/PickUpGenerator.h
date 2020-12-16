@@ -26,5 +26,11 @@ public:
 	};
 
 	Actions GetPickUpType();
+
+	PickUp CreateSpeedPickUp();
+	PickUp CreatePaddleSizeChangePickUp(Paddle& paddle, float difference);
+	PickUp CreatePaddleSpeedChangePickUp(Paddle& paddle, float speed);
+	PickUp CreateBallSizeChangePickUp(Ball& ball, float difference);
+
 };
 

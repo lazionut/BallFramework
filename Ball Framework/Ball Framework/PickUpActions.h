@@ -9,8 +9,8 @@ public:
 	static void SpeedUp();
 	static void SlowDown();
 
-	static void SmallerPaddle(Paddle& paddle);
-	static void BiggerPaddle(Paddle& paddle);
+	static void SmallerPaddle(Paddle& paddle, float difference);
+	static void BiggerPaddle(Paddle& paddle, float difference);
 
 	static void FasterPaddle(Paddle& paddle, float speed);
 	static void SlowerPaddle(Paddle& paddle, float speed);
