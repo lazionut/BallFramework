@@ -57,13 +57,13 @@ void BrickBreaker::ResetBall()
 
 void BrickBreaker::CheckCollision()
 {
-	if (m_paddle.GetPosition().GetX() < LEFTLIMIT + m_paddle.GetWidth() / 2 + SPACING)
+	if (m_paddle.GetPosition().GetX() < LEFTLIMIT + m_paddle.GetWidth() / 2)
 	{
-		m_paddle.SetPosition(LEFTLIMIT + m_paddle.GetWidth() / 2 + 0.25f, m_paddle.GetPosition().GetY());
+		m_paddle.SetPosition(LEFTLIMIT + m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
 	}
-	if (m_paddle.GetPosition().GetX() > RIGHTLIMIT - m_paddle.GetWidth() / 2 - SPACING)
+	if (m_paddle.GetPosition().GetX() > RIGHTLIMIT - m_paddle.GetWidth() / 2)
 	{
-		m_paddle.SetPosition(RIGHTLIMIT - m_paddle.GetWidth() / 2 - 0.25f, m_paddle.GetPosition().GetY());
+		m_paddle.SetPosition(RIGHTLIMIT - m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
 	}
 
 	CheckBrickBreakerBallWallCollision();
@@ -71,9 +71,10 @@ void BrickBreaker::CheckCollision()
 	if (m_ball.CheckCollision(m_paddle))
 	{
 		//m_ball.ChangeDirection(m_paddle);
-		float difference = m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX();
+		float difference = m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX() / 2;
 		m_ball.GetDirection().GetY() *= -1;
 		m_ball.GetDirection().SetX(difference);
+		m_ball.GetDirection().Normalize();
 	}
 
 	for (auto& row : m_bricks)

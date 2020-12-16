@@ -155,22 +155,22 @@ void Pong::CheckBallPaddleCollision()
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
 		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
 
-		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle1.GetPosition().GetY();
-		m_pongBall.GetDirection().Normalize();
+		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle1.GetPosition().GetY() / 2;
 		m_pongBall.GetDirection().GetX() *= -1;
 		m_pongBall.GetDirection().SetY(difference);
 		m_pongBall.AddSpeed(0.25f);
+		m_pongBall.GetDirection().Normalize();
 	}
 	if (m_pongBall.GetDirection().GetX() > 0 && m_pongBall.CheckCollision(m_pongPaddle2))
 	{
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
 		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
 
-		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle2.GetPosition().GetY();
-		m_pongBall.GetDirection().Normalize();
+		float difference = m_pongBall.GetPosition().GetY() - m_pongPaddle2.GetPosition().GetY() / 2;
 		m_pongBall.GetDirection().GetX() *= -1;
 		m_pongBall.GetDirection().SetY(difference);
 		m_pongBall.AddSpeed(0.25f);
+		m_pongBall.GetDirection().Normalize();
 	}
 }
 
@@ -181,6 +181,14 @@ void Pong::CheckBallBrickCollision()
 			if (m_pongBall.CheckCollision(*element))
 			{
 				row.erase(element);
+
+				--m_brickNumber;
+
+				if (m_brickNumber < 1)
+				{
+					m_bricks.resize(BRICKCOLUMNS);
+					InitialiseBricks();
+				}
 				return;
 			}
 }
@@ -227,6 +235,7 @@ void Pong::InitialiseBricks()
 		++x;
 		y = -3;
 	}
+	m_bricksNumber = BRICKCOLUMNS * BRICKSPERCOLUMN;
 }
 
 void Pong::RenderBricks(SDL_Renderer* renderer)

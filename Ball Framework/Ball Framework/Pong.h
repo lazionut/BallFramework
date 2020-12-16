@@ -42,4 +42,5 @@ private:
 	TTF_Font* m_font;
 	Score m_pongScore1;
 	Score m_pongScore2;
+	uint16_t m_bricksNumber;
 };
