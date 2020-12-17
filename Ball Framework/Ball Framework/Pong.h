@@ -50,5 +50,5 @@ private:
 
 	PickUp m_pickUp;
 	SDL_Texture* m_pickUpImage;
-	bool isPickActive = true;
+	bool m_isPickActive;
 };

@@ -24,7 +24,7 @@ Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint
 	m_pongPaddle1(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED),
 	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED),
 	m_bricks{ BRICKCOLUMNS }, m_ballImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 10 },
-	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }
+	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }, m_isPickActive{ true }
 {
 }
 
@@ -65,53 +65,78 @@ void Pong::ResetBall()
 	m_pongBall.SetDirection(pow(-1, (rand() % 2)), 0);
 }
 
-void Pong::CreatePickUp(const Vector2& position)
+void Pong::CreatePickUp(const Vector2& position) // functia aceasta ar trebui apelata cand se distruge o caramida
 {
 	using Generator = PickUpGenerator::Actions;
 
-	m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
-
-	auto random = rand() % 2;
-	auto difference = 3;
-
-	switch (m_pickUpGenerator.GetPickUpType())
+	if (rand() % 100 > 80)
 	{
-	case Generator::SPEEDCHANGE:
-		m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
-		break;
-	case Generator::PADDLESIZECHANGE:
-		if (random)
+		m_isPickActive = true;
+
+		auto random = rand() % 2;
+		auto difference = 0.0f; //puteti sa folositi aceasta variabila pentru metodele ce necesita un parametru float
+								//daca nu puteti crea o constanta cu define
+
+		switch (m_pickUpGenerator.GetPickUpType())
 		{
-			m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_pongPaddle1, difference);
-			m_pickUp.SetDirection(m_pongPaddle1.GetPosition() - position);
-		}
-		else
-		{
-			m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_pongPaddle2, difference);
-			m_pickUp.SetDirection(m_pongPaddle1.GetPosition() - position);
+		case Generator::SPEEDCHANGE:
+			m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
+			break;
+		case Generator::PADDLESIZECHANGE:
+			difference = 3;
+			if (random)
+			{
+				m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_pongPaddle1, difference);
+				m_pickUp.SetDirection(m_pongPaddle1.GetPosition() - position);
+			}
+			else
+			{
+				m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_pongPaddle2, difference);
+				m_pickUp.SetDirection(m_pongPaddle1.GetPosition() - position);
+			}
+			m_pickUp.StartMoving();
+
+			break;
+		case Generator::PADDLESPEEDCHANGE:
+
+			difference = 3;
+			if (random)
+			{
+				m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(m_pongPaddle1, difference);
+				m_pickUp.SetDirection(m_pongPaddle1.GetPosition() - position);
+			}
+			else
+			{
+				m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(m_pongPaddle2, difference);
+				m_pickUp.SetDirection(m_pongPaddle1.GetPosition() - position);
+			}
+			m_pickUp.StartMoving();
+			break;
+		case Generator::BALLSIZECHANGE:
+			m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(m_pongBall, 2);
+			break;
+		case Generator::BALLSPEEDCHANGE:
+			m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(m_pongBall, 2);
+			break;
+		case Generator::BONUSPOINTS:
+			m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(m_pongScore1, 2); // si aici ar trebui cu random, in cazul la pong
+
+			//daca nu vreti de exemplu la pong sa se creeze pickUp de bonus points tot ce puteti e urmatoare chestie:
+			//m_isPickActive = false;
+
+			break;
+		case Generator::REMOVEPOINTS:
+			m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(m_pongScore1, 2); // si aici la fel
+			break;
+		default:
+			std::cout << "could not create pickUp\n";
+			Stop();
+			return;
 		}
 
-		m_pickUp.StartMoving();
-
-		break;
-	case Generator::PADDLESPEEDCHANGE:
-		break;
-	case Generator::BALLSIZECHANGE:
-		break;
-	case Generator::BALLSPEEDCHANGE:
-		break;
-	case Generator::BONUSPOINTS:
-		break;
-	case Generator::REMOVEPOINTS:
-		break;
-	default:
-		std::cout << "could not create pickUp\n";
-		Stop();
-		return;
+		m_pickUp.SetDimension(Vector2(1, 1));
+		m_pickUp.SetPosition(position);
 	}
-
-	m_pickUp.SetDimension(Vector2(1, 1));
-	m_pickUp.SetPosition(position);
 }
 
 void Pong::CheckCollision()
@@ -121,6 +146,20 @@ void Pong::CheckCollision()
 	CheckBallPaddleCollision();
 	CheckBallBrickCollision();
 	CheckScoreCondition();
+
+
+	//pickUp collision
+
+	float ballSize = m_pongBall.GetSize() / 2;
+	float pickUpSize = m_pickUp.GetDimension().GetX() / 2;
+
+	if (m_isPickActive &&
+		(m_pickUp.GetPosition() - m_pongBall.GetPosition()).GetSquareLength() < ballSize * ballSize + pickUpSize * pickUpSize)
+	{
+		std::cout << "pickUp collision\n";
+		m_pickUp.InvokeAction(5);
+		m_isPickActive = false;
+	}
 }
 
 void Pong::Update()
@@ -128,6 +167,16 @@ void Pong::Update()
 	m_pongPaddle1.Move();
 	m_pongPaddle2.Move();
 	m_pongBall.Move();
+
+	if (m_pickUp.IsActionActive())
+	{
+		m_pickUp.ContinueAction();
+	}
+
+	if (m_pickUp.IsMoving())
+	{
+		m_pickUp.Move();
+	}
 }
 
 void Pong::KeyPressed(const SDL_Keycode& key)
@@ -175,8 +224,13 @@ void Pong::Render(SDL_Renderer* renderer)
 	RenderBricks(renderer);
 	RenderPlayersScore(renderer);
 
-	scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetDimension());
-	SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &aux);
+	//render pickUp
+
+	if (m_isPickActive)
+	{
+		scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetDimension());
+		SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &aux);
+	}
 }
 
 void Pong::CheckBallWallCollision()
