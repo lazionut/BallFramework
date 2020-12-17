@@ -42,16 +42,76 @@ void Pong::Start()
 	}
 
 	ResetBall();
+	m_pickUpImage = LoadImage("../Assets/redball.png");
+
+	if (m_pickUpImage == nullptr)
+	{
+		std::cout << "could not load pickup texture\n";
+		Stop();
+		return;
+	}
+
+	CreatePickUp(Vector2::zero);
 }
 
 void Pong::OnClose()
 {
 	SDL_DestroyTexture(m_ballImage);
+	SDL_DestroyTexture(m_pickUpImage);
 }
 
 void Pong::ResetBall()
 {
 	m_pongBall.SetDirection(pow(-1, (rand() % 2)), 0);
+}
+
+void Pong::CreatePickUp(const Vector2& position)
+{
+	using Generator = PickUpGenerator::Actions;
+
+	m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
+
+	auto random = rand() % 2;
+	auto difference = 3;
+
+	switch (m_pickUpGenerator.GetPickUpType())
+	{
+	case Generator::SPEEDCHANGE:
+		m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
+		break;
+	case Generator::PADDLESIZECHANGE:
+		if (random)
+		{
+			m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_pongPaddle1, difference);
+			m_pickUp.SetDirection(m_pongPaddle1.GetPosition() - position);
+		}
+		else
+		{
+			m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_pongPaddle2, difference);
+			m_pickUp.SetDirection(m_pongPaddle1.GetPosition() - position);
+		}
+
+		m_pickUp.StartMoving();
+
+		break;
+	case Generator::PADDLESPEEDCHANGE:
+		break;
+	case Generator::BALLSIZECHANGE:
+		break;
+	case Generator::BALLSPEEDCHANGE:
+		break;
+	case Generator::BONUSPOINTS:
+		break;
+	case Generator::REMOVEPOINTS:
+		break;
+	default:
+		std::cout << "could not create pickUp\n";
+		Stop();
+		return;
+	}
+
+	m_pickUp.SetDimension(Vector2(1, 1));
+	m_pickUp.SetPosition(position);
 }
 
 void Pong::CheckCollision()
@@ -114,6 +174,9 @@ void Pong::Render(SDL_Renderer* renderer)
 
 	RenderBricks(renderer);
 	RenderPlayersScore(renderer);
+
+	scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetDimension());
+	SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &aux);
 }
 
 void Pong::CheckBallWallCollision()
@@ -224,17 +287,21 @@ void Pong::CheckScoreCondition()
 void Pong::InitialiseBricks()
 {
 	float x = -1.5f, y = -3;
-	for (int row = 0; row < BRICKCOLUMNS; ++row)
+
+	for (auto&& row : m_bricks)
 	{
-		m_bricks[row].resize(BRICKSPERCOLUMN);
-		for (int column = 0; column < BRICKSPERCOLUMN; ++column)
+		row.resize(BRICKSPERCOLUMN);
+
+		for (auto&& elem : row)
 		{
-			m_bricks[row][column].Set(Vector2(x, y), BRICKWIDTH, BRICKHEIGHT);
+			elem.Set(Vector2(x, y), BRICKWIDTH, BRICKHEIGHT);
 			y += 2;
 		}
+
 		++x;
 		y = -3;
 	}
+
 	m_bricksNumber = BRICKCOLUMNS * BRICKSPERCOLUMN;
 }
 

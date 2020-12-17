@@ -35,7 +35,7 @@ public:
 	void Move();
 	void ContinueAction();
 
-	void StopMoving();
+	void StartMoving();
 
 private:
 

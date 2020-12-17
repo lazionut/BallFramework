@@ -4,6 +4,7 @@
 #include "Paddle.h"
 #include "Score.h"
 #include "ScreenScale.h"
+#include "PickUpGenerator.h"
 #include <SDL_ttf.h>
 #include <vector>
 
@@ -33,6 +34,7 @@ private:
 	void RenderBricks(SDL_Renderer* renderer);
 	void RenderPlayersScore(SDL_Renderer* renderer);
 	void ResetBall();
+	void CreatePickUp(const Vector2& position);
 
 	Paddle m_pongPaddle1;
 	Paddle m_pongPaddle2;
@@ -43,4 +45,10 @@ private:
 	Score m_pongScore1;
 	Score m_pongScore2;
 	uint16_t m_bricksNumber;
+
+	PickUpGenerator m_pickUpGenerator;
+
+	PickUp m_pickUp;
+	SDL_Texture* m_pickUpImage;
+	bool isPickActive = true;
 };
