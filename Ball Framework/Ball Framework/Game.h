@@ -35,6 +35,8 @@ protected:
 
 	void Stop();
 
+	void Repaint();
+
 private:
 
 	TimeManager m_timeManager;
@@ -46,7 +48,7 @@ private:
 	float m_lastTimeScale;
 
 	void GameLoop();
-	void RenderAux();
+
 	void HandleEvents();
 	void HandleWindowEvents(const SDL_Event* gameEvent);
 

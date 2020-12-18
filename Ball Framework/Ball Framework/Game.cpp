@@ -110,7 +110,7 @@ void Game::GameLoop()
 			{
 				Update();
 				CheckCollision();
-				RenderAux();
+				Repaint();
 			}
 
 			m_timeManager.UpdateDone();
@@ -128,7 +128,7 @@ void Game::GameLoop()
 	}
 }
 
-void Game::RenderAux()
+void Game::Repaint()
 {
 	SDL_Renderer* renderer = m_renderer.GetRenderer();
 	SDL_Color color = m_renderer.GetBackgroundColor();

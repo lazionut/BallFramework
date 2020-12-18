@@ -71,8 +71,6 @@ void Pong::CreatePickUp(const Vector2& position) // functia aceasta ar trebui ap
 
 	if (rand() % 100 > 80)
 	{
-		m_isPickActive = true;
-
 		auto random = rand() % 2;
 		auto difference = 0.0f; //puteti sa folositi aceasta variabila pentru metodele ce necesita un parametru float
 								//daca nu puteti crea o constanta cu define
@@ -134,8 +132,13 @@ void Pong::CreatePickUp(const Vector2& position) // functia aceasta ar trebui ap
 			return;
 		}
 
+		m_isPickActive = true;
 		m_pickUp.SetDimension(Vector2(1, 1));
 		m_pickUp.SetPosition(position);
+	}
+	else
+	{
+		m_isPickActive = false;
 	}
 }
 
@@ -157,7 +160,7 @@ void Pong::CheckCollision()
 		(m_pickUp.GetPosition() - m_pongBall.GetPosition()).GetSquareLength() < ballSize * ballSize + pickUpSize * pickUpSize)
 	{
 		std::cout << "pickUp collision\n";
-		m_pickUp.InvokeAction(5);
+		m_pickUp.InvokeAction(10.0f);
 		m_isPickActive = false;
 	}
 }

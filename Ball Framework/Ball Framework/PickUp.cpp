@@ -5,7 +5,11 @@ void PickUp::InvokeAction(float time)
 	m_StopTime = time;
 	m_isMoving = false;
 	m_isActionActive = true;
-	m_startAction();
+
+	if (m_startAction)
+	{
+		m_startAction();
+	}
 }
 
 void PickUp::Move()
