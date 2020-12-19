@@ -6,6 +6,7 @@
 #include "Paddle.h"
 #include "Score.h"
 #include "Ball.h"
+#include "PickUpGenerator.h"
 #include "PickUp.h"
 
 class BrickBreaker : public Game
@@ -29,6 +30,7 @@ private:
 	bool CheckBrickBreakerBallWallCollision();
 	void RenderScore(SDL_Renderer* renderer);
 	void ResetBall();
+	void CreatePickUp(const Vector2& position);
 
 	Paddle m_paddle;
 	std::vector<std::vector<Rectangle>> m_bricks;
@@ -38,5 +40,6 @@ private:
 	Ball m_ball;
 	PickUp m_pickUp;
 	uint16_t m_heartCounter;
-	int hitWall =-1;
+	int hitWall = -1;
+	PickUpGenerator m_pickUpGenerator;
 };

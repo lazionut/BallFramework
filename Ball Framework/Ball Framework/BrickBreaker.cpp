@@ -55,6 +55,47 @@ void BrickBreaker::ResetBall()
 	m_ball.SetPosition(0, 0);
 }
 
+void BrickBreaker::CreatePickUp(const Vector2& position)
+{
+	using Generator = PickUpGenerator::Actions;
+
+	if (rand() % 100 > 80)
+	{
+		switch (m_pickUpGenerator.GetPickUpType())
+		{
+		case Generator::SPEEDCHANGE:
+			m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
+			break;
+		case Generator::PADDLESIZECHANGE:
+			m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_paddle, 3);
+			m_pickUp.SetDirection(m_paddle.GetPosition() + position);
+			m_pickUp.StartMoving();
+			break;
+		case Generator::PADDLESPEEDCHANGE:
+			m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(m_paddle, 3);
+			m_pickUp.SetDirection(m_paddle.GetPosition() + position);
+			m_pickUp.StartMoving();
+			break;
+		case Generator::BALLSIZECHANGE:
+			m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(m_ball, 1.25f);
+			break;
+		case Generator::BALLSPEEDCHANGE:
+			m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(m_ball, 4);
+			break;
+		case Generator::BONUSPOINTS:
+			m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(m_score, rand() % 5 + 1);
+			break;
+		case Generator::REMOVEPOINTS:
+			m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(m_score, rand() % 5 + 1);
+			break;
+		default:
+			std::cout << "Could not create pickUp!\n";
+			Stop();
+			return;
+		}
+	}
+}
+
 void BrickBreaker::CheckCollision()
 {
 	if (m_paddle.GetPosition().GetX() < LEFTLIMIT + m_paddle.GetWidth() / 2)
@@ -70,18 +111,18 @@ void BrickBreaker::CheckCollision()
 	if (m_ball.CheckCollision(m_paddle))
 	{
 		//m_ball.ChangeDirection(m_paddle);
-		float difference =abs( m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX());
+		float difference = abs(m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX());
 		m_ball.GetDirection().GetY() *= -1;
 
 		//if (m_ball.GetDirection().GetX() >= 0) //prima versiune
 
-		if (m_ball.GetPosition().GetX() >= m_paddle.GetPosition().GetX()) 
+		if (m_ball.GetPosition().GetX() >= m_paddle.GetPosition().GetX())
 			//asta e a doua optiune de design in care mingea isi schimba dir 
 			//pe axa x in functie de unde pica pe paleta
 		{
 			m_ball.GetDirection().SetX(difference);
 		}
-		else 
+		else
 			m_ball.GetDirection().SetX(-difference);
 		m_ball.GetDirection().Normalize();
 	}
@@ -90,7 +131,7 @@ void BrickBreaker::CheckCollision()
 	{
 		for (auto element = row.begin(); element < row.end(); ++element)
 		{
-			if (m_ball.CheckCollision(*element)) 
+			if (m_ball.CheckCollision(*element))
 			{
 				m_ball.ChangeDirection(*element);
 				row.erase(element);
@@ -171,7 +212,7 @@ void BrickBreaker::KeyReleased(const SDL_Keycode& key)
 	{
 		Pause();
 	}
-	else if (!m_paused) 
+	else if (!m_paused)
 	{
 		m_paddle.KeyReleased(key);
 	}
