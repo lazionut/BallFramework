@@ -184,14 +184,24 @@ void Pong::Update()
 
 void Pong::KeyPressed(const SDL_Keycode& key)
 {
-	m_pongPaddle1.KeyPressed(key);
-	m_pongPaddle2.KeyPressed(key);
+	if (!m_paused)
+	{
+		m_pongPaddle1.KeyPressed(key);
+		m_pongPaddle2.KeyPressed(key);
+	}
 }
 
 void Pong::KeyReleased(const SDL_Keycode& key)
 {
-	m_pongPaddle1.KeyReleased(key);
-	m_pongPaddle2.KeyReleased(key);
+	if (key == SDLK_p || key == SDLK_ESCAPE) 
+	{
+		Pause();
+	}
+	else if (!m_paused) 
+	{
+		m_pongPaddle1.KeyReleased(key);
+		m_pongPaddle2.KeyReleased(key);
+	}	
 }
 
 void Pong::MousePressed(const SDL_MouseButtonEvent& mouse)

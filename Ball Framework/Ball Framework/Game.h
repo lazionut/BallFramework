@@ -34,8 +34,10 @@ protected:
 	void SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
 
 	void Stop();
-
+	void Pause();
 	void Repaint();
+
+	bool m_paused;
 
 private:
 

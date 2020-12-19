@@ -23,6 +23,7 @@ void Game::InitGame(const char* title, int32_t x, int32_t y, uint16_t width, uin
 		m_gameEvent = new SDL_Event;
 		m_lastTimeScale = Time::GetTimeScale();
 		m_running = true;
+		m_paused = false;
 	}
 }
 
@@ -51,6 +52,19 @@ void Game::Clean()
 void Game::Stop()
 {
 	m_running = false;
+}
+
+void Game::Pause()
+{
+	if (!m_paused) {
+		m_lastTimeScale = Time::GetTimeScale();
+		Time::SetTimeScale(0);
+		m_paused = true;
+	}
+	else {
+		Time::SetTimeScale(m_lastTimeScale);
+		m_paused = false;
+	}
 }
 
 SDL_Texture* Game::LoadImage(const std::string& path) const

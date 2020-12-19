@@ -147,12 +147,22 @@ void BrickBreaker::InitBricks()
 
 void BrickBreaker::KeyPressed(const SDL_Keycode& key)
 {
-	m_paddle.KeyPressed(key);
+	if (!m_paused)
+	{
+		m_paddle.KeyPressed(key);
+	}
 }
 
 void BrickBreaker::KeyReleased(const SDL_Keycode& key)
 {
-	m_paddle.KeyReleased(key);
+	if (key == SDLK_p || key == SDLK_ESCAPE)
+	{
+		Pause();
+	}
+	else if (!m_paused) 
+	{
+		m_paddle.KeyReleased(key);
+	}
 }
 
 void BrickBreaker::MousePressed(const SDL_MouseButtonEvent& mouse)
