@@ -65,15 +65,17 @@ void Pong::ResetBall()
 	m_pongBall.SetDirection(pow(-1, (rand() % 2)), 0);
 }
 
-void Pong::CreatePickUp(const Vector2& position) // functia aceasta ar trebui apelata cand se distruge o caramida
+void Pong::CreatePickUp(const Vector2& position)
 {
 	using Generator = PickUpGenerator::Actions;
 
+	m_isPickCreated = false;
+
 	if (rand() % 100 > 80)
 	{
+		m_isPickCreated = true;
 		auto random = rand() % 2;
-		auto difference = 0.0f; //puteti sa folositi aceasta variabila pentru metodele ce necesita un parametru float
-								//daca nu puteti crea o constanta cu define
+		auto difference = 0.0f;
 
 		switch (m_pickUpGenerator.GetPickUpType())
 		{
@@ -93,10 +95,8 @@ void Pong::CreatePickUp(const Vector2& position) // functia aceasta ar trebui ap
 				m_pickUp.SetDirection(m_pongPaddle1.GetPosition() - position);
 			}
 			m_pickUp.StartMoving();
-
 			break;
 		case Generator::PADDLESPEEDCHANGE:
-
 			difference = 3;
 			if (random)
 			{
@@ -117,28 +117,25 @@ void Pong::CreatePickUp(const Vector2& position) // functia aceasta ar trebui ap
 			m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(m_pongBall, 2);
 			break;
 		case Generator::BONUSPOINTS:
-			m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(m_pongScore1, 2); // si aici ar trebui cu random, in cazul la pong
-
-			//daca nu vreti de exemplu la pong sa se creeze pickUp de bonus points tot ce puteti e urmatoare chestie:
-			//m_isPickActive = false;
-
+			m_isPickActive = false;
 			break;
 		case Generator::REMOVEPOINTS:
-			m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(m_pongScore1, 2); // si aici la fel
+			m_isPickActive = false;
 			break;
 		default:
-			std::cout << "could not create pickUp\n";
+			std::cout << "Could not create pickUp!\n";
 			Stop();
 			return;
 		}
 
 		m_isPickActive = true;
-		m_pickUp.SetDimension(Vector2(1, 1));
+		m_pickUp.SetDimension(Vector2(0.75f, 0.75f));
 		m_pickUp.SetPosition(position);
 	}
 	else
 	{
 		m_isPickActive = false;
+		m_isPickCreated = false;
 	}
 }
 
@@ -148,21 +145,8 @@ void Pong::CheckCollision()
 	CheckPaddleWallCollision();
 	CheckBallPaddleCollision();
 	CheckBallBrickCollision();
+	CheckPickUpCollision();
 	CheckScoreCondition();
-
-
-	//pickUp collision
-
-	float ballSize = m_pongBall.GetSize() / 2;
-	float pickUpSize = m_pickUp.GetDimension().GetX() / 2;
-
-	if (m_isPickActive &&
-		(m_pickUp.GetPosition() - m_pongBall.GetPosition()).GetSquareLength() < ballSize * ballSize + pickUpSize * pickUpSize)
-	{
-		std::cout << "pickUp collision\n";
-		m_pickUp.InvokeAction(10.0f);
-		m_isPickActive = false;
-	}
 }
 
 void Pong::Update()
@@ -193,20 +177,19 @@ void Pong::KeyPressed(const SDL_Keycode& key)
 
 void Pong::KeyReleased(const SDL_Keycode& key)
 {
-	if (key == SDLK_p || key == SDLK_ESCAPE) 
+	if (key == SDLK_p || key == SDLK_ESCAPE)
 	{
 		Pause();
 	}
-	else if (!m_paused) 
+	else if (!m_paused)
 	{
 		m_pongPaddle1.KeyReleased(key);
 		m_pongPaddle2.KeyReleased(key);
-	}	
+	}
 }
 
 void Pong::MousePressed(const SDL_MouseButtonEvent& mouse)
 {
-
 }
 
 void Pong::MouseReleased(const SDL_MouseButtonEvent& mouse)
@@ -237,8 +220,6 @@ void Pong::Render(SDL_Renderer* renderer)
 	RenderBricks(renderer);
 	RenderPlayersScore(renderer);
 
-	//render pickUp
-
 	if (m_isPickActive)
 	{
 		scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetDimension());
@@ -248,12 +229,17 @@ void Pong::Render(SDL_Renderer* renderer)
 
 void Pong::CheckBallWallCollision()
 {
-	if (m_pongBall.GetPosition().GetY() + m_pongBall.GetSize() / 2 > UPPERLIMIT ||
-		m_pongBall.GetPosition().GetY() - m_pongBall.GetSize() / 2 < LOWERLIMIT)
+	if (m_pongBall.GetPosition().GetY() + m_pongBall.GetSize() / 2 > UPPERLIMIT)
 	{
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX(), -m_pongBall.GetDirection().GetY());
 		//m_pongBall.GetDirection().SetY(-m_pongBall.GetDirection().GetY());
 
+		m_pongBall.GetPosition().SetY(UPPERLIMIT - m_pongBall.GetSize() / 2);
+		m_pongBall.GetDirection().GetY() *= -1;
+	}
+	else if (m_pongBall.GetPosition().GetY() - m_pongBall.GetSize() / 2 < LOWERLIMIT)
+	{
+		m_pongBall.GetPosition().SetY(LOWERLIMIT + m_pongBall.GetSize() / 2);
 		m_pongBall.GetDirection().GetY() *= -1;
 	}
 }
@@ -264,7 +250,7 @@ void Pong::CheckPaddleWallCollision()
 	{
 		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, LOWERLIMIT + m_pongPaddle1.GetHeight() / 2 + HEIGHTPADDLESPACING);
 	}
-	if (m_pongPaddle1.GetPosition().GetY() > UPPERLIMIT - m_pongPaddle1.GetHeight() / 2)
+	else if (m_pongPaddle1.GetPosition().GetY() > UPPERLIMIT - m_pongPaddle1.GetHeight() / 2)
 	{
 		m_pongPaddle1.SetPosition(WIDTHPADDLESPACING1, UPPERLIMIT - m_pongPaddle1.GetHeight() / 2 - HEIGHTPADDLESPACING);
 	}
@@ -272,7 +258,7 @@ void Pong::CheckPaddleWallCollision()
 	{
 		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, LOWERLIMIT + m_pongPaddle2.GetHeight() / 2 + HEIGHTPADDLESPACING);
 	}
-	if (m_pongPaddle2.GetPosition().GetY() > UPPERLIMIT - m_pongPaddle2.GetHeight() / 2)
+	else if (m_pongPaddle2.GetPosition().GetY() > UPPERLIMIT - m_pongPaddle2.GetHeight() / 2)
 	{
 		m_pongPaddle2.SetPosition(WIDTHPADDLESPACING2, UPPERLIMIT - m_pongPaddle2.GetHeight() / 2 - HEIGHTPADDLESPACING);
 	}
@@ -291,7 +277,7 @@ void Pong::CheckBallPaddleCollision()
 		m_pongBall.AddSpeed(0.25f);
 		m_pongBall.GetDirection().Normalize();
 	}
-	if (m_pongBall.GetDirection().GetX() > 0 && m_pongBall.CheckCollision(m_pongPaddle2))
+	else if (m_pongBall.GetDirection().GetX() > 0 && m_pongBall.CheckCollision(m_pongPaddle2))
 	{
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
 		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
@@ -310,7 +296,10 @@ void Pong::CheckBallBrickCollision()
 		for (auto element = row.begin(); element < row.end(); ++element)
 			if (m_pongBall.CheckCollision(*element))
 			{
+				m_pongBall.ChangeDirection(*element);
 				row.erase(element);
+				if (m_isPickCreated == false)
+					CreatePickUp(Vector2::zero);
 
 				--m_bricksNumber;
 
@@ -321,6 +310,20 @@ void Pong::CheckBallBrickCollision()
 				}
 				return;
 			}
+}
+
+void Pong::CheckPickUpCollision()
+{
+	float ballSize = m_pongBall.GetSize() / 2;
+	float pickUpSize = m_pickUp.GetDimension().GetX() / 2;
+
+	if (m_isPickActive &&
+		(m_pickUp.GetPosition() - m_pongBall.GetPosition()).GetSquareLength() < ballSize * ballSize + pickUpSize * pickUpSize)
+	{
+		std::cout << "pickUp collision\n";
+		m_pickUp.InvokeAction(10.0f);
+		m_isPickActive = false;
+	}
 }
 
 void Pong::CheckScoreCondition()
@@ -337,7 +340,7 @@ void Pong::CheckScoreCondition()
 		m_pongBall.SetDirection(-1, 0);
 		m_pongBall.SetSpeed(10);
 	}
-	if (m_pongBall.GetPosition().GetX() > RIGHTLIMIT)
+	else if (m_pongBall.GetPosition().GetX() > RIGHTLIMIT)
 	{
 		m_pongScore2.AddPoints(1);
 		if (m_pongScore2.GetScore() == 5)

@@ -20,6 +20,11 @@ const Vector2& Ball::GetPosition() const
 	return m_position;
 }
 
+Vector2& Ball::GetPosition()
+{
+	return m_position;
+}
+
 float Ball::GetSize() const
 {
 	return m_size;
@@ -88,7 +93,7 @@ bool Ball::CheckCollision(const Rectangle& rect)
 	float rectHeight = rect.GetHeight();
 	float rectx = rect.GetPosition().GetX() - rectWidth / 2;
 	float recty = rect.GetPosition().GetY() - rectHeight / 2;
-	
+
 	if (ballx < rectx)
 	{
 		x = rectx;
@@ -139,20 +144,20 @@ void Ball::ChangeDirection(const Rectangle& rect)
 {
 	auto xRect = rect.GetPosition().GetX();
 	auto yRect = rect.GetPosition().GetY();
-	
+
 
 	if (m_position.GetY() <= yRect + (rect.GetHeight() / 2) && m_position.GetY() >= yRect - rect.GetHeight() / 2)
 	{
-		
+
 		if (m_position.GetX() < xRect && m_direction.GetX() < 0)
-		
+
 			m_position.SetX(m_position.GetX() - m_size);
-		
+
 		else
 		{
 			if (m_position.GetX() > xRect && m_direction.GetX() > 0)
 
-			m_position.SetX(m_position.GetX() + m_size);
+				m_position.SetX(m_position.GetX() + m_size);
 
 			else
 				m_direction.SetX(m_direction.GetX() * (-1));
@@ -163,7 +168,7 @@ void Ball::ChangeDirection(const Rectangle& rect)
 	{
 		if (m_position.GetX() <= xRect + (rect.GetWidth() / 2) && m_position.GetX() >= xRect - (rect.GetWidth() / 2))
 		{
-			
+
 			if (m_position.GetY() < yRect && m_direction.GetY() < 0)
 
 				m_position.SetY(m_position.GetY() - m_size);
@@ -172,28 +177,28 @@ void Ball::ChangeDirection(const Rectangle& rect)
 				if (m_position.GetY() > yRect && m_direction.GetY() > 0)
 
 					m_position.SetY(m_position.GetY() + m_size);
-				else 
+				else
 					m_direction.SetY(m_direction.GetY() * (-1));
 			}
-			
+
 		}
 		else {
-			
-				if (m_position.GetY() > yRect)
-				{
-					if (m_position.GetX() >= xRect)
-						m_direction.Set(1, 1);
-					else
-						m_direction.Set(-1, 1);
-				}
+
+			if (m_position.GetY() > yRect)
+			{
+				if (m_position.GetX() >= xRect)
+					m_direction.Set(1, 1);
 				else
-				{
-					if (m_position.GetX() > xRect)
-						m_direction.Set(1, -1);
-					else
-						m_direction.Set(-1, -1);
-				}
-			
+					m_direction.Set(-1, 1);
+			}
+			else
+			{
+				if (m_position.GetX() > xRect)
+					m_direction.Set(1, -1);
+				else
+					m_direction.Set(-1, -1);
+			}
+
 		}
 	}
 }

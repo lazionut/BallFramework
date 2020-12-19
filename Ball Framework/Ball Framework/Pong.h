@@ -23,13 +23,14 @@ private:
 	void MousePressed(const SDL_MouseButtonEvent& mouse) override;
 	void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
 	void Render(SDL_Renderer* renderer) override;
- 
+
 	void CheckBallWallCollision();
 	void CheckPaddleWallCollision();
 	void CheckBallPaddleCollision();
 	void CheckBallBrickCollision();
+	void CheckPickUpCollision();
 	void CheckScoreCondition();
-	
+
 	void InitialiseBricks();
 	void RenderBricks(SDL_Renderer* renderer);
 	void RenderPlayersScore(SDL_Renderer* renderer);
@@ -37,18 +38,23 @@ private:
 	void CreatePickUp(const Vector2& position);
 
 	Paddle m_pongPaddle1;
+
 	Paddle m_pongPaddle2;
 	std::vector<std::vector<Rectangle>> m_bricks;
+	uint16_t m_bricksNumber;
+
 	Ball m_pongBall;
 	SDL_Texture* m_ballImage;
+
 	TTF_Font* m_font;
+
 	Score m_pongScore1;
 	Score m_pongScore2;
-	uint16_t m_bricksNumber;
 
 	PickUpGenerator m_pickUpGenerator;
 
 	PickUp m_pickUp;
 	SDL_Texture* m_pickUpImage;
 	bool m_isPickActive;
+	bool m_isPickCreated;
 };

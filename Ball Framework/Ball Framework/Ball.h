@@ -11,6 +11,7 @@ public:
 	Ball(const Ball& other);
 
 	const Vector2& GetPosition() const;
+	Vector2& GetPosition();
 	float GetSize() const;
 	const Vector2& GetDirection() const;
 	Vector2& GetDirection();
