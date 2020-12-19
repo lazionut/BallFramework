@@ -28,7 +28,7 @@ public:
 
 	void Render(SDL_Renderer* renderer) override;
 
-	void IsInBounds(Sint32 x, Sint32 y);
+	int IsInBounds(Sint32 x, Sint32 y);
 	void PerformAction(int index);
 
 	TTF_Font* GetFont();
@@ -37,4 +37,5 @@ private:
 	std::vector<Button> m_buttons;
 	void InitButtons();
 	TTF_Font* m_font;
+	int m_button;
 };

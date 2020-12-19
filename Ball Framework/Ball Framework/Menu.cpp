@@ -7,8 +7,8 @@ static SDL_Color black = { 0, 0, 0, 0 };
 
 Menu::Menu(int16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS) :
 	Game("Ball Games", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-	m_buttons{ buttonsNum }
-	
+	m_buttons{ buttonsNum }, m_button {-1}
+
 {
 	InitMenu();
 }
@@ -46,11 +46,18 @@ void Menu::KeyReleased(const SDL_Keycode& key)
 
 void Menu::MousePressed(const SDL_MouseButtonEvent& mouse)
 {
-	IsInBounds(mouse.x, mouse.y);
+	m_button = IsInBounds(mouse.x, mouse.y);
+	if (m_button>-1) {
+		m_buttons[m_button].ChangeBackColor();
+	}
 }
 
 void Menu::MouseReleased(const SDL_MouseButtonEvent& mouse)
 {
+	if (m_button>-1) {
+		m_buttons[m_button].ChangeBackColor();
+		PerformAction(m_button);
+	}
 }
 
 void Menu::Render(SDL_Renderer* renderer)
@@ -79,14 +86,14 @@ void Menu::Render(SDL_Renderer* renderer)
 	}
 }
 
-void Menu::IsInBounds(Sint32 x, Sint32 y)
+int Menu::IsInBounds(Sint32 x, Sint32 y)
 {
 	for (auto i = 0; i < m_buttons.size(); i++) {
 		if (x > m_buttons[i].GetRect().x &&
 			x < m_buttons[i].GetRect().x + m_buttons[i].GetRect().w
 			&& y > m_buttons[i].GetRect().y &&
 			y < m_buttons[i].GetRect().y + m_buttons[i].GetRect().h) {
-			PerformAction(i);
+			return i;
 		}
 	}
 }
