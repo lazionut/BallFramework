@@ -19,7 +19,7 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 	m_font{ font },
 	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
 		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{ font },
-	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.25f, Vector2(0, 1), 2.0f),
+	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 2.0f),
 	m_heartCounter{ 3 }
 {
 
@@ -65,15 +65,24 @@ void BrickBreaker::CheckCollision()
 	{
 		m_paddle.SetPosition(RIGHTLIMIT - m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
 	}
-
 	CheckBrickBreakerBallWallCollision();
 
 	if (m_ball.CheckCollision(m_paddle))
 	{
 		//m_ball.ChangeDirection(m_paddle);
-		float difference = m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX() / 2;
+		float difference =abs( m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX());
 		m_ball.GetDirection().GetY() *= -1;
-		m_ball.GetDirection().SetX(difference);
+
+		//if (m_ball.GetDirection().GetX() >= 0) //prima versiune
+
+		if (m_ball.GetPosition().GetX() >= m_paddle.GetPosition().GetX()) 
+			//asta e a doua optiune de design in care mingea isi schimba dir 
+			//pe axa x in functie de unde pica pe paleta
+		{
+			m_ball.GetDirection().SetX(difference);
+		}
+		else 
+			m_ball.GetDirection().SetX(-difference);
 		m_ball.GetDirection().Normalize();
 	}
 
@@ -81,7 +90,7 @@ void BrickBreaker::CheckCollision()
 	{
 		for (auto element = row.begin(); element < row.end(); ++element)
 		{
-			if (m_ball.CheckCollision(*element)) //de lucrat aici
+			if (m_ball.CheckCollision(*element)) 
 			{
 				m_ball.ChangeDirection(*element);
 				row.erase(element);
@@ -92,18 +101,20 @@ void BrickBreaker::CheckCollision()
 	}
 }
 
-void BrickBreaker::CheckBrickBreakerBallWallCollision()
+bool BrickBreaker::CheckBrickBreakerBallWallCollision()
 {
 	const Vector2& ballPosition = m_ball.GetPosition();
 
 	if (ballPosition.GetX() + m_ball.GetSize() / 2 > RIGHTLIMIT || ballPosition.GetX() - m_ball.GetSize() / 2 < LEFTLIMIT)
 	{
 		m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+		return true;
 	}
 
 	if (ballPosition.GetY() > BRICKLIMIT_Y)
 	{
 		m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
+		return true;
 	}
 
 	if (ballPosition.GetY() < LOWERLIMIT)
@@ -116,6 +127,7 @@ void BrickBreaker::CheckBrickBreakerBallWallCollision()
 		}
 		ResetBall();
 	}
+	return false;
 }
 
 void BrickBreaker::Update()

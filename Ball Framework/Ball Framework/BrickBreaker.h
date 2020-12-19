@@ -26,7 +26,7 @@ private:
 
 	void InitBricks();
 	void RenderBricks(SDL_Renderer* renderer);
-	void CheckBrickBreakerBallWallCollision();
+	bool CheckBrickBreakerBallWallCollision();
 	void RenderScore(SDL_Renderer* renderer);
 	void ResetBall();
 
@@ -38,4 +38,5 @@ private:
 	Ball m_ball;
 	PickUp m_pickUp;
 	uint16_t m_heartCounter;
+	int hitWall =-1;
 };
