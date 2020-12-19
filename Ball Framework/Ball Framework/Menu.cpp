@@ -96,6 +96,7 @@ int Menu::IsInBounds(Sint32 x, Sint32 y)
 			return i;
 		}
 	}
+	return -1;
 }
 
 void Menu::PerformAction(int index)
