@@ -5,6 +5,7 @@
 #include "Score.h"
 #include "ScreenScale.h"
 #include "PickUpGenerator.h"
+#include "Button.h"
 #include <SDL_ttf.h>
 #include <vector>
 
@@ -36,9 +37,9 @@ private:
 	void RenderPlayersScore(SDL_Renderer* renderer);
 	void ResetBall();
 	void CreatePickUp(const Vector2& position);
+	void RenderButton(SDL_Renderer* renderer);
 
 	Paddle m_pongPaddle1;
-
 	Paddle m_pongPaddle2;
 	std::vector<std::vector<Rectangle>> m_bricks;
 	uint16_t m_bricksNumber;
@@ -55,6 +56,9 @@ private:
 
 	PickUp m_pickUp;
 	SDL_Texture* m_pickUpImage;
+
+	Button m_pauseButton;
+
 	bool m_isPickActive;
 	bool m_isPickCreated;
 };

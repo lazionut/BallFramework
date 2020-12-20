@@ -18,13 +18,18 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
 constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
+static SDL_Color white = { 255, 255, 255, 255 };
+static SDL_Color red = { 255, 0, 0, 255 };
+static SDL_Color black = { 0, 0, 0, 0 };
+
 Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
 	: Game("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 	m_pongPaddle1(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED),
 	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED),
 	m_bricks{ BRICKCOLUMNS }, m_bricksNumber{ 0 }, m_ballImage{ nullptr }, m_pickUpImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 10 },
-	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }, m_isPickCreated{ false }, m_isPickActive{ true }
+	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }, m_isPickCreated{ false }, m_isPickActive{ true },
+	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 - 0.5f), 0.7f, 0.7f, black, white, "||" }
 {
 }
 
@@ -145,6 +150,28 @@ void Pong::CreatePickUp(const Vector2& position)
 	}
 }
 
+void Pong::RenderButton(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	const auto& scale = GetScale();
+	SDL_Texture* fontTexture;
+
+	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
+	SDL_SetRenderDrawColor(renderer, m_pauseButton.GetBackColor().r, m_pauseButton.GetBackColor().g,
+		m_pauseButton.GetBackColor().b, m_pauseButton.GetBackColor().a);
+	SDL_RenderFillRect(renderer, &rect);
+	m_pauseButton.SetRect(rect);
+
+	fontTexture = m_pauseButton.GetText(renderer, m_font);
+	GetScale().PointToPixel(rect, m_pauseButton.GetPosition().GetX(), m_pauseButton.GetPosition().GetY(),
+		m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
+	if (fontTexture != nullptr)
+	{
+		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
+		SDL_DestroyTexture(fontTexture);
+	}
+}
+
 void Pong::CheckCollision()
 {
 	CheckBallWallCollision();
@@ -185,6 +212,8 @@ void Pong::KeyReleased(const SDL_Keycode& key)
 {
 	if (key == SDLK_p || key == SDLK_ESCAPE)
 	{
+		m_pauseButton.ChangeFontColor();
+		Repaint();
 		Pause();
 	}
 	else if (!m_paused)
@@ -225,6 +254,7 @@ void Pong::Render(SDL_Renderer* renderer)
 
 	RenderBricks(renderer);
 	RenderPlayersScore(renderer);
+	RenderButton(renderer);
 
 	if (m_isPickActive)
 	{
