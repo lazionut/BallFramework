@@ -26,21 +26,27 @@ private:
 	void Update() override;
 
 	void InitBricks();
+	void InitHearts();
 	void RenderBricks(SDL_Renderer* renderer);
+	void RenderHearts(SDL_Renderer* renderer);
+	void CheckPaddleWallCollision();
+	void CheckBrickBreakerBallPaddleColision();
 	bool CheckBrickBreakerBallWallCollision();
+	void CheckBallBricksColision();
 	void RenderScore(SDL_Renderer* renderer);
 	void ResetBall();
 	void CreatePickUp(const Vector2& position);
 
 	Paddle m_paddle;
 	std::vector<std::vector<Rectangle>> m_bricks;
+	std::vector<Rectangle> m_hearts;
 	Score m_score;
 	SDL_Texture* m_ballImage = nullptr;
+	SDL_Texture* m_heartImage = nullptr;
 	TTF_Font* m_font;
 	Ball m_ball;
 	PickUp m_pickUp;
 	uint16_t m_heartCounter;
-	int hitWall = -1;
 	PickUpGenerator m_pickUpGenerator;
 	bool m_isPickActive;
 	bool m_isPickCreated;
