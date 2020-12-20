@@ -225,10 +225,26 @@ void Pong::KeyReleased(const SDL_Keycode& key)
 
 void Pong::MousePressed(const SDL_MouseButtonEvent& mouse)
 {
+	IsInBounds(mouse.x, mouse.y);
 }
 
 void Pong::MouseReleased(const SDL_MouseButtonEvent& mouse)
 {
+	if (IsInBounds(mouse.x, mouse.y) == 1) {
+		KeyReleased(SDLK_p);
+	};
+}
+
+int Pong::IsInBounds(Sint32 x, Sint32 y)
+{
+	if (x > m_pauseButton.GetRect().x &&
+		x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
+		&& y > m_pauseButton.GetRect().y &&
+		y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h) {
+		m_pauseButton.ChangeFontColor();
+		return 1;
+	}
+	return -1;
 }
 
 void Pong::Render(SDL_Renderer* renderer)

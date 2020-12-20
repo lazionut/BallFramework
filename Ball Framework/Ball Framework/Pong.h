@@ -23,6 +23,7 @@ private:
 	void KeyReleased(const SDL_Keycode& key) override;
 	void MousePressed(const SDL_MouseButtonEvent& mouse) override;
 	void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
+	int IsInBounds(Sint32 x, Sint32 y);
 	void Render(SDL_Renderer* renderer) override;
 
 	void CheckBallWallCollision();
