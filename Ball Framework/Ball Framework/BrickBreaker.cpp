@@ -17,11 +17,11 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
 	: Game("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-	m_font{ font },
+	m_ballImage{ nullptr }, m_heartImage{ nullptr }, m_pickUpImage{ nullptr }, m_font{ font },
 	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
 		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{ font },
-	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 2.0f),
-	m_heartCounter{ 3 }, m_isPickCreated{ false }
+	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 4),
+	m_heartCounter{ 3 }, m_isPickCreated{ false }, m_isPickActive{ true }
 {
 
 }
@@ -39,11 +39,16 @@ void BrickBreaker::Start()
 	}
 
 	ResetBall();
+	m_pickUpImage = LoadImage("../Assets/star.png");
 
+	if (m_pickUpImage == nullptr)
+	{
+		std::cout << "could not load pickup texture\n";
+		Stop();
+		return;
+	}
 
-
-	m_pickUp.SetStartAction(PickUpActions::SpeedUp);
-	m_pickUp.InvokeAction();
+	CreatePickUp(Vector2::zero);
 }
 
 void BrickBreaker::OnClose()

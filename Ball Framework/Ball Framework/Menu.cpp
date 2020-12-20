@@ -66,7 +66,7 @@ void Menu::Render(SDL_Renderer* renderer)
 	const auto& scale = GetScale();
 	SDL_Texture* fontTexture;
 
-	for (auto i = 0; i < m_buttons.size(); i++)
+	for (unsigned int i = 0; i < m_buttons.size(); i++)
 	{
 		scale.PointToPixel(rect, m_buttons[i].GetPosition(), m_buttons[i].GetWidth(), m_buttons[i].GetHeight());
 		SDL_SetRenderDrawColor(renderer, m_buttons[i].GetColor().r, m_buttons[i].GetColor().g,
@@ -88,7 +88,7 @@ void Menu::Render(SDL_Renderer* renderer)
 
 int Menu::IsInBounds(Sint32 x, Sint32 y)
 {
-	for (auto i = 0; i < m_buttons.size(); i++) {
+	for (unsigned int i = 0; i < m_buttons.size(); i++) {
 		if (x > m_buttons[i].GetRect().x &&
 			x < m_buttons[i].GetRect().x + m_buttons[i].GetRect().w
 			&& y > m_buttons[i].GetRect().y &&
@@ -130,7 +130,7 @@ TTF_Font* Menu::GetFont()
 
 void Menu::InitButtons()
 {
-	for (auto i = 0; i < m_buttons.size(); i++)
+	for (unsigned int i = 0; i < m_buttons.size(); i++)
 	{
 		switch (i) {
 		case 0:

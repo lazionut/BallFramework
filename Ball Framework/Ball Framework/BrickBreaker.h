@@ -41,8 +41,9 @@ private:
 	std::vector<std::vector<Rectangle>> m_bricks;
 	std::vector<Rectangle> m_hearts;
 	Score m_score;
-	SDL_Texture* m_ballImage = nullptr;
-	SDL_Texture* m_heartImage = nullptr;
+	SDL_Texture* m_ballImage;
+	SDL_Texture* m_heartImage;
+	SDL_Texture* m_pickUpImage;
 	TTF_Font* m_font;
 	Ball m_ball;
 	PickUp m_pickUp;
