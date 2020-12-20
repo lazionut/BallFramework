@@ -17,12 +17,12 @@ void PlayersStatistics::ReadStatistics(const std::string& inFile)
 	uint16_t maxScore = 0;
 
 	std::ifstream fin(inFile);
-
+	fin >> m_noPlayers;
 	if (fin.is_open())
 	{
 		std::vector< std::variant <std::string, uint16_t> > playerEntry;
 
-		while (!fin.eof())
+		for (int i = 0; i < m_noPlayers; i++)
 		{
 			fin >> playerName;
 			fin >> gamesPlayed;
@@ -54,10 +54,12 @@ void PlayersStatistics::ReadStatistics(const std::string& inFile)
 void PlayersStatistics::UpdateStatistics(std::variant<std::string, uint16_t> playerName, const std::string& outFile, bool isWon)
 {
 	//playerName gamesPlayed gamesWon gamesLost
+	bool found = false;
 	for (auto& player : m_statistics)
 	{
 		if (player[0] == playerName)
 		{
+			found = true;
 			std::variant<std::string, uint16_t> temp = std::get<uint16_t>(player[1]) + 1;
 			player[1] = temp;
 
@@ -73,9 +75,32 @@ void PlayersStatistics::UpdateStatistics(std::variant<std::string, uint16_t> pla
 			}
 		}
 	}
+	if (!found)
+	{
+		std::vector< std::variant <std::string, uint16_t> > playerEntry;
+		std::variant<std::string, uint16_t> temp = playerName;
+		playerEntry.push_back(temp);
+		temp = 1;
+		playerEntry.push_back(temp);
+		if (isWon)
+		{
+			playerEntry.push_back(temp);
+			temp = 0;
+			playerEntry.push_back(temp);
+		}
+		else
+		{
+			temp = 0;
+			playerEntry.push_back(temp);
+			temp = 1;
+			playerEntry.push_back(temp);
+		}
+		m_statistics.push_back(playerEntry);
+		++m_noPlayers;
+	}
 
 	std::ofstream fout(outFile);
-
+	fout << m_noPlayers << std::endl;
 	for (auto& player : m_statistics)
 	{
 		fout << std::get<std::string>(player[0]) << " ";

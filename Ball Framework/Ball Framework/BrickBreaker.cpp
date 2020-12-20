@@ -161,6 +161,8 @@ bool BrickBreaker::CheckBrickBreakerBallWallCollision()
 		--m_heartCounter;
 		if (m_heartCounter == 0)
 		{
+			playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
+			playersStatistics.UpdateStatistics("Player3", "..\\Assets\\statisticsBB.txt", false);
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", NULL);
 			Stop();
 		}

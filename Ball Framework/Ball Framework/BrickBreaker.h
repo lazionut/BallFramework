@@ -8,6 +8,7 @@
 #include "Ball.h"
 #include "PickUpGenerator.h"
 #include "PickUp.h"
+#include "PlayersStatistics.h"
 
 class BrickBreaker : public Game
 {
@@ -49,6 +50,7 @@ private:
 	PickUp m_pickUp;
 	uint16_t m_heartCounter;
 	PickUpGenerator m_pickUpGenerator;
+	PlayersStatistics playersStatistics;
 	bool m_isPickActive;
 	bool m_isPickCreated;
 };
