@@ -9,6 +9,7 @@
 #include "PickUpGenerator.h"
 #include "PickUp.h"
 #include "PlayersStatistics.h"
+#include "Button.h" 
 
 class BrickBreaker : public Game
 {
@@ -37,6 +38,7 @@ private:
 	void RenderScore(SDL_Renderer* renderer);
 	void ResetBall();
 	void CreatePickUp(const Vector2& position);
+	void RenderButton(SDL_Renderer* renderer);
 
 	Paddle m_paddle;
 	std::vector<std::vector<Rectangle>> m_bricks;
@@ -51,6 +53,7 @@ private:
 	uint16_t m_heartCounter;
 	PickUpGenerator m_pickUpGenerator;
 	PlayersStatistics playersStatistics;
+	Button m_pauseButton;
 	bool m_isPickActive;
 	bool m_isPickCreated;
 };

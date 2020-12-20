@@ -3,12 +3,15 @@
 #define WIDTHUNITS 10
 #define HEIGHTUNITS 10
 constexpr int buttonsNum = 2;
+
+
+static SDL_Color white = { 255, 255, 255, 255 };
+static SDL_Color red = { 255, 0, 0, 255 };
 static SDL_Color black = { 0, 0, 0, 0 };
 
 Menu::Menu(int16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS) :
 	Game("Ball Games", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-	m_buttons{ buttonsNum }, m_button {-1}
-
+	m_buttons{ buttonsNum }, m_button{ -1 }
 {
 	InitMenu();
 }
@@ -47,14 +50,14 @@ void Menu::KeyReleased(const SDL_Keycode& key)
 void Menu::MousePressed(const SDL_MouseButtonEvent& mouse)
 {
 	m_button = IsInBounds(mouse.x, mouse.y);
-	if (m_button>-1) {
+	if (m_button > -1) {
 		m_buttons[m_button].ChangeBackColor();
 	}
 }
 
 void Menu::MouseReleased(const SDL_MouseButtonEvent& mouse)
 {
-	if (m_button>-1) {
+	if (m_button > -1) {
 		m_buttons[m_button].ChangeBackColor();
 		PerformAction(m_button);
 	}
@@ -69,8 +72,8 @@ void Menu::Render(SDL_Renderer* renderer)
 	for (unsigned int i = 0; i < m_buttons.size(); i++)
 	{
 		scale.PointToPixel(rect, m_buttons[i].GetPosition(), m_buttons[i].GetWidth(), m_buttons[i].GetHeight());
-		SDL_SetRenderDrawColor(renderer, m_buttons[i].GetColor().r, m_buttons[i].GetColor().g,
-			m_buttons[i].GetColor().b, m_buttons[i].GetColor().a);
+		SDL_SetRenderDrawColor(renderer, m_buttons[i].GetBackColor().r, m_buttons[i].GetBackColor().g,
+			m_buttons[i].GetBackColor().b, m_buttons[i].GetBackColor().a);
 		SDL_RenderFillRect(renderer, &rect);
 		m_buttons[i].SetRect(rect);
 
@@ -134,10 +137,10 @@ void Menu::InitButtons()
 	{
 		switch (i) {
 		case 0:
-			m_buttons[i].SetButton(Vector2(0.0f, 3.0f), 3.0f, 0.7f, "Play Pong");
+			m_buttons[i].SetButton(Vector2(0.0f, 3.0f), 3.0f, 0.7f, white, black, "Play Pong");
 			break;
 		case 1:
-			m_buttons[i].SetButton(Vector2(0.0f, 1.5f), 5.0f, 0.7f, "Play BrickBreaker");
+			m_buttons[i].SetButton(Vector2(0.0f, 1.5f), 5.0f, 0.7f, white, black, "Play BrickBreaker");
 			break;
 		}
 	}

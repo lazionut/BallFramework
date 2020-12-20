@@ -8,6 +8,7 @@
 #define BRICKH 0.35f
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
+
 constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
 constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
 constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
@@ -15,13 +16,18 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
 constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
+static SDL_Color white = { 255, 255, 255, 255 };
+static SDL_Color red = { 255, 0, 0, 255 };
+static SDL_Color black = { 0, 0, 0, 0 };
+
 BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
 	: Game("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 	m_ballImage{ nullptr }, m_heartImage{ nullptr }, m_pickUpImage{ nullptr }, m_font{ font },
 	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
 		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{ font },
 	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 4),
-	m_heartCounter{ 3 }, m_isPickCreated{ false }, m_isPickActive{ true }
+	m_heartCounter{ 3 }, m_isPickCreated{ false }, m_isPickActive{ true },
+	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 + 0.1f), 0.7f, 0.7f, black, white, "||" }
 {
 
 }
@@ -247,6 +253,8 @@ void BrickBreaker::KeyReleased(const SDL_Keycode& key)
 {
 	if (key == SDLK_p || key == SDLK_ESCAPE)
 	{
+		m_pauseButton.ChangeFontColor();
+		Repaint();
 		Pause();
 	}
 	else if (!m_paused)
@@ -275,6 +283,7 @@ void BrickBreaker::Render(SDL_Renderer* renderer)
 	RenderBricks(renderer);
 	RenderScore(renderer);
 	RenderHearts(renderer);
+	RenderButton(renderer);
 
 	scale.PointToPixel(rect, m_ball.GetPosition(), m_ball.GetSize(), m_ball.GetSize());
 	SDL_RenderCopy(renderer, m_ballImage, NULL, &rect);
@@ -306,6 +315,29 @@ void BrickBreaker::RenderHearts(SDL_Renderer* renderer)
 		SDL_RenderCopy(renderer, m_heartImage, NULL, &rect);
 	}
 }
+
+void BrickBreaker::RenderButton(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	const auto& scale = GetScale();
+	SDL_Texture* fontTexture;
+
+	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
+	SDL_SetRenderDrawColor(renderer, m_pauseButton.GetBackColor().r, m_pauseButton.GetBackColor().g,
+		m_pauseButton.GetBackColor().b, m_pauseButton.GetBackColor().a);
+	SDL_RenderFillRect(renderer, &rect);
+	m_pauseButton.SetRect(rect);
+
+	fontTexture = m_pauseButton.GetText(renderer, m_font);
+	GetScale().PointToPixel(rect, m_pauseButton.GetPosition().GetX(), m_pauseButton.GetPosition().GetY(),
+		m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
+	if (fontTexture != nullptr)
+	{
+		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
+		SDL_DestroyTexture(fontTexture);
+	}
+}
+
 
 void BrickBreaker::CheckPaddleWallCollision()
 {
