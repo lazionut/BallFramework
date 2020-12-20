@@ -42,4 +42,6 @@ private:
 	uint16_t m_heartCounter;
 	int hitWall = -1;
 	PickUpGenerator m_pickUpGenerator;
+	bool m_isPickActive;
+	bool m_isPickCreated;
 };

@@ -24,7 +24,7 @@ Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint
 	m_pongPaddle1(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED),
 	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED),
 	m_bricks{ BRICKCOLUMNS }, m_ballImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 10 },
-	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }, m_isPickActive{ true }
+	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }, m_isPickActive{ true }, m_isPickCreated{ false }
 {
 }
 
@@ -68,8 +68,6 @@ void Pong::ResetBall()
 void Pong::CreatePickUp(const Vector2& position)
 {
 	using Generator = PickUpGenerator::Actions;
-
-	m_isPickCreated = false;
 
 	if (rand() % 100 > 80)
 	{
@@ -129,8 +127,16 @@ void Pong::CreatePickUp(const Vector2& position)
 		}
 
 		m_isPickActive = true;
-		m_pickUp.SetDimension(Vector2(0.75f, 0.75f));
-		m_pickUp.SetPosition(position);
+		if (rand() % 2 == 1)
+		{
+			m_pickUp.Set(position, Vector2(0.75f, 0.75f), Vector2(rand() % 3 - 1, 0), 4.5f);
+			m_pickUp.Move();
+		}
+		else
+		{
+			m_pickUp.SetDimension(Vector2(0.75f, 0.75f));
+			m_pickUp.SetPosition(position);
+		}
 	}
 	else
 	{
