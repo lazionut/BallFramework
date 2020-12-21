@@ -63,6 +63,7 @@ void Pong::OnClose()
 {
 	SDL_DestroyTexture(m_ballImage);
 	SDL_DestroyTexture(m_pickUpImage);
+	Time::SetTimeScale(m_lastTimeScale);
 }
 
 void Pong::ResetBall()
@@ -460,5 +461,18 @@ void Pong::RenderPlayersScore(SDL_Renderer* renderer)
 	else
 	{
 		std::cout << "Font was not loaded!" << std::endl;
+	}
+}
+
+void Pong::Pause()
+{
+	if (!m_paused) {
+		m_lastTimeScale = Time::GetTimeScale();
+		Time::SetTimeScale(0);
+		m_paused = true;
+	}
+	else {
+		Time::SetTimeScale(m_lastTimeScale);
+		m_paused = false;
 	}
 }

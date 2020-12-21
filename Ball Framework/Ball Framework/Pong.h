@@ -36,6 +36,7 @@ private:
 	void InitialiseBricks();
 	void RenderBricks(SDL_Renderer* renderer);
 	void RenderPlayersScore(SDL_Renderer* renderer);
+	void Pause();
 	void ResetBall();
 	void CreatePickUp(const Vector2& position);
 	void RenderButton(SDL_Renderer* renderer);
@@ -60,6 +61,9 @@ private:
 
 	Button m_pauseButton;
 
+	float m_lastTimeScale;
+
+	bool m_paused;
 	bool m_isPickActive;
 	bool m_isPickCreated;
 };

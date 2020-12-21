@@ -27,6 +27,7 @@ private:
 	int IsInBounds(Sint32 x, Sint32 y);
 	void Render(SDL_Renderer* renderer) override;
 	void Update() override;
+	void Pause();
 
 	void InitBricks();
 	void InitHearts();
@@ -55,6 +56,8 @@ private:
 	PickUpGenerator m_pickUpGenerator;
 	PlayersStatistics playersStatistics;
 	Button m_pauseButton;
+	float m_lastTimeScale;
+	bool m_paused;
 	bool m_isPickActive;
 	bool m_isPickCreated;
 };
