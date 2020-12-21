@@ -29,8 +29,9 @@ Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint
 	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED),
 	m_bricks{ BRICKCOLUMNS }, m_bricksNumber{ 0 }, m_ballImage{ nullptr }, m_pickUpImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 10 },
 	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }, m_isPickCreated{ false }, m_isPickActive{ true },
-	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 - 0.5f), 0.7f, 0.7f, black, white, "||" }
+	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 - 0.5f), 0.7f, 0.7f, black, white, "||" }, m_paused{ false }
 {
+	m_lastTimeScale = Time::GetTimeScale();
 }
 
 void Pong::Start()
