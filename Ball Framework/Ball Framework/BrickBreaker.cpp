@@ -27,7 +27,8 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{ font },
 	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 4),
 	m_heartCounter{ 3 }, m_isPickCreated{ false }, m_isPickActive{ true },
-	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 + 0.1f), 0.7f, 0.7f, black, white, "||" }, m_paused{ false }
+	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 + 0.1f), 0.7f, 0.7f, black, white, "||" }, m_paused{ false },
+	m_playersStatistics {"..\\Assets\\statisticsBB.txt"} 
 {
 	m_lastTimeScale = Time::GetTimeScale();
 }
@@ -168,8 +169,8 @@ bool BrickBreaker::CheckBrickBreakerBallWallCollision()
 		--m_heartCounter;
 		if (m_heartCounter == 0)
 		{
-			playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
-			playersStatistics.UpdateStatistics("Player3", "..\\Assets\\statisticsBB.txt", false);
+			//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
+			m_playersStatistics.UpdateStatistics("Player4", true);
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", NULL);
 			Stop();
 		}

@@ -3,23 +3,25 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include <variant>
+#include <string>
+#include "PlayerEntry.h"
 
 class PlayersStatistics
 {
 public:
 	PlayersStatistics();
-	PlayersStatistics(uint16_t noPlayers);
+	PlayersStatistics(const std::string& filePath);
 	void ReadStatistics(const std::string& inFile);
-	void UpdateStatistics(std::variant<std::string, uint16_t> playerName, const std::string& outFile, bool isWon);
+	void UpdateStatistics(std::string playerName, bool isWon);
 
-	friend void Swap(std::vector < std::variant <std::string, uint16_t> >* first, std::vector < std::variant <std::string, uint16_t> >* second);
-	friend void OrderStatistiscs(std::vector<std::vector< std::variant <std::string, uint16_t> > >& statistics);
+	friend void Swap( PlayerEntry * first, PlayerEntry* second);
+	friend void OrderStatistiscs(std::vector<PlayerEntry>& statistics); //TO DO: optimise
 
 	friend std::ostream& operator<<(std::ostream& outStream, PlayersStatistics& other);
 private:
 
-	std::vector<std::vector< std::variant <std::string, uint16_t> > > m_statistics;
+	std::vector<PlayerEntry> m_statistics;
+	std::string m_filePath;
 	uint16_t m_noPlayers;
 };
 

@@ -157,6 +157,7 @@
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="PickUpActions.cpp" />
     <ClCompile Include="PickUpGenerator.cpp" />
+    <ClCompile Include="PlayerEntry.cpp" />
     <ClCompile Include="PlayersStatistics.cpp" />
     <ClCompile Include="Pong.cpp" />
     <ClCompile Include="Rectangle.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="PickUpActions.h" />
     <ClInclude Include="PickUpGenerator.h" />
+    <ClInclude Include="PlayerEntry.h" />
     <ClInclude Include="PlayersStatistics.h" />
     <ClInclude Include="Pong.h" />
     <ClInclude Include="Rectangle.h" />

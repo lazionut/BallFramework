@@ -1,49 +1,48 @@
 #include "PlayersStatistics.h"
 
-PlayersStatistics::PlayersStatistics() : m_noPlayers{ 0 }
+
+PlayersStatistics::PlayersStatistics()
 {
 }
 
-PlayersStatistics::PlayersStatistics(uint16_t noPlayers) : m_noPlayers{ noPlayers }
+PlayersStatistics::PlayersStatistics(const std::string& filePath) : m_noPlayers{ 0 }, m_filePath{filePath}
 {
+	ReadStatistics(filePath);
 }
+
 
 void PlayersStatistics::ReadStatistics(const std::string& inFile)
 {
-	std::string playerName;
-	uint16_t gamesPlayed;
-	uint16_t gamesWon;
-	uint16_t gamesLost;
-	uint16_t maxScore = 0;
 
 	std::ifstream fin(inFile);
-	fin >> m_noPlayers;
+	
 	if (fin.is_open())
 	{
-		std::vector< std::variant <std::string, uint16_t> > playerEntry;
-
-		for (int i = 0; i < m_noPlayers; i++)
+		PlayerEntry playerEntry;
+		std::string playerName;
+		uint16_t gamesPlayed;
+		uint16_t gamesWon;
+		uint16_t gamesLost;
+		if (fin.peek() == std::ifstream::traits_type::eof())
 		{
-			fin >> playerName;
-			fin >> gamesPlayed;
-			fin >> gamesWon;
-			fin >> gamesLost;
+			m_noPlayers = 0;
+		}
+		else
+		{
+			fin >> m_noPlayers;
+			for (auto index = 0; index < m_noPlayers; index++)
+			{
 
-			std::variant <std::string, uint16_t> nameMatchVariant;
-			nameMatchVariant = playerName;
-			playerEntry.emplace(playerEntry.end(), nameMatchVariant);
+				fin >> playerName;
+				fin >> gamesPlayed;
+				fin >> gamesWon;
+				fin >> gamesLost;
 
-			nameMatchVariant = gamesPlayed;
-			playerEntry.emplace(playerEntry.end(), nameMatchVariant);
-
-			nameMatchVariant = gamesWon;
-			playerEntry.emplace(playerEntry.end(), nameMatchVariant);
-
-			nameMatchVariant = gamesLost;
-			playerEntry.emplace(playerEntry.end(), nameMatchVariant);
-
-			m_statistics.emplace(m_statistics.end(), playerEntry);
-
+				m_statistics.emplace(m_statistics.begin(), PlayerEntry{ playerName,gamesPlayed,gamesWon,gamesLost });
+				
+			}
+			
+			//if (m_statistics.empty()) m_noPlayers = 0;
 		}
 	}
 	else
@@ -51,84 +50,65 @@ void PlayersStatistics::ReadStatistics(const std::string& inFile)
 	fin.close();
 }
 
-void PlayersStatistics::UpdateStatistics(std::variant<std::string, uint16_t> playerName, const std::string& outFile, bool isWon)
+void PlayersStatistics::UpdateStatistics(std::string playerName, bool isWon)
 {
 	//playerName gamesPlayed gamesWon gamesLost
 	bool found = false;
 	for (auto& player : m_statistics)
 	{
-		if (player[0] == playerName)
+		if (player.GetPlayerName() == playerName)
 		{
-			found = true;
-			std::variant<std::string, uint16_t> temp = std::get<uint16_t>(player[1]) + 1;
-			player[1] = temp;
+			player.SetGamesPlayed(player.GetGamesPlayed() + 1);
 
 			if (isWon)
-			{
-				temp = std::get<uint16_t>(player[2]) + 1;
-				player[2] = temp;
-			}
+				player.SetGamesWon(player.GetGamesWon() + 1);
 			else
-			{
-				temp = std::get<uint16_t>(player[3]) + 1;
-				player[3] = temp;
-			}
+				player.SetGamesLost(player.GetGamesLost() + 1);
+			found = true;
 		}
 	}
-	if (!found)
+	if (!found && playerName!="")
 	{
-		std::vector< std::variant <std::string, uint16_t> > playerEntry;
-		std::variant<std::string, uint16_t> temp = playerName;
-		playerEntry.push_back(temp);
-		temp = 1;
-		playerEntry.push_back(temp);
 		if (isWon)
-		{
-			playerEntry.push_back(temp);
-			temp = 0;
-			playerEntry.push_back(temp);
-		}
+			m_statistics.emplace(m_statistics.end(),PlayerEntry{ playerName,1,1,0 });
 		else
-		{
-			temp = 0;
-			playerEntry.push_back(temp);
-			temp = 1;
-			playerEntry.push_back(temp);
-		}
-		m_statistics.push_back(playerEntry);
+			m_statistics.emplace(m_statistics.end(), PlayerEntry{ playerName,1,0,1 });
 		++m_noPlayers;
 	}
 
-	std::ofstream fout(outFile);
-	fout << m_noPlayers << std::endl;
+	std::ofstream fout(m_filePath);
+
+	fout << m_noPlayers<<std::endl;
+
 	for (auto& player : m_statistics)
 	{
-		fout << std::get<std::string>(player[0]) << " ";
-		fout << std::get<std::uint16_t>(player[1]) << " ";
-		fout << std::get<std::uint16_t>(player[2]) << " ";
-		fout << std::get<std::uint16_t>(player[3]) << std::endl;
+		fout <<player.GetPlayerName() << " ";
+		fout <<player.GetGamesPlayed()  << " ";
+		fout <<player.GetGamesWon()  << " ";
+		fout <<player.GetGamesLost()<< std::endl;
 	}
+	fout.close();
 }
 
-void Swap(std::vector<std::variant<std::string, uint16_t>>* first, std::vector<std::variant<std::string, uint16_t>>* second)
+void Swap(PlayerEntry* first, PlayerEntry* second)
 {
-	std::vector<std::variant<std::string, uint16_t>>* temp;
+	PlayerEntry* temp;
 	temp = first;
 	first = second;
 	second = temp;
 }
-void OrderStatistiscs(std::vector<std::vector< std::variant <std::string, uint16_t> > >& statistics)
+void OrderStatistiscs(std::vector<PlayerEntry>& statistics)
 {
-	for (uint16_t index = 0; index < statistics.size() - 1; index++)
+	for (auto index1=0 ; index1 < statistics.size();index1++)
 	{
-		for (uint16_t index2 = index; index2 < statistics.size(); index2++)
+		for (auto index2=0; index2 < statistics.size(); index2++)
 		{
-			uint16_t firstScore = std::get<uint16_t>(statistics[index][2]) - std::get<uint16_t>(statistics[index][3]);
-			uint16_t secondScore = std::get<uint16_t>(statistics[index2][2]) - std::get<uint16_t>(statistics[index2][3]);
+			auto firstScore = statistics[index1].GetGamesWon() - statistics[index1].GetGamesWon();
+			auto secondScore = statistics[index2].GetGamesWon() - statistics[index2].GetGamesWon();
 
 			if (firstScore < secondScore)
 			{
-				Swap(&statistics[index], &statistics[index2]);
+				Swap(&statistics[index1], &statistics[index2]);
 			}
 		}
 	}
@@ -140,11 +120,8 @@ std::ostream& operator<<(std::ostream& outStream, PlayersStatistics& other)
 	OrderStatistiscs(other.m_statistics);
 
 	for (uint16_t index = 0; index < other.m_noPlayers; index++)
-	{
-		outStream << std::get<std::string>(other.m_statistics[index][0]) << " ";
-		outStream << std::get<std::uint16_t>(other.m_statistics[index][1]) << " ";
-		outStream << std::get<std::uint16_t>(other.m_statistics[index][2]) << " ";
-		outStream << std::get<std::uint16_t>(other.m_statistics[index][3]) << std::endl;
+	{ 
+		outStream << other.m_statistics[index].GetPlayerName() <<" " << other.m_statistics[index].GetGamesPlayed()<< " " << other.m_statistics[index].GetGamesWon()<< " " << other.m_statistics[index].GetGamesLost();
 	}
 	return outStream;
 }

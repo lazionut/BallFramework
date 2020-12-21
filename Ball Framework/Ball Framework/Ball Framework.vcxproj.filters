@@ -111,6 +111,9 @@
     <ClCompile Include="PickUpGenerator.cpp">
       <Filter>Source Files\Framework\PickUp</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerEntry.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="PickUpGenerator.h">
       <Filter>Header Files\Framework\PickUp</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerEntry.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

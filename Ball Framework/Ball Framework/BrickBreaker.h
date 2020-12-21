@@ -54,7 +54,7 @@ private:
 	PickUp m_pickUp;
 	uint16_t m_heartCounter;
 	PickUpGenerator m_pickUpGenerator;
-	PlayersStatistics playersStatistics;
+	PlayersStatistics m_playersStatistics;
 	Button m_pauseButton;
 	float m_lastTimeScale;
 	bool m_paused;
