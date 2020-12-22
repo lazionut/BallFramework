@@ -33,7 +33,7 @@ private:
 	void CheckPickUpCollision();
 	void CheckScoreCondition();
 
-	void InitialiseBricks();
+	void InitializeBricks();
 	void RenderBricks(SDL_Renderer* renderer);
 	void RenderPlayersScore(SDL_Renderer* renderer);
 	void Pause();
