@@ -10,6 +10,9 @@
 #define BRICKSPERCOLUMN 4
 #define BRICKWIDTH 0.81f
 #define BRICKHEIGHT 0.35f
+#define BRICKLIMIT_X -1.5f
+#define BRICKLIMIT_Y -3
+#define BRICKSPACING 2
 
 constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
 constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
@@ -36,7 +39,7 @@ Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint
 
 void Pong::Start()
 {
-	InitialiseBricks();
+	InitializeBricks();
 
 	m_ballImage = LoadImage("../Assets/ball.png");
 
@@ -86,6 +89,7 @@ void Pong::CreatePickUp(const Vector2& position)
 		{
 		case Generator::SPEEDCHANGE:
 			m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
+			m_pickUp.StartMoving();
 			break;
 		case Generator::PADDLESIZECHANGE:
 			difference = 3;
@@ -128,22 +132,12 @@ void Pong::CreatePickUp(const Vector2& position)
 			m_isPickActive = false;
 			break;
 		default:
-			std::cout << "Could not create pickUp!\n";
-			Stop();
+			m_isPickCreated = false;
 			return;
 		}
 
 		m_isPickActive = true;
-		if (rand() % 2 == 1)
-		{
-			m_pickUp.Set(position, Vector2(0.75f, 0.75f), Vector2(rand() % 3 - 1, 0), 4.5f);
-			m_pickUp.Move();
-		}
-		else
-		{
-			m_pickUp.SetDimension(Vector2(0.75f, 0.75f));
-			m_pickUp.SetPosition(position);
-		}
+		m_pickUp.Set(position, Vector2(0.75f, 0.75f), Vector2(rand() % 3 - 1, 0), 4.5f);
 	}
 	else
 	{
@@ -320,7 +314,7 @@ void Pong::CheckPaddleWallCollision()
 
 void Pong::CheckBallPaddleCollision()
 {
-	if (m_pongBall.GetDirection().GetX() < 0 && m_pongBall.CheckCollision(m_pongPaddle1))
+	if (m_pongBall.CheckCollision(m_pongPaddle1))
 	{
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
 		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
@@ -331,7 +325,7 @@ void Pong::CheckBallPaddleCollision()
 		m_pongBall.AddSpeed(0.25f);
 		m_pongBall.GetDirection().Normalize();
 	}
-	else if (m_pongBall.GetDirection().GetX() > 0 && m_pongBall.CheckCollision(m_pongPaddle2))
+	else if (m_pongBall.CheckCollision(m_pongPaddle2))
 	{
 		//m_pongBall.SetDirection(m_pongBall.GetDirection().GetX() * -1, m_pongBall.GetDirection().GetY());
 		//m_pongBall.GetDirection().SetX(-m_pongBall.GetDirection().GetX());
@@ -350,17 +344,18 @@ void Pong::CheckBallBrickCollision()
 		for (auto element = row.begin(); element < row.end(); ++element)
 			if (m_pongBall.CheckCollision(*element))
 			{
-				m_pongBall.ChangeDirection(*element);
-				row.erase(element);
 				if (m_isPickCreated == false)
-					CreatePickUp(Vector2::zero);
+					CreatePickUp(element->GetPosition());
+				m_pongBall.ChangeDirection(*element);
+				m_pongBall.GetDirection().Normalize();
+				row.erase(element);
 
 				--m_bricksNumber;
 
 				if (m_bricksNumber < 1)
 				{
 					m_bricks.resize(BRICKCOLUMNS);
-					InitialiseBricks();
+					InitializeBricks();
 				}
 				return;
 			}
@@ -408,9 +403,9 @@ void Pong::CheckScoreCondition()
 	}
 }
 
-void Pong::InitialiseBricks()
+void Pong::InitializeBricks()
 {
-	float x = -1.5f, y = -3;
+	float x = BRICKLIMIT_X, y = BRICKLIMIT_Y;
 
 	for (auto&& row : m_bricks)
 	{
@@ -419,11 +414,11 @@ void Pong::InitialiseBricks()
 		for (auto&& elem : row)
 		{
 			elem.Set(Vector2(x, y), BRICKWIDTH, BRICKHEIGHT);
-			y += 2;
+			y += BRICKSPACING;
 		}
 
 		++x;
-		y = -3;
+		y = BRICKLIMIT_Y;
 	}
 
 	m_bricksNumber = BRICKCOLUMNS * BRICKSPERCOLUMN;

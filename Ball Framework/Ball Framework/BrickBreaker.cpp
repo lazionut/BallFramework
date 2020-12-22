@@ -25,10 +25,10 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 	m_ballImage{ nullptr }, m_heartImage{ nullptr }, m_pickUpImage{ nullptr }, m_font{ font },
 	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
 		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{ font },
-	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 4),
+	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 6),
 	m_heartCounter{ 3 }, m_isPickCreated{ false }, m_isPickActive{ true },
 	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 + 0.1f), 0.7f, 0.7f, black, white, "||" }, m_paused{ false },
-	m_playersStatistics {"..\\Assets\\statisticsBB.txt"} 
+	m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
 {
 	m_lastTimeScale = Time::GetTimeScale();
 }
@@ -85,6 +85,7 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 		{
 		case Generator::SPEEDCHANGE:
 			m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
+			m_pickUp.StartMoving();
 			break;
 		case Generator::PADDLESIZECHANGE:
 			m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_paddle, 3);
@@ -98,9 +99,11 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 			break;
 		case Generator::BALLSIZECHANGE:
 			m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(m_ball, 1.25f);
+			m_pickUp.StartMoving();
 			break;
 		case Generator::BALLSPEEDCHANGE:
 			m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(m_ball, 4);
+			m_pickUp.StartMoving();
 			break;
 		case Generator::BONUSPOINTS:
 			m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(m_score, rand() % 5 + 1);
@@ -109,22 +112,12 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 			m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(m_score, rand() % 5 + 1);
 			break;
 		default:
-			std::cout << "Could not create pickUp!\n";
-			Stop();
+			m_isPickCreated = false;
 			return;
 		}
 
 		m_isPickActive = true;
-		if (rand() % 2 == 1)
-		{
-			m_pickUp.Set(position, Vector2(0.75f, 0.75f), Vector2(0, rand() % 2), 4.5f);
-			m_pickUp.Move();
-		}
-		else
-		{
-			m_pickUp.SetDimension(Vector2(0.75f, 0.75f));
-			m_pickUp.SetPosition(Vector2(0, 0));
-		}
+		m_pickUp.Set(position, Vector2(0.75f, 0.75f), Vector2(0, rand() % 2), 4.5f);
 	}
 	else
 	{
@@ -187,10 +180,11 @@ void BrickBreaker::CheckBallBricksColision()
 		{
 			if (m_ball.CheckCollision(*element))
 			{
-				m_ball.ChangeDirection(*element);
-				row.erase(element);
 				if (m_isPickCreated == false)
-					CreatePickUp(Vector2::zero);
+					CreatePickUp(element->GetPosition());
+				m_ball.ChangeDirection(*element);
+				m_ball.GetDirection().Normalize();
+				row.erase(element);
 				m_score.AddPoints(1);
 				return;
 			}
