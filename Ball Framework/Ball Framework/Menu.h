@@ -37,5 +37,6 @@ private:
 	std::vector<Button> m_buttons;
 	void InitButtons();
 	TTF_Font* m_font;
+	SDL_Renderer* m_renderer;
 	int m_button;
 };

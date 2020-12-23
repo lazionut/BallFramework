@@ -48,6 +48,7 @@ private:
 
 	Ball m_pongBall;
 	SDL_Texture* m_ballImage;
+	SDL_Renderer* m_renderer;
 
 	TTF_Font* m_font;
 

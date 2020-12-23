@@ -3,6 +3,10 @@
 #include "Time.h"
 #include "TimeManager.h"
 
+static SDL_Color white = { 255, 255, 255, 255 };
+static SDL_Color red = { 255, 0, 0, 255 };
+static SDL_Color black = { 0, 0, 0, 0 };
+
 class Game
 {
 public:

@@ -49,6 +49,7 @@ private:
 	SDL_Texture* m_ballImage;
 	SDL_Texture* m_heartImage;
 	SDL_Texture* m_pickUpImage;
+	SDL_Renderer* m_renderer;
 	TTF_Font* m_font;
 	Ball m_ball;
 	PickUp m_pickUp;

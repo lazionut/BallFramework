@@ -21,9 +21,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
 constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
-static SDL_Color white = { 255, 255, 255, 255 };
-static SDL_Color red = { 255, 0, 0, 255 };
-static SDL_Color black = { 0, 0, 0, 0 };
+
 
 Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
 	: Game("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
@@ -32,7 +30,7 @@ Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint
 	m_pongPaddle2(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED),
 	m_bricks{ BRICKCOLUMNS }, m_bricksNumber{ 0 }, m_ballImage{ nullptr }, m_pickUpImage{ nullptr }, m_pongBall{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 10 },
 	m_font{ font }, m_pongScore1{ font }, m_pongScore2{ font }, m_isPickCreated{ false }, m_isPickActive{ true },
-	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 - 0.5f), 0.7f, 0.7f, black, white, "||" }, m_paused{ false }
+	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.38f, HEIGHTUNITS / 2 - 0.5f), 0.7f, 0.7f, black, white, "||", m_font}, m_paused{ false }
 {
 	m_lastTimeScale = Time::GetTimeScale();
 }
@@ -158,7 +156,7 @@ void Pong::RenderButton(SDL_Renderer* renderer)
 	SDL_RenderFillRect(renderer, &rect);
 	m_pauseButton.SetRect(rect);
 
-	fontTexture = m_pauseButton.GetText(renderer, m_font);
+	fontTexture = m_pauseButton.GetText(renderer);
 	GetScale().PointToPixel(rect, m_pauseButton.GetPosition().GetX(), m_pauseButton.GetPosition().GetY(),
 		m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
 	if (fontTexture != nullptr)
@@ -208,7 +206,7 @@ void Pong::KeyReleased(const SDL_Keycode& key)
 {
 	if (key == SDLK_p || key == SDLK_ESCAPE)
 	{
-		m_pauseButton.ChangeFontColor();
+		m_pauseButton.ChangeFontColor(m_renderer);
 		Repaint();
 		Pause();
 	}
@@ -237,7 +235,7 @@ int Pong::IsInBounds(Sint32 x, Sint32 y)
 		x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
 		&& y > m_pauseButton.GetRect().y &&
 		y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h) {
-		m_pauseButton.ChangeFontColor();
+		m_pauseButton.ChangeFontColor(m_renderer);
 		return 1;
 	}
 	return -1;
@@ -245,33 +243,34 @@ int Pong::IsInBounds(Sint32 x, Sint32 y)
 
 void Pong::Render(SDL_Renderer* renderer)
 {
+	m_renderer = renderer;
 	SDL_Rect aux;
 	const auto& scale = GetScale();
 
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_SetRenderDrawColor(m_renderer, 0, 255, 0, 255);
 	scale.PointToPixel(aux, m_pongPaddle1.GetPosition(), m_pongPaddle1.GetWidth(), m_pongPaddle1.GetHeight());
-	SDL_RenderFillRect(renderer, &aux);
+	SDL_RenderFillRect(m_renderer, &aux);
 	scale.PointToPixel(aux, m_pongPaddle2.GetPosition(), m_pongPaddle2.GetWidth(), m_pongPaddle2.GetHeight());
-	SDL_RenderFillRect(renderer, &aux);
+	SDL_RenderFillRect(m_renderer, &aux);
 
 	uint16_t screenHeight = scale.GetScreenHeight();
 	uint16_t screenCenter = scale.GetScreenWidth() / 2;
 	for (int index = 0; index < screenHeight; index += 3)
 	{
-		SDL_RenderDrawPoint(renderer, screenCenter, index);
+		SDL_RenderDrawPoint(m_renderer, screenCenter, index);
 	}
 
 	scale.PointToPixel(aux, m_pongBall.GetPosition(), m_pongBall.GetSize(), m_pongBall.GetSize());
-	SDL_RenderCopy(renderer, m_ballImage, nullptr, &aux);
+	SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &aux);
 
-	RenderBricks(renderer);
-	RenderPlayersScore(renderer);
-	RenderButton(renderer);
+	RenderBricks(m_renderer);
+	RenderPlayersScore(m_renderer);
+	RenderButton(m_renderer);
 
 	if (m_isPickActive)
 	{
 		scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetDimension());
-		SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &aux);
+		SDL_RenderCopy(m_renderer, m_pickUpImage, nullptr, &aux);
 	}
 }
 
