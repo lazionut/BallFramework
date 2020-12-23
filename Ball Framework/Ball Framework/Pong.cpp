@@ -149,20 +149,20 @@ void Pong::RenderButton(SDL_Renderer* renderer)
 	SDL_Rect rect;
 	const auto& scale = GetScale();
 	SDL_Texture* fontTexture;
+	const SDL_Color& buttonColor = m_pauseButton.GetBackColor();
 
 	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
-	SDL_SetRenderDrawColor(renderer, m_pauseButton.GetBackColor().r, m_pauseButton.GetBackColor().g,
-		m_pauseButton.GetBackColor().b, m_pauseButton.GetBackColor().a);
+	SDL_SetRenderDrawColor(renderer, buttonColor.r, buttonColor.g, buttonColor.b, buttonColor.a);
 	SDL_RenderFillRect(renderer, &rect);
 	m_pauseButton.SetRect(rect);
 
 	fontTexture = m_pauseButton.GetText(renderer);
-	GetScale().PointToPixel(rect, m_pauseButton.GetPosition().GetX(), m_pauseButton.GetPosition().GetY(),
-		m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
+	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
+
 	if (fontTexture != nullptr)
 	{
 		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
-		//SDL_DestroyTexture(fontTexture);
+		SDL_DestroyTexture(fontTexture);
 	}
 }
 

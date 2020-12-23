@@ -1,34 +1,19 @@
 #include "Game.h"
 
-Game::Game(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit)
+Game::Game(const std::string& title, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit)
 	: m_maxFPS{ maxFPS }, m_gameEvent{ nullptr }, m_running{ false }, m_renderer{ widthUnit, heightUnit }
 {
-	InitGame(title, x, y, width, height, flags, maxFPS);
+	InitGame(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS);
 }
 
-Game::Game(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit)
-	: Game(title.c_str(), x, y, width, height, flags, maxFPS, widthUnit, heightUnit) {}
-
-Game::Game(const char* title, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit)
-	: Game(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS, widthUnit, heightUnit) {}
-
-Game::Game(const std::string& title, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit)
-	: Game(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS, widthUnit, heightUnit) {}
-
-void Game::InitGame(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
+void Game::InitGame(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 {
-	if (m_renderer.InitRenderer(title, x, y, width, height, flags))
+	if(m_renderer.InitRenderer(title.c_str(), x, y, width, height, flags))
 	{
 		m_maxFPS = maxFPS;
 		m_gameEvent = new SDL_Event;
 		m_running = true;
 	}
-}
-
-void Game::InitGame(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
-{
-	InitGame(title.c_str(), x, y, width, height, flags, maxFPS);
-
 }
 
 void Game::Run()
@@ -70,10 +55,7 @@ void Game::SetBackgroundColor(const SDL_Color& color)
 void Game::SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	SDL_Color color;
-	color.r = red;
-	color.g = green;
-	color.b = blue;
-	color.a = alpha;
+	color = { red, green, blue, alpha };
 	m_renderer.SetBackgroundColor(color);
 }
 

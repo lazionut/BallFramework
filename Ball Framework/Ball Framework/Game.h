@@ -10,9 +10,6 @@ static SDL_Color black = { 0, 0, 0, 0 };
 class Game
 {
 public:
-	Game(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
-	Game(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
-	Game(const char* title, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 	Game(const std::string& title, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 
 	void Run();
@@ -40,24 +37,19 @@ protected:
 	void Stop();
 	void Repaint();
 
-	
-
 private:
 
 	TimeManager m_timeManager;
 	Renderer m_renderer;
 	SDL_Event* m_gameEvent;
-
 	uint16_t m_maxFPS;
 	bool m_running = false;
 	
-
 	void GameLoop();
 
 	void HandleEvents();
 	void HandleWindowEvents(const SDL_Event* gameEvent);
 
-	void InitGame(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS);
 	void InitGame(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS);
 	void Clean();
 };

@@ -25,6 +25,8 @@ public:
 
 	void UpdateTextures(SDL_Renderer* renderer);
 
+	~Button();
+
 private:
 	std::string m_text;
 	SDL_Color m_backColor;

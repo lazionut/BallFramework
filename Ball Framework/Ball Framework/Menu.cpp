@@ -5,7 +5,7 @@
 constexpr int buttonsNum = 2;
 
 Menu::Menu(int16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS) :
-	Game("Ball Games", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
+	Game("Ball Games", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 	m_buttons{ buttonsNum }, m_button{ -1 }
 {
 	InitMenu();
