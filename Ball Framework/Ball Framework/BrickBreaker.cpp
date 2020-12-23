@@ -18,16 +18,12 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
 	: Game("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-
-	m_renderer{ nullptr },
-	m_paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0),
-	m_ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f), m_ballImage{ nullptr },
-	m_bricks{ BRICKROWS },
-	m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ true },
-	m_heartImage{ nullptr }, m_heartCounter{ 3 },
-	m_score{ font },
-	m_buttonFont{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, black, white, "||", m_buttonFont },
-	m_isPaused{ false },
+	m_ballImage{ nullptr }, m_heartImage{ nullptr }, m_pickUpImage{ nullptr }, m_font{ font },
+	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
+		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{ font },
+	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 4.5f),
+	m_heartCounter{ 3 }, m_isPickCreated{ false }, m_isPickActive{ true },
+	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 + 0.1f), 0.7f, 0.7f, black, white, "||", m_font}, m_paused{ false },
 	m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
 {
 	m_lastTimeScale = Time::GetTimeScale();
@@ -35,10 +31,8 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 
 void BrickBreaker::Start()
 {
-	InitializeBricks();
-
-	InitializeHearts();
-
+	InitBricks();
+	InitHearts();
 	m_ballImage = LoadImage("../Assets/redball.png");
 	m_heartImage = LoadImage("../Assets/redheart.png");
 	if (m_ballImage == nullptr || m_heartImage == nullptr)
@@ -48,27 +42,16 @@ void BrickBreaker::Start()
 	}
 
 	ResetBall();
-
 	m_pickUpImage = LoadImage("../Assets/star.png");
+
 	if (m_pickUpImage == nullptr)
 	{
 		std::cout << "could not load pickup texture\n";
 		Stop();
 		return;
 	}
-}
 
-void BrickBreaker::ResetBall()
-{
-	m_ball.SetDirection(0, 1);
-	m_ball.SetPosition(0, 0);
-}
-
-void BrickBreaker::Update()
-{
-	m_paddle.Move();
-	m_ball.Move();
-	m_pickUp.ContinueAction();
+	CreatePickUp(Vector2::zero);
 }
 
 void BrickBreaker::OnClose()
@@ -78,226 +61,11 @@ void BrickBreaker::OnClose()
 	Time::SetTimeScale(m_lastTimeScale);
 }
 
-void BrickBreaker::CheckCollision()
+void BrickBreaker::ResetBall()
 {
-	CheckPaddleWallCollision();
-	CheckBallWallCollision();
-	CheckBallPaddleColision();
-	CheckBallBrickColision();
-}
-
-void BrickBreaker::CheckPaddleWallCollision()
-{
-	if (m_paddle.GetPosition().GetX() < LEFTLIMIT + m_paddle.GetWidth() / 2)
-	{
-		m_paddle.SetPosition(LEFTLIMIT + m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
-	}
-	if (m_paddle.GetPosition().GetX() > RIGHTLIMIT - m_paddle.GetWidth() / 2)
-	{
-		m_paddle.SetPosition(RIGHTLIMIT - m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
-	}
-}
-
-bool BrickBreaker::CheckBallWallCollision()
-{
-	const Vector2& ballPosition = m_ball.GetPosition();
-
-	if (ballPosition.GetX() + m_ball.GetSize() / 2 > RIGHTLIMIT)
-	{
-		m_ball.GetPosition().SetX(RIGHTLIMIT - m_ball.GetSize() / 2);
-		m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
-		return true;
-	}
-	if (ballPosition.GetX() - m_ball.GetSize() / 2 < LEFTLIMIT)
-	{
-		m_ball.SetPosition(LEFTLIMIT + m_ball.GetSize() / 2, m_ball.GetPosition().GetY());
-		m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
-	}
-	if (ballPosition.GetY() > BRICKLIMIT_Y)
-	{
-		m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
-		return true;
-	}
-
-	if (ballPosition.GetY() < LOWERLIMIT)
-	{
-		m_hearts.pop_back();
-		--m_heartCounter;
-		if (m_heartCounter == 0)
-		{
-			//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
-			m_playersStatistics.UpdateStatistics("Player4", true);
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", NULL);
-			Stop();
-		}
-		ResetBall();
-	}
-	return false;
-}
-
-void BrickBreaker::CheckBallPaddleColision()
-{
-	if (m_ball.CheckCollision(m_paddle))
-	{
-		if (m_ball.GetPosition().GetY() >= m_paddle.GetPosition().GetY() + m_paddle.GetHeight() / 2) //temporary solution to a bug
-		{
-			//m_ball.ChangeDirection(m_paddle);
-			float difference = abs(m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX());
-			m_ball.GetDirection().GetY() *= -1;
-
-			//if (m_ball.GetDirection().GetX() >= 0) //prima versiune
-
-			if (m_ball.GetPosition().GetX() >= m_paddle.GetPosition().GetX())
-				//asta e a doua optiune de design in care mingea isi schimba dir 
-				//pe axa x in functie de unde pica pe paleta
-			{
-				m_ball.GetDirection().SetX(difference);
-			}
-			else
-				m_ball.GetDirection().SetX(-difference);
-			m_ball.GetDirection().Normalize();
-		}
-		else
-			m_ball.SetDirection(Vector2::down);
-	}
-}
-
-void BrickBreaker::CheckBallBrickColision()
-{
-	for (auto& row : m_bricks)
-	{
-		for (auto element = row.begin(); element < row.end(); ++element)
-		{
-			if (m_ball.CheckCollision(*element))
-			{
-				if (m_isPickCreated == false)
-					CreatePickUp(element->GetPosition());
-				m_ball.ChangeDirection(*element);
-				m_ball.GetDirection().Normalize();
-				row.erase(element);
-				m_score.AddPoints(1);
-				return;
-			}
-		}
-	}
-}
-
-void BrickBreaker::KeyPressed(const SDL_Keycode& key)
-{
-	if (!m_isPaused)
-	{
-		m_paddle.KeyPressed(key);
-	}
-}
-
-void BrickBreaker::KeyReleased(const SDL_Keycode& key)
-{
-	if (key == SDLK_p || key == SDLK_ESCAPE)
-	{
-		m_pauseButton.ChangeFontColor(m_renderer);
-		Repaint();
-		Pause();
-	}
-	else if (!m_isPaused)
-	{
-		m_paddle.KeyReleased(key);
-	}
-}
-
-void BrickBreaker::MousePressed(const SDL_MouseButtonEvent& mouse)
-{
-	IsInBounds(mouse.x, mouse.y);
-}
-
-void BrickBreaker::MouseReleased(const SDL_MouseButtonEvent& mouse)
-{
-	if (IsInBounds(mouse.x, mouse.y) == 1)
-	{
-		KeyReleased(SDLK_p);
-	}
-}
-
-void BrickBreaker::Render(SDL_Renderer* renderer)
-{
-	m_renderer = renderer;
-	SDL_Rect rect;
-
-	const auto& scale = GetScale();
-	scale.PointToPixel(rect, m_paddle.GetPosition(), m_paddle.GetWidth(), m_paddle.GetHeight());
-	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
-	SDL_RenderFillRect(m_renderer, &rect);
-
-	RenderBricks(m_renderer);
-	RenderScore(m_renderer);
-	RenderHearts(m_renderer);
-	RenderButton(m_renderer);
-
-	scale.PointToPixel(rect, m_ball.GetPosition(), m_ball.GetSize(), m_ball.GetSize());
-	SDL_RenderCopy(m_renderer, m_ballImage, NULL, &rect);
-}
-
-void BrickBreaker::InitializeBricks()
-{
-	float offset = 0.5f;
-	float x = BRICKLIMIT_X, y = BRICKLIMIT_Y;
-
-	for (auto&& row : m_bricks)
-	{
-		row.resize(BRICKPERROW);
-
-		for (auto&& brick : row)
-		{
-			brick.Set(Vector2(x, y), BRICKW, BRICKH);
-			x = x + SPACING + BRICKW;
-		}
-
-		x = BRICKLIMIT_X;
-		y -= offset;
-	}
-}
-
-void BrickBreaker::RenderBricks(SDL_Renderer* renderer)
-{
-	SDL_Rect rect;
-	const auto& scale = GetScale();
-
-	for (const auto& iter1 : m_bricks)
-	{
-		for (const auto& iter2 : iter1)
-		{
-			scale.PointToPixel(rect, iter2.GetPosition(), iter2.GetWidth(), iter2.GetHeight());
-			SDL_RenderFillRect(renderer, &rect);
-		}
-	}
-}
-
-void BrickBreaker::InitializeHearts()
-{
-	float ofset = 0.25;
-	float x = LEFTLIMIT + 0.5;
-	float y = LOWERLIMIT + 0.1;
-
-	m_hearts.resize(m_heartCounter);
-
-	for (int index = 0; index < m_heartCounter; ++index)
-	{
-		Rectangle rect;
-		m_hearts.push_back(rect);
-		m_hearts[index].Set(Vector2(x, y), HEARTSIZE, HEARTSIZE);
-		x = x + ofset + HEARTSIZE;
-	}
-	m_hearts.resize(m_heartCounter);
-}
-
-void BrickBreaker::RenderHearts(SDL_Renderer* renderer)
-{
-	SDL_Rect rect;
-	const auto& scale = GetScale();
-	for (const auto& iter : m_hearts)
-	{
-		scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
-		SDL_RenderCopy(renderer, m_heartImage, NULL, &rect);
-	}
+	//xBall = pow(-1, (rand() % 2));
+	m_ball.SetDirection(0, 1);
+	m_ball.SetPosition(0, 0);
 }
 
 void BrickBreaker::CreatePickUp(const Vector2& position)
@@ -353,30 +121,221 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 	}
 }
 
-
-void BrickBreaker::RenderScore(SDL_Renderer* renderer)
+void BrickBreaker::CheckCollision()
 {
-	SDL_Rect rect;
-	SDL_Texture* fontTexture = m_score.GetText(renderer);
-	if (m_score.GetScore() < 10)
+
+	CheckPaddleWallCollision();
+	CheckBrickBreakerBallWallCollision();
+	CheckBrickBreakerBallPaddleColision();
+	CheckBallBricksColision();
+}
+
+bool BrickBreaker::CheckBrickBreakerBallWallCollision()
+{
+	const Vector2& ballPosition = m_ball.GetPosition();
+
+	if (ballPosition.GetX() + m_ball.GetSize() / 2 > RIGHTLIMIT)
 	{
-		GetScale().PointToPixel(rect, 0.0f, 6.1f, 0.5f, 0.9f);
+		m_ball.GetPosition().SetX(RIGHTLIMIT - m_ball.GetSize() / 2);
+		m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+		return true;
 	}
-	else
+	if (ballPosition.GetX() - m_ball.GetSize() / 2 < LEFTLIMIT)
 	{
-		GetScale().PointToPixel(rect, 0.0f, 6.1f, 1.0f, 0.9f);
+		m_ball.SetPosition(LEFTLIMIT + m_ball.GetSize() / 2, m_ball.GetPosition().GetY());
+		m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
 	}
-	if (m_buttonFont != nullptr)
+	if (ballPosition.GetY() > BRICKLIMIT_Y)
 	{
-		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
-		SDL_DestroyTexture(fontTexture);
+		m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
+		return true;
 	}
-	else
+
+	if (ballPosition.GetY() < LOWERLIMIT)
 	{
-		std::cout << "Font was not loaded!" << std::endl;
+		m_hearts.pop_back();
+		--m_heartCounter;
+		if (m_heartCounter == 0)
+		{
+			//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
+			m_playersStatistics.UpdateStatistics("Player4", true);
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", NULL);
+			Stop();
+		}
+		ResetBall();
+	}
+	return false;
+}
+
+void BrickBreaker::CheckBallBricksColision()
+{
+	for (auto& row : m_bricks)
+	{
+		for (auto element = row.begin(); element < row.end(); ++element)
+		{
+			if (m_ball.CheckCollision(*element))
+			{
+				if (m_isPickCreated == false)
+					CreatePickUp(element->GetPosition());
+				m_ball.ChangeDirection(*element);
+				m_ball.GetDirection().Normalize();
+				row.erase(element);
+				m_score.AddPoints(1);
+				return;
+			}
+		}
 	}
 }
 
+void BrickBreaker::Update()
+{
+	m_paddle.Move();
+	m_ball.Move();
+	m_pickUp.ContinueAction();
+}
+
+void BrickBreaker::Pause()
+{
+	if (!m_paused) {
+		m_lastTimeScale = Time::GetTimeScale();
+		Time::SetTimeScale(0);
+		m_paused = true;
+	}
+	else {
+		Time::SetTimeScale(m_lastTimeScale);
+		m_paused = false;
+	}
+}
+
+void BrickBreaker::InitBricks()
+{
+	float offset = 0.5f;
+	float x = BRICKLIMIT_X, y = BRICKLIMIT_Y;
+
+	for (int i = 0; i < BRICKROWS; i++)
+	{
+		m_bricks[i].resize(BRICKPERROW);
+
+		for (int j = 0; j < BRICKPERROW; j++)
+		{
+			m_bricks[i][j].Set(Vector2(x, y), BRICKW, BRICKH);
+			x = x + SPACING + BRICKW;
+		}
+
+		x = BRICKLIMIT_X;
+		y -= offset;
+	}
+}
+
+void BrickBreaker::InitHearts()
+{
+	float ofset = 0.25;
+	float x = LEFTLIMIT + 0.5;
+	float y = LOWERLIMIT + 0.1;
+
+	m_hearts.resize(m_heartCounter);
+
+	for (int i = 0; i < m_heartCounter; i++)
+	{
+		Rectangle rect;
+		m_hearts.push_back(rect);
+		m_hearts[i].Set(Vector2(x, y), HEARTSIZE, HEARTSIZE);
+		x = x + ofset + HEARTSIZE;
+	}
+	m_hearts.resize(m_heartCounter);
+}
+
+void BrickBreaker::KeyPressed(const SDL_Keycode& key)
+{
+	if (!m_paused)
+	{
+		m_paddle.KeyPressed(key);
+	}
+}
+
+void BrickBreaker::KeyReleased(const SDL_Keycode& key)
+{
+	if (key == SDLK_p || key == SDLK_ESCAPE)
+	{
+		m_pauseButton.ChangeFontColor(m_renderer);
+		Repaint();
+		Pause();
+	}
+	else if (!m_paused)
+	{
+		m_paddle.KeyReleased(key);
+	}
+}
+
+void BrickBreaker::MousePressed(const SDL_MouseButtonEvent& mouse)
+{
+	IsInBounds(mouse.x, mouse.y);
+}
+
+void BrickBreaker::MouseReleased(const SDL_MouseButtonEvent& mouse)
+{
+	if (IsInBounds(mouse.x, mouse.y) == 1) {
+		KeyReleased(SDLK_p);
+	};
+}
+
+int BrickBreaker::IsInBounds(Sint32 x, Sint32 y)
+{
+	if (x > m_pauseButton.GetRect().x &&
+		x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
+		&& y > m_pauseButton.GetRect().y &&
+		y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h) {
+		m_pauseButton.ChangeFontColor(m_renderer);
+		return 1;
+	}
+	return -1;
+}
+
+void BrickBreaker::Render(SDL_Renderer* renderer)
+{
+	m_renderer = renderer;
+	SDL_Rect rect;
+
+	const auto& scale = GetScale();
+	scale.PointToPixel(rect, m_paddle.GetPosition(), m_paddle.GetWidth(), m_paddle.GetHeight());
+	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+	SDL_RenderFillRect(m_renderer, &rect);
+
+	RenderBricks(m_renderer);
+	RenderScore(m_renderer);
+	RenderHearts(m_renderer);
+	RenderButton(m_renderer);
+
+	scale.PointToPixel(rect, m_ball.GetPosition(), m_ball.GetSize(), m_ball.GetSize());
+	SDL_RenderCopy(m_renderer, m_ballImage, NULL, &rect);
+
+}
+
+void BrickBreaker::RenderBricks(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	const auto& scale = GetScale();
+
+	for (const auto& iter1 : m_bricks)
+	{
+		for (const auto& iter2 : iter1)
+		{
+			scale.PointToPixel(rect, iter2.GetPosition(), iter2.GetWidth(), iter2.GetHeight());
+			SDL_RenderFillRect(renderer, &rect);
+		}
+	}
+}
+
+void BrickBreaker::RenderHearts(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	const auto& scale = GetScale();
+	for (const auto& iter : m_hearts)
+	{
+		scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
+		SDL_RenderCopy(renderer, m_heartImage, NULL, &rect);
+	}
+}
 
 void BrickBreaker::RenderButton(SDL_Renderer* renderer)
 {
@@ -400,28 +359,64 @@ void BrickBreaker::RenderButton(SDL_Renderer* renderer)
 	}
 }
 
-int BrickBreaker::IsInBounds(Sint32 x, Sint32 y)
+
+void BrickBreaker::CheckPaddleWallCollision()
 {
-	if (x > m_pauseButton.GetRect().x && x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
-		&& y > m_pauseButton.GetRect().y && y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h)
+	if (m_paddle.GetPosition().GetX() < LEFTLIMIT + m_paddle.GetWidth() / 2)
 	{
-		m_pauseButton.ChangeFontColor(m_renderer);
-		return 1;
+		m_paddle.SetPosition(LEFTLIMIT + m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
 	}
-	return -1;
+	if (m_paddle.GetPosition().GetX() > RIGHTLIMIT - m_paddle.GetWidth() / 2)
+	{
+		m_paddle.SetPosition(RIGHTLIMIT - m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
+	}
 }
 
-void BrickBreaker::Pause()
+void BrickBreaker::CheckBrickBreakerBallPaddleColision()
 {
-	if (!m_isPaused)
+	if (m_ball.CheckCollision(m_paddle))
 	{
-		m_lastTimeScale = Time::GetTimeScale();
-		Time::SetTimeScale(0);
-		m_isPaused = true;
+		if (m_ball.GetPosition().GetY() >= m_paddle.GetPosition().GetY() + m_paddle.GetHeight() / 2) //temporary solution to a bug
+		{
+			//m_ball.ChangeDirection(m_paddle);
+			float difference = abs(m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX());
+			m_ball.GetDirection().GetY() *= -1;
+
+			//if (m_ball.GetDirection().GetX() >= 0) //prima versiune
+
+			if (m_ball.GetPosition().GetX() >= m_paddle.GetPosition().GetX())
+				//asta e a doua optiune de design in care mingea isi schimba dir 
+				//pe axa x in functie de unde pica pe paleta
+			{
+				m_ball.GetDirection().SetX(difference);
+			}
+			else
+				m_ball.GetDirection().SetX(-difference);
+			m_ball.GetDirection().Normalize();
+		}
+		else
+			m_ball.SetDirection(Vector2::down);
+	}
+
+}
+
+void BrickBreaker::RenderScore(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	SDL_Texture* fontTexture = m_score.GetText(renderer);
+	if (m_score.GetScore() < 10) {
+		GetScale().PointToPixel(rect, 0.0f, 6.1f, 0.5f, 0.9f);
+	}
+	else {
+		GetScale().PointToPixel(rect, 0.0f, 6.1f, 1.0f, 0.9f);
+	}
+	if (m_font != nullptr)
+	{
+		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
+		SDL_DestroyTexture(fontTexture);
 	}
 	else
 	{
-		Time::SetTimeScale(m_lastTimeScale);
-		m_isPaused = false;
+		std::cout << "Font not loaded" << std::endl;
 	}
 }

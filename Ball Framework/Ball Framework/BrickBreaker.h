@@ -1,82 +1,64 @@
 #pragma once
 #include <SDL_ttf.h>
+#include <vector>
+#include "PickUpActions.h"
 #include "Game.h"
-#include "ScreenScale.h"
 #include "Paddle.h"
+#include "Score.h"
 #include "Ball.h"
 #include "PickUpGenerator.h"
-#include "Score.h"
-#include "Button.h"
+#include "PickUp.h"
 #include "PlayersStatistics.h"
+#include "Button.h" 
 
 class BrickBreaker : public Game
 {
 public:
 	BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags = 0, uint16_t maxFPS = 0);
 
-private: //override Game class methods
+private:
 	void Start() override;
-	void Update() override;
 	void OnClose() override;
 	void CheckCollision() override;
 	void KeyPressed(const SDL_Keycode& key) override;
 	void KeyReleased(const SDL_Keycode& key) override;
 	void MousePressed(const SDL_MouseButtonEvent& mouse) override;
 	void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
-	void Render(SDL_Renderer* renderer) override;
-
-private: //class methods
-	void ResetBall();
-
-	void CheckPaddleWallCollision();
-	void CheckBallPaddleColision();
-	bool CheckBallWallCollision();
-	void CheckBallBrickColision();
-
-	void InitializeBricks();
-	void RenderBricks(SDL_Renderer* renderer);
-
-	void InitializeHearts();
-	void RenderHearts(SDL_Renderer* renderer);
-
-	void CreatePickUp(const Vector2& position);
-
-	void RenderScore(SDL_Renderer* renderer);
-
-	void RenderButton(SDL_Renderer* renderer);
 	int IsInBounds(Sint32 x, Sint32 y);
+	void Render(SDL_Renderer* renderer) override;
+	void Update() override;
 	void Pause();
 
-private: //SDL objects
-	SDL_Renderer* m_renderer;
-	SDL_Texture* m_ballImage;
-	SDL_Texture* m_pickUpImage;
-	SDL_Texture* m_heartImage;
-	TTF_Font* m_buttonFont;
+	void InitBricks();
+	void InitHearts();
+	void RenderBricks(SDL_Renderer* renderer);
+	void RenderHearts(SDL_Renderer* renderer);
+	void CheckPaddleWallCollision();
+	void CheckBrickBreakerBallPaddleColision();
+	bool CheckBrickBreakerBallWallCollision();
+	void CheckBallBricksColision();
+	void RenderScore(SDL_Renderer* renderer);
+	void ResetBall();
+	void CreatePickUp(const Vector2& position);
+	void RenderButton(SDL_Renderer* renderer);
 
-private: //objects
 	Paddle m_paddle;
-
-	Ball m_ball;
-
 	std::vector<std::vector<Rectangle>> m_bricks;
-
-	PickUpGenerator m_pickUpGenerator;
-	PickUp m_pickUp;
-
-	Score m_score;
-
 	std::vector<Rectangle> m_hearts;
+	Score m_score;
+	SDL_Texture* m_ballImage;
+	SDL_Texture* m_heartImage;
+	SDL_Texture* m_pickUpImage;
+	SDL_Renderer* m_renderer;
+	TTF_Font* m_font;
+	Ball m_ball;
+	PickUp m_pickUp;
 	uint16_t m_heartCounter;
-
+	PickUpGenerator m_pickUpGenerator;
 	PlayersStatistics m_playersStatistics;
-
 	Button m_pauseButton;
-
-private: //primitive types
-	bool m_isPickCreated;
-	bool m_isPickActive;
-
 	float m_lastTimeScale;
-	bool m_isPaused;
+	bool m_paused;
+	bool m_isPickActive;
+	bool m_isPickCreated;
 };
