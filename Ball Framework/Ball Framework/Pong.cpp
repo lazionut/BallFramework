@@ -164,7 +164,7 @@ void Pong::RenderButton(SDL_Renderer* renderer)
 	if (fontTexture != nullptr)
 	{
 		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
-		SDL_DestroyTexture(fontTexture);
+		//SDL_DestroyTexture(fontTexture);
 	}
 }
 

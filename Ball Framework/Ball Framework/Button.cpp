@@ -7,12 +7,12 @@ static SDL_Color black = { 0, 0, 0, 0 };
 
 Button::Button()
 	: Rectangle{ Vector2::zero, 0.0f, 0.0f },
-	m_name{ "" }, m_backColor{ white }, m_fontColor{ black }, m_changedBack{ false }, m_changedFont{ false }
+	m_text{ "" }, m_backColor{ white }, m_fontColor{ black }, m_changedBack{ false }, m_changedFont{ false }, m_buttonTexture{ nullptr }, m_loadedText{ nullptr }
 {
 }
-Button::Button(const Vector2& position, const float& width, const float& height, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& name)
+Button::Button(const Vector2& position, const float& width, const float& height, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& text)
 	: Rectangle{ position, width, height },
-	m_name{ name }, m_backColor{ backColor }, m_fontColor{ fontColor }, m_changedBack{ false }, m_changedFont{ false }
+	m_text{ text }, m_backColor{ backColor }, m_fontColor{ fontColor }, m_changedBack{ false }, m_changedFont{ false }, m_buttonTexture{nullptr}, m_loadedText{nullptr}
 {
 }
 
@@ -23,7 +23,7 @@ SDL_Color Button::GetBackColor() const
 
 SDL_Color Button::GetFontColor() const
 {
-	return m_backColor;
+	return m_fontColor;
 }
 
 void Button::SetRect(const SDL_Rect& rect) {
@@ -71,7 +71,7 @@ void Button::ChangeFontColor()
 void Button::SetButton(const Vector2& position, const float& width, const float& height, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& name)
 {
 	Set(position, width, height);
-	m_name = name;
+	m_text = name;
 	m_backColor = backColor;
 	m_fontColor = fontColor;
 
@@ -79,11 +79,15 @@ void Button::SetButton(const Vector2& position, const float& width, const float&
 
 SDL_Texture* Button::GetText(SDL_Renderer* renderer, TTF_Font* font)
 {
-	SDL_Surface* loadedText = TTF_RenderText_Solid(font, m_name.c_str(), m_fontColor);
-	if (loadedText)
+	if (!m_buttonTexture) 
 	{
-		SDL_Texture* result = SDL_CreateTextureFromSurface(renderer, loadedText);
-		SDL_FreeSurface(loadedText);
-		return result;
+		if (!m_loadedText) {
+			m_loadedText = TTF_RenderText_Solid(font, m_text.c_str(), m_fontColor);
+			if (m_loadedText)
+			{
+				m_buttonTexture = SDL_CreateTextureFromSurface(renderer, m_loadedText);
+			}
+		}
 	}
+	return m_buttonTexture;
 }

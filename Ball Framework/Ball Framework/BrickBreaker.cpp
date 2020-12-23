@@ -25,7 +25,7 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 	m_ballImage{ nullptr }, m_heartImage{ nullptr }, m_pickUpImage{ nullptr }, m_font{ font },
 	m_paddle(Vector2(0, -HEIGHTUNITS / 2 + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right,
 		SDLK_LEFT, SDLK_RIGHT, 5.0), m_bricks{ BRICKROWS }, m_score{ font },
-	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 6),
+	m_ball(Vector2(0, -HEIGHTUNITS / 2 + 1.0f), 0.5f, Vector2(0, 1), 4.5f),
 	m_heartCounter{ 3 }, m_isPickCreated{ false }, m_isPickActive{ true },
 	m_pauseButton{ Vector2(-WIDTHUNITS / 2 + 0.5f, HEIGHTUNITS / 2 + 0.1f), 0.7f, 0.7f, black, white, "||" }, m_paused{ false },
 	m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
@@ -359,7 +359,7 @@ void BrickBreaker::RenderButton(SDL_Renderer* renderer)
 	if (fontTexture != nullptr)
 	{
 		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
-		SDL_DestroyTexture(fontTexture);
+		//SDL_DestroyTexture(fontTexture);
 	}
 }
 
