@@ -336,7 +336,10 @@ void Pong::CreatePickUp(const Vector2& position)
 		auto random = rand() % 2;
 		auto difference = 0.0f;
 
-		switch (m_pickUpGenerator.GetPickUpType())
+		auto type = m_pickUpGenerator.GetPickUpType();
+		std::cout << "PickUp type is: " << static_cast<int>(type) << "\n";
+
+		switch (type)
 		{
 		case Generator::SPEEDCHANGE:
 			m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
@@ -384,7 +387,7 @@ void Pong::CreatePickUp(const Vector2& position)
 			break;
 		default:
 			m_isPickCreated = false;
-			return;
+			break;
 		}
 
 		m_isPickActive = true;

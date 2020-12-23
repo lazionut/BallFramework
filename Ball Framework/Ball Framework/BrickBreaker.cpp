@@ -23,7 +23,7 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 	m_paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0),
 	m_ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f), m_ballImage{ nullptr },
 	m_bricks{ BRICKROWS },
-	m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ true },
+	m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ false },
 	m_heartImage{ nullptr }, m_heartCounter{ 3 },
 	m_score{ font },
 	m_buttonFont{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, black, white, "||", m_buttonFont },
@@ -68,7 +68,16 @@ void BrickBreaker::Update()
 {
 	m_paddle.Move();
 	m_ball.Move();
-	m_pickUp.ContinueAction();
+
+	if (m_pickUp.IsActionActive())
+	{
+		m_pickUp.ContinueAction();
+	}
+
+	if (m_pickUp.IsMoving())
+	{
+		m_pickUp.Move();
+	}
 }
 
 void BrickBreaker::OnClose()
@@ -92,7 +101,7 @@ void BrickBreaker::CheckPaddleWallCollision()
 	{
 		m_paddle.SetPosition(LEFTLIMIT + m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
 	}
-	if (m_paddle.GetPosition().GetX() > RIGHTLIMIT - m_paddle.GetWidth() / 2)
+	else if (m_paddle.GetPosition().GetX() > RIGHTLIMIT - m_paddle.GetWidth() / 2)
 	{
 		m_paddle.SetPosition(RIGHTLIMIT - m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
 	}
@@ -108,13 +117,15 @@ bool BrickBreaker::CheckBallWallCollision()
 		m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
 		return true;
 	}
-	if (ballPosition.GetX() - m_ball.GetSize() / 2 < LEFTLIMIT)
+	else if (ballPosition.GetX() - m_ball.GetSize() / 2 < LEFTLIMIT)
 	{
 		m_ball.SetPosition(LEFTLIMIT + m_ball.GetSize() / 2, m_ball.GetPosition().GetY());
 		m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
 	}
+
 	if (ballPosition.GetY() > BRICKLIMIT_Y)
 	{
+		m_ball.GetPosition().SetY(BRICKLIMIT_Y);
 		m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
 		return true;
 	}
@@ -154,11 +165,16 @@ void BrickBreaker::CheckBallPaddleColision()
 				m_ball.GetDirection().SetX(difference);
 			}
 			else
+			{
 				m_ball.GetDirection().SetX(-difference);
+			}
+
 			m_ball.GetDirection().Normalize();
 		}
 		else
+		{
 			m_ball.SetDirection(Vector2::down);
+		}
 	}
 }
 
@@ -171,7 +187,10 @@ void BrickBreaker::CheckBallBrickColision()
 			if (m_ball.CheckCollision(*element))
 			{
 				if (m_isPickCreated == false)
+				{
 					CreatePickUp(element->GetPosition());
+				}
+
 				m_ball.ChangeDirection(*element);
 				m_ball.GetDirection().Normalize();
 				row.erase(element);
@@ -234,6 +253,12 @@ void BrickBreaker::Render(SDL_Renderer* renderer)
 
 	scale.PointToPixel(rect, m_ball.GetPosition(), m_ball.GetSize(), m_ball.GetSize());
 	SDL_RenderCopy(m_renderer, m_ballImage, NULL, &rect);
+
+	if (m_isPickCreated)
+	{
+		scale.PointToPixel(rect, m_pickUp.GetPosition(), m_pickUp.GetDimension());
+		SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &rect);
+	}
 }
 
 void BrickBreaker::InitializeBricks()
@@ -304,7 +329,7 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 {
 	using Generator = PickUpGenerator::Actions;
 
-	if (rand() % 100 > 80)
+	if ((rand() % 100) > 20)
 	{
 		m_isPickCreated = true;
 
@@ -312,25 +337,24 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 		{
 		case Generator::SPEEDCHANGE:
 			m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
-			m_pickUp.StartMoving();
 			break;
 		case Generator::PADDLESIZECHANGE:
 			m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_paddle, 3);
-			m_pickUp.SetDirection(m_paddle.GetPosition() + position);
+			m_pickUp.SetDirection(m_paddle.GetPosition() - position);
 			m_pickUp.StartMoving();
+			std::cout << "moving pickUp\n";
 			break;
 		case Generator::PADDLESPEEDCHANGE:
 			m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(m_paddle, 3);
-			m_pickUp.SetDirection(m_paddle.GetPosition() + position);
+			m_pickUp.SetDirection(m_paddle.GetPosition() - position);
 			m_pickUp.StartMoving();
+			std::cout << "moving pickUp\n";
 			break;
 		case Generator::BALLSIZECHANGE:
 			m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(m_ball, 1.25f);
-			m_pickUp.StartMoving();
 			break;
 		case Generator::BALLSPEEDCHANGE:
 			m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(m_ball, 4);
-			m_pickUp.StartMoving();
 			break;
 		case Generator::BONUSPOINTS:
 			m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(m_score, rand() % 5 + 1);
@@ -344,7 +368,9 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 		}
 
 		m_isPickActive = true;
-		m_pickUp.Set(position, Vector2(0.75f, 0.75f), Vector2(0, rand() % 2), 4.5f);
+		m_pickUp.SetPosition(position);
+		m_pickUp.SetDimension(Vector2::one);
+		m_pickUp.SetSpeed(1);
 	}
 	else
 	{
@@ -396,7 +422,7 @@ void BrickBreaker::RenderButton(SDL_Renderer* renderer)
 	if (fontTexture != nullptr)
 	{
 		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
-		//SDL_DestroyTexture(fontTexture);
+		SDL_DestroyTexture(fontTexture);
 	}
 }
 
