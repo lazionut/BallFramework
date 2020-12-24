@@ -26,13 +26,13 @@ public:
 
 	Actions GetPickUpType();
 
-	PickUp CreateSpeedPickUp();
-	PickUp CreatePaddleSizeChangePickUp(Paddle& paddle, float difference);
-	PickUp CreatePaddleSpeedChangePickUp(Paddle& paddle, float speed);
-	PickUp CreateBallSizeChangePickUp(Ball& ball, float difference);
-	PickUp CreateBallSpeedChangePickUp(Ball& ball, float speed);
-	PickUp CreateBonusPointsPickUp(Score& score, uint16_t points);
-	PickUp CreateRemovePointsPickUp(Score& score, uint16_t points);
+	const PickUp& CreateSpeedPickUp();
+	const PickUp& CreatePaddleSizeChangePickUp(Paddle& paddle, float difference);
+	const PickUp& CreatePaddleSpeedChangePickUp(Paddle& paddle, float speed);
+	const PickUp& CreateBallSizeChangePickUp(Ball& ball, float difference);
+	const PickUp& CreateBallSpeedChangePickUp(Ball& ball, float speed);
+	const PickUp& CreateBonusPointsPickUp(Score& score, uint16_t points);
+	const PickUp& CreateRemovePointsPickUp(Score& score, uint16_t points);
 
 	void SetDefaultProperties(const Vector2& size, const float speed);
 
