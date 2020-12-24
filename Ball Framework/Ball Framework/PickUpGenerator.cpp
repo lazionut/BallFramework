@@ -7,29 +7,31 @@ PickUpGenerator::Actions PickUpGenerator::GetPickUpType()
 
 PickUp PickUpGenerator::CreateSpeedPickUp()
 {
-	return
-	{
-		PickUpActions::SpeedUp,
-		PickUpActions::SlowDown
-	};
+	m_pickUp.SetActions(PickUpActions::SpeedUp, PickUpActions::SlowDown);
+
+	return m_pickUp;
 }
 
 PickUp PickUpGenerator::CreatePaddleSizeChangePickUp(Paddle& paddle, float difference)
 {
-	return
-	{
-		[&paddle, difference]() { PickUpActions::BiggerPaddle(paddle, difference); },
-		[&paddle, difference]() { PickUpActions::SmallerPaddle(paddle, difference); }
-	};
+	m_pickUp.SetActions
+	(
+		[&]() -> void { PickUpActions::BiggerPaddle(paddle, difference); },
+		[&]() -> void { PickUpActions::SmallerPaddle(paddle, difference); }
+	);
+
+	return m_pickUp;
 }
 
 PickUp PickUpGenerator::CreatePaddleSpeedChangePickUp(Paddle& paddle, float speed)
 {
-	return
-	{
-		[&paddle, speed]() { PickUpActions::FasterPaddle(paddle, speed); },
-		[&paddle, speed]() { PickUpActions::SmallerPaddle(paddle, speed); }
-	};
+	m_pickUp.SetActions
+	(
+		[&]() -> void { PickUpActions::FasterPaddle(paddle, speed); },
+		[&]() -> void { PickUpActions::SmallerPaddle(paddle, speed); }
+	);
+
+	return m_pickUp;
 }
 
 PickUp PickUpGenerator::CreateBallSizeChangePickUp(Ball& ball, float difference)
@@ -70,9 +72,12 @@ PickUp PickUpGenerator::CreateRemovePointsPickUp(Score& score, uint16_t points)
 
 void PickUpGenerator::SetDefaultProperties(const Vector2& size, const float speed)
 {
-	m_defaultSize = size;
-	m_defaultSpeed = speed;
+	m_pickUp.SetDimension(size);
+	m_pickUp.SetSpeed(speed);
 }
 
-PickUpGenerator::PickUpGenerator(const Vector2& size, const float speed) 
-	: m_defaultSize{ size }, m_defaultSpeed{ speed } {}
+PickUpGenerator::PickUpGenerator(const Vector2& size, const float speed)
+{
+	m_pickUp.SetDimension(size);
+	m_pickUp.SetSpeed(speed);
+}

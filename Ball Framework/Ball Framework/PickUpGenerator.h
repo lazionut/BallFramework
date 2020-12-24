@@ -40,7 +40,6 @@ public:
 	PickUpGenerator(const Vector2& size, const float speed);
 
 private:
-	Vector2 m_defaultSize;
-	float m_defaultSpeed;
+	PickUp m_pickUp;
 };
 
