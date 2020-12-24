@@ -5,20 +5,34 @@ class PlayerEntry
 {
 public:
 	PlayerEntry();
-	PlayerEntry(std::string name, uint16_t gamesPlayed, uint16_t gamesWon, uint16_t gamesLost);
+	PlayerEntry(std::string name);
+	PlayerEntry(std::string name, int gamesPlayed, int gamesWon, int gamesLost);
+	PlayerEntry(const PlayerEntry& other) noexcept;
+	PlayerEntry(PlayerEntry&& other) noexcept;
 
-	std::string GetPlayerName();
-	uint16_t GetGamesPlayed() const;
-	uint16_t GetGamesWon() const;
-	uint16_t GetGamesLost() const;
 
-	void SetGamesPlayed(uint16_t gamesPlayed);
-	void SetGamesWon(uint16_t gamesWon);
-	void SetGamesLost(uint16_t gamesLost);
+	std::string GetPlayerName() const;
+	int GetGamesPlayed() const;
+	int GetGamesWon() const;
+	int GetGamesLost() const;
 
-private: 
+	void SetGamesPlayed(int gamesPlayed);
+	void SetGamesWon(int gamesWon);
+	void SetGamesLost(int gamesLost);
+
+	PlayerEntry& operator= (const PlayerEntry& other);
+	PlayerEntry& operator= (PlayerEntry&& other) noexcept;
+
+
+	bool operator>(const PlayerEntry& other) const;
+	bool operator>=(const PlayerEntry& other) const;
+	bool operator<(const PlayerEntry& other) const;
+	bool operator<=(const PlayerEntry& other) const;
+	bool operator==(const PlayerEntry& other) const;
+
+private:
 	std::string m_playerName;
-	uint16_t m_gamesPlayed, m_gamesWon, m_gamesLost;
+	int m_gamesPlayed, m_gamesWon, m_gamesLost;
 	//TO DO : highscore;
- };
+};
 
