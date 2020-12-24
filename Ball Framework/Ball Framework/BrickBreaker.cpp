@@ -256,7 +256,7 @@ void BrickBreaker::Render(SDL_Renderer* renderer)
 
 	if (m_isPickCreated)
 	{
-		scale.PointToPixel(rect, m_pickUp.GetPosition(), m_pickUp.GetDimension());
+		scale.PointToPixel(rect, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
 		SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &rect);
 	}
 }
@@ -369,7 +369,7 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 
 		m_isPickActive = true;
 		m_pickUp.SetPosition(position);
-		m_pickUp.SetDimension(Vector2::one);
+		m_pickUp.SetSize(1);
 		m_pickUp.SetSpeed(1);
 	}
 	else

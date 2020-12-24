@@ -184,7 +184,7 @@ void Pong::CheckBallBrickCollision()
 void Pong::CheckPickUpCollision()
 {
 	float ballSize = m_ball.GetSize() / 2;
-	float pickUpSize = m_pickUp.GetDimension().GetX() / 2;
+	float pickUpSize = m_pickUp.GetSize() / 2;
 
 	if (m_isPickActive &&
 		(m_pickUp.GetPosition() - m_ball.GetPosition()).GetSquareLength() < ballSize * ballSize + pickUpSize * pickUpSize)
@@ -288,7 +288,7 @@ void Pong::Render(SDL_Renderer* renderer)
 
 	if (m_isPickActive)
 	{
-		scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetDimension());
+		scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
 		SDL_RenderCopy(m_renderer, m_pickUpImage, nullptr, &aux);
 	}
 }
@@ -391,7 +391,7 @@ void Pong::CreatePickUp(const Vector2& position)
 		}
 
 		m_isPickActive = true;
-		m_pickUp.Set(position, Vector2(0.75f, 0.75f), Vector2(rand() % 3 - 1, 0), 4.5f);
+		//m_pickUp.Set(position, Vector2(0.75f, 0.75f), Vector2(rand() % 3 - 1, 0), 4.5f);
 	}
 	else
 	{

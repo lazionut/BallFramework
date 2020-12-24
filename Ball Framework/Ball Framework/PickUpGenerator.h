@@ -34,10 +34,10 @@ public:
 	const PickUp& CreateBonusPointsPickUp(Score& score, uint16_t points);
 	const PickUp& CreateRemovePointsPickUp(Score& score, uint16_t points);
 
-	void SetDefaultProperties(const Vector2& size, const float speed);
+	void SetDefaultProperties(const float size, const float speed);
 
 	PickUpGenerator() = default;
-	PickUpGenerator(const Vector2& size, const float speed);
+	PickUpGenerator(const float size, const float speed);
 
 private:
 	PickUp m_pickUp;
