@@ -33,5 +33,14 @@ public:
 	PickUp CreateBallSpeedChangePickUp(Ball& ball, float speed);
 	PickUp CreateBonusPointsPickUp(Score& score, uint16_t points);
 	PickUp CreateRemovePointsPickUp(Score& score, uint16_t points);
+
+	void SetDefaultProperties(const Vector2& size, const float speed);
+
+	PickUpGenerator() = default;
+	PickUpGenerator(const Vector2& size, const float speed);
+
+private:
+	Vector2 m_defaultSize;
+	float m_defaultSpeed;
 };
 

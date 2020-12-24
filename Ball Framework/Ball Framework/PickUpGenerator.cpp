@@ -67,3 +67,12 @@ PickUp PickUpGenerator::CreateRemovePointsPickUp(Score& score, uint16_t points)
 		nullptr
 	};
 }
+
+void PickUpGenerator::SetDefaultProperties(const Vector2& size, const float speed)
+{
+	m_defaultSize = size;
+	m_defaultSpeed = speed;
+}
+
+PickUpGenerator::PickUpGenerator(const Vector2& size, const float speed) 
+	: m_defaultSize{ size }, m_defaultSpeed{ speed } {}
