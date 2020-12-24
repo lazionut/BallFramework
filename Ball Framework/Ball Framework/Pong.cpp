@@ -395,8 +395,8 @@ void Pong::CreatePickUp(const Vector2& position)
 	}
 	else
 	{
-		m_isPickActive = false;
 		m_isPickCreated = false;
+		m_isPickActive = false;
 	}
 }
 

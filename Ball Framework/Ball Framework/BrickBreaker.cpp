@@ -374,11 +374,10 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 	}
 	else
 	{
-		m_isPickActive = false;
 		m_isPickCreated = false;
+		m_isPickActive = false;
 	}
 }
-
 
 void BrickBreaker::RenderScore(SDL_Renderer* renderer)
 {
@@ -402,7 +401,6 @@ void BrickBreaker::RenderScore(SDL_Renderer* renderer)
 		std::cout << "Font was not loaded!" << std::endl;
 	}
 }
-
 
 void BrickBreaker::RenderButton(SDL_Renderer* renderer)
 {

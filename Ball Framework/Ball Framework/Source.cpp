@@ -5,6 +5,7 @@
 #include "BrickBreaker.h"
 #include "Menu.h"
 #include "TestGame.h"
+#include "Logger.h"
 
 bool initializeSDL()
 {
@@ -29,6 +30,8 @@ bool initializeSDL()
 
 int main(int argc, char** argv)
 {
+	Logger::Initialize();
+
 	srand(time(0));
 
 	if (initializeSDL())
