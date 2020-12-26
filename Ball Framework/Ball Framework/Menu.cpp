@@ -6,7 +6,7 @@ constexpr int buttonsNum = 2;
 
 Menu::Menu(int16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS) :
 	Game("Ball Games", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-	m_buttons{ buttonsNum }, m_button{ -1 }
+	m_buttons{ buttonsNum }, m_lastButton{ nullptr }
 {
 	InitMenu();
 }
@@ -44,17 +44,16 @@ void Menu::KeyReleased(const SDL_Keycode& key)
 
 void Menu::MousePressed(const SDL_MouseButtonEvent& mouse)
 {
-	m_button = IsInBounds(mouse.x, mouse.y);
-	if (m_button > -1) {
-		m_buttons[m_button].ChangeBackColor();
+	if (IsInBounds(mouse.x, mouse.y)) {
+		m_lastButton->ChangeBackColor();
 	}
 }
 
 void Menu::MouseReleased(const SDL_MouseButtonEvent& mouse)
 {
-	if (m_button > -1) {
-		m_buttons[m_button].ChangeBackColor();
-		PerformAction(m_button);
+	if (m_lastButton != nullptr) {
+		m_lastButton->ChangeBackColor();
+		PerformAction();
 	}
 }
 
@@ -63,44 +62,39 @@ void Menu::Render(SDL_Renderer* renderer)
 	m_renderer = renderer;
 	SDL_Rect rect;
 	const auto& scale = GetScale();
-	SDL_Texture* fontTexture;
 
-	for (unsigned int i = 0; i < m_buttons.size(); i++)
+	for (auto& button : m_buttons)
 	{
-		scale.PointToPixel(rect, m_buttons[i].GetPosition(), m_buttons[i].GetWidth(), m_buttons[i].GetHeight());
-		SDL_SetRenderDrawColor(m_renderer, m_buttons[i].GetBackColor().r, m_buttons[i].GetBackColor().g,
-			m_buttons[i].GetBackColor().b, m_buttons[i].GetBackColor().a);
+		scale.PointToPixel(rect, button.GetPosition(), button.GetWidth(), button.GetHeight());
+		SDL_SetRenderDrawColor(m_renderer, button.GetBackColor().r, button.GetBackColor().g,
+			button.GetBackColor().b, button.GetBackColor().a);
 		SDL_RenderFillRect(m_renderer, &rect);
-		m_buttons[i].SetRect(rect);
+		button.SetRect(rect);
 
-		fontTexture = m_buttons[i].GetText(m_renderer);
-		GetScale().PointToPixel(rect, m_buttons[i].GetPosition().GetX(), m_buttons[i].GetPosition().GetY(),
-			m_buttons[i].GetWidth() - 0.2f, m_buttons[i].GetHeight());
+		scale.PointToPixel(rect, button.GetPosition().GetX(), button.GetPosition().GetY(),
+			button.GetWidth() - 0.2f, button.GetHeight());
 
-		if (fontTexture != nullptr)
-		{
-			SDL_RenderCopy(m_renderer, fontTexture, nullptr, &rect);
-			//SDL_DestroyTexture(fontTexture);
-		}
+		SDL_RenderCopy(m_renderer, button.GetText(m_renderer), nullptr, &rect);
 	}
 }
 
-int Menu::IsInBounds(Sint32 x, Sint32 y)
+bool Menu::IsInBounds(Sint32 x, Sint32 y)
 {
-	for (unsigned int i = 0; i < m_buttons.size(); i++) {
-		if (x > m_buttons[i].GetRect().x &&
-			x < m_buttons[i].GetRect().x + m_buttons[i].GetRect().w
-			&& y > m_buttons[i].GetRect().y &&
-			y < m_buttons[i].GetRect().y + m_buttons[i].GetRect().h) {
-			return i;
+	for (auto& button : m_buttons) {
+		if (x > button.GetRect().x &&
+			x < button.GetRect().x + button.GetRect().w &&
+			y > button.GetRect().y &&
+			y < button.GetRect().y + button.GetRect().h) {
+			m_lastButton = &button;
+			return true;
 		}
 	}
-	return -1;
+	return false;
 }
 
-void Menu::PerformAction(int index)
+void Menu::PerformAction()
 {
-	if (index == 0) {
+	if (m_lastButton == &m_buttons.at(0)) {
 
 		Game* pong = new Pong(1000, 500, m_font, SDL_WINDOW_RESIZABLE, 60);
 		pong->Run();
@@ -129,15 +123,15 @@ TTF_Font* Menu::GetFont()
 
 void Menu::InitButtons()
 {
-	for (unsigned int i = 0; i < m_buttons.size(); i++)
+	int count = 0;
+	for (auto& button : m_buttons)
 	{
-		switch (i) {
-		case 0:
-			m_buttons[i].SetButton(Vector2(0.0f, 3.0f), 3.0f, 0.7f, white, black, "Play Pong", m_font);
-			break;
-		case 1:
-			m_buttons[i].SetButton(Vector2(0.0f, 1.5f), 5.0f, 0.7f, white, black, "Play BrickBreaker", m_font);
-			break;
+		if (count == 0) {
+			button.SetButton(Vector2(0.0f, 3.0f), 3.0f, 0.7f, white, black, "Play Pong", m_font);
 		}
+		else {
+			button.SetButton(Vector2(0.0f, 1.5f), 5.0f, 0.7f, white, black, "Play BrickBreaker", m_font);
+		}
+		count++;
 	}
 }

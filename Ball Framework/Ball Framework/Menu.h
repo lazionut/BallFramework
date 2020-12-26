@@ -28,8 +28,8 @@ public:
 
 	void Render(SDL_Renderer* renderer) override;
 
-	int IsInBounds(Sint32 x, Sint32 y);
-	void PerformAction(int index);
+	bool IsInBounds(Sint32 x, Sint32 y);
+	void PerformAction();
 
 	TTF_Font* GetFont();
 
@@ -38,5 +38,5 @@ private:
 	void InitButtons();
 	TTF_Font* m_font;
 	SDL_Renderer* m_renderer;
-	int m_button;
+	Button* m_lastButton;
 };
