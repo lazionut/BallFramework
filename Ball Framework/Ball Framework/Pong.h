@@ -40,7 +40,7 @@ private: //class methods
 	void RenderPlayersScore(SDL_Renderer* renderer);
 
 	void RenderButton(SDL_Renderer* renderer);
-	int IsInBounds(Sint32 x, Sint32 y);
+	bool IsInBounds(Sint32 x, Sint32 y);
 	void Pause();
 
 private: //SDL objects

@@ -236,8 +236,6 @@ void Pong::KeyReleased(const SDL_Keycode& key)
 {
 	if (key == SDLK_p || key == SDLK_ESCAPE)
 	{
-		m_pauseButton.ChangeFontColor(m_renderer);
-		Repaint();
 		Pause();
 	}
 	else if (!m_isPaused)
@@ -254,9 +252,9 @@ void Pong::MousePressed(const SDL_MouseButtonEvent& mouse)
 
 void Pong::MouseReleased(const SDL_MouseButtonEvent& mouse)
 {
-	if (IsInBounds(mouse.x, mouse.y) == 1)
+	if (IsInBounds(mouse.x, mouse.y))
 	{
-		KeyReleased(SDLK_p);
+		Pause();
 	}
 }
 
@@ -428,37 +426,28 @@ void Pong::RenderButton(SDL_Renderer* renderer)
 {
 	SDL_Rect rect;
 	const auto& scale = GetScale();
-	SDL_Texture* fontTexture;
-	const SDL_Color& buttonColor = m_pauseButton.GetBackColor();
 
 	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
-	SDL_SetRenderDrawColor(renderer, buttonColor.r, buttonColor.g, buttonColor.b, buttonColor.a);
-	SDL_RenderFillRect(renderer, &rect);
 	m_pauseButton.SetRect(rect);
-
-	fontTexture = m_pauseButton.GetText(renderer);
 	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
+	SDL_RenderCopy(renderer, m_pauseButton.GetText(renderer), nullptr, &rect);
 
-	if (fontTexture != nullptr)
-	{
-		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
-		SDL_DestroyTexture(fontTexture);
-	}
 }
 
-int Pong::IsInBounds(Sint32 x, Sint32 y)
+bool Pong::IsInBounds(Sint32 x, Sint32 y)
 {
 	if (x > m_pauseButton.GetRect().x && x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
 		&& y > m_pauseButton.GetRect().y && y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h)
 	{
-		m_pauseButton.ChangeFontColor(m_renderer);
-		return 1;
+		return true;
 	}
-	return -1;
+	return false;
 }
 
 void Pong::Pause()
 {
+	m_pauseButton.ChangeFontColor(m_renderer);
+	Repaint();
 	if (!m_isPaused)
 	{
 		m_lastTimeScale = Time::GetTimeScale();
