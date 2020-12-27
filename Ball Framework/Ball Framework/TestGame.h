@@ -18,6 +18,8 @@ private:
 	void KeyReleased(const SDL_Keycode& key) override;
 	void Render(SDL_Renderer* renderer) override;
 
+	void MousePressed(const SDL_MouseButtonEvent& mouse) override;
+	void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
 
 	Ball ball;
 	Rectangle rect;

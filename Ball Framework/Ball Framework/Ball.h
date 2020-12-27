@@ -27,8 +27,11 @@ public:
 	void AddSpeed(float difference);
 
 	void Move();
-	bool CheckCollision(const Rectangle& rect);
+	
 	void ChangeDirection(const Rectangle& rect);
+
+	bool CheckCollision(const Rectangle& rect);
+	bool CheckCollision(const Ball& ball);
 
 	Ball& operator=(const Ball& other);
 	Ball& operator=(Ball&& other) noexcept;

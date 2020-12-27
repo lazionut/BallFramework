@@ -87,12 +87,13 @@ void Ball::Move()
 
 bool Ball::CheckCollision(const Rectangle& rect)
 {
+	const auto& rectPos = rect.GetPosition();
 	float x, y;
 	float ballx = m_position.GetX(), bally = m_position.GetY();
 	float rectWidth = rect.GetWidth();
 	float rectHeight = rect.GetHeight();
-	float rectx = rect.GetPosition().GetX() - rectWidth / 2;
-	float recty = rect.GetPosition().GetY() - rectHeight / 2;
+	float rectx = rectPos.GetX() - rectWidth / 2;
+	float recty = rectPos.GetY() - rectHeight / 2;
 
 	if (ballx < rectx)
 	{
@@ -123,10 +124,24 @@ bool Ball::CheckCollision(const Rectangle& rect)
 	float delta1 = x - ballx;
 	float delta2 = y - bally;
 
-	//float difference = (m_size * m_size / 4) - (delta1 * delta1 + delta2 * delta2);
-
 	if (delta1 * delta1 + delta2 * delta2 < (m_size * m_size / 4))
 	{
+		if (x == ballx && y == bally)
+		{
+			if (m_position == rectPos)
+			{
+				m_position += Vector2::up * (rectHeight / 2 + m_size / 2);
+				return true;
+			}
+
+			Vector2 temp = m_position - rectPos;
+			temp.Normalize();
+
+			m_position += temp;
+
+			return true;
+		}
+
 		Vector2 difference{ delta1, delta2 };
 		difference.Normalize();
 		difference *= m_size / 2;
@@ -136,6 +151,23 @@ bool Ball::CheckCollision(const Rectangle& rect)
 		return true;
 	}
 
+
+	return false;
+}
+
+bool Ball::CheckCollision(const Ball& ball)
+{
+	float addedRadius = (m_size + ball.m_size) / 2;
+
+	float x = ball.m_position.GetX() - m_position.GetX();
+	float y = ball.m_position.GetY() - m_position.GetY();
+
+	float distance = x * x + y * y;
+
+	if (distance < addedRadius * addedRadius)
+	{
+		return true;
+	}
 
 	return false;
 }
