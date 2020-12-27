@@ -156,6 +156,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Paddle.cpp" />
+    <ClCompile Include="Paths.cpp" />
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="PickUpActions.cpp" />
     <ClCompile Include="PickUpGenerator.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Paddle.h" />
+    <ClInclude Include="Paths.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="PickUpActions.h" />
     <ClInclude Include="PickUpGenerator.h" />
