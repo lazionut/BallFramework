@@ -18,7 +18,7 @@ public:
     float GetHeight() const;
     void SetPosition(const Vector2& position);
     void SetPosition(float x, float y);
-    Vector2 GetPosition() const;
+    const Vector2& GetPosition() const;
 
     Rectangle& operator=(const Rectangle& other);
     Rectangle& operator=(Rectangle&& other) noexcept;

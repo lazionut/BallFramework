@@ -1,5 +1,7 @@
 #include "Pong.h"
 
+#pragma region CONSTANTS
+
 #define WIDTHUNITS 20
 #define HEIGHTUNITS 10
 #define PADDLEWIDTH 3.0f
@@ -20,6 +22,8 @@ constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
 constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
 constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+
+#pragma endregion
 
 Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
 	: Game("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
@@ -161,13 +165,15 @@ void Pong::CheckBallPaddleCollision()
 void Pong::CheckBallBrickCollision()
 {
 	for (auto& row : m_bricks)
+	{
 		for (auto element = row.begin(); element < row.end(); ++element)
+		{
 			if (m_ball.CheckCollision(*element))
 			{
 				if (m_isPickCreated == false)
 					CreatePickUp(element->GetPosition());
+
 				m_ball.ChangeDirection(*element);
-				m_ball.GetDirection().Normalize();
 				row.erase(element);
 
 				--m_bricksNumber;
@@ -177,8 +183,11 @@ void Pong::CheckBallBrickCollision()
 					m_bricks.resize(BRICKCOLUMNS);
 					InitializeBricks();
 				}
+
 				return;
 			}
+		}
+	}
 }
 
 void Pong::CheckPickUpCollision()
@@ -190,7 +199,7 @@ void Pong::CheckPickUpCollision()
 		(m_pickUp.GetPosition() - m_ball.GetPosition()).GetSquareLength() < ballSize * ballSize + pickUpSize * pickUpSize)
 	{
 		std::cout << "pickUp collision\n";
-		m_pickUp.InvokeAction(10.0f);
+		m_pickUp.InvokeAction();
 		m_isPickActive = false;
 	}
 }

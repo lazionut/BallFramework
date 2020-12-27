@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL_ttf.h>
+#include <optional>
 #include "Game.h"
 #include "ScreenScale.h"
 #include "Paddle.h"
@@ -30,9 +31,9 @@ private: //class methods
 	void ResetBall();
 
 	void CheckPaddleWallCollision();
-	void CheckBallPaddleColision();
-	bool CheckBallWallCollision();
-	void CheckBallBrickColision();
+	void CheckBallPaddleCollision();
+	void CheckBallWallCollision();
+	void CheckBallBrickCollision();
 
 	void InitializeBricks();
 	void RenderBricks(SDL_Renderer* renderer);
@@ -57,7 +58,6 @@ private: //SDL objects
 
 private: //objects
 	Paddle m_paddle;
-
 	Ball m_ball;
 
 	std::vector<std::vector<Rectangle>> m_bricks;

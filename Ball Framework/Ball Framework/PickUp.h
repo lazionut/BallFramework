@@ -19,10 +19,10 @@ public:
 
 	void SetStartAction(std::function<void()> action);
 	void SetStopAction(std::function<void()> action);
-	void SetActions(std::function<void()> startAction, std::function<void()> stopAction);
+	void SetActions(std::function<void()> startAction, std::function<void()> stopAction, float time = 0.0f);
 
-	void InvokeAction(float time = 0.0f);
-	void ContinueAction();
+	void InvokeAction();
+	bool ContinueAction();
 
 	void StartMoving();
 

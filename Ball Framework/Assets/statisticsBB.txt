@@ -1,5 +1,5 @@
 4
-Player4 6 6 0
+Player4 7 7 0
 Player2 1 1 0
-Player3 6 1 5
 Player1 1 1 0
+Player3 6 1 5

@@ -1,8 +1,7 @@
 #include "PickUp.h"
 
-void PickUp::InvokeAction(float time)
+void PickUp::InvokeAction()
 {
-	m_StopTime = time;
 	m_isMoving = false;
 	m_isActionActive = true;
 
@@ -12,7 +11,7 @@ void PickUp::InvokeAction(float time)
 	}
 }
 
-void PickUp::ContinueAction()
+bool PickUp::ContinueAction()
 {
 	m_time += Time::GetUnscaledDeltaTime();
 
@@ -22,8 +21,10 @@ void PickUp::ContinueAction()
 		{
 			m_StopAction();
 			m_isActionActive = false;
+			return true;
 		}
 	}
+	return false;
 }
 
 void PickUp::StartMoving()
@@ -61,8 +62,9 @@ void PickUp::SetStopAction(std::function<void()> action)
 	m_StopAction = action;
 }
 
-void PickUp::SetActions(std::function<void()> startAction, std::function<void()> stopAction)
+void PickUp::SetActions(std::function<void()> startAction, std::function<void()> stopAction, float time)
 {
+	m_StopTime = time;
 	m_startAction = startAction;
 	m_StopAction = stopAction;
 }

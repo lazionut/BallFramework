@@ -87,14 +87,15 @@ void Ball::Move()
 
 bool Ball::CheckCollision(const Rectangle& rect)
 {
-	const auto& rectPos = rect.GetPosition();
 	float x, y;
+	const auto& rectPos = rect.GetPosition();
 	float ballx = m_position.GetX(), bally = m_position.GetY();
 	float rectWidth = rect.GetWidth();
 	float rectHeight = rect.GetHeight();
 	float rectx = rectPos.GetX() - rectWidth / 2;
 	float recty = rectPos.GetY() - rectHeight / 2;
 
+	//find the closest x between ball and rectangle
 	if (ballx < rectx)
 	{
 		x = rectx;
@@ -108,6 +109,7 @@ bool Ball::CheckCollision(const Rectangle& rect)
 		x = ballx;
 	}
 
+	//find the closest y between ball and rectangle
 	if (bally < recty)
 	{
 		y = recty;
@@ -121,14 +123,14 @@ bool Ball::CheckCollision(const Rectangle& rect)
 		y = bally;
 	}
 
-	float delta1 = x - ballx;
-	float delta2 = y - bally;
+	float deltaX = x - ballx;
+	float deltaY = y - bally;
 
-	if (delta1 * delta1 + delta2 * delta2 < (m_size * m_size / 4))
+	if (deltaX * deltaX + deltaY * deltaY < (m_size * m_size / 4)) //collision was found
 	{
-		if (x == ballx && y == bally)
+		if (x == ballx && y == bally) //ball closest point coordonates are the ball coordonates
 		{
-			if (m_position == rectPos)
+			if (m_position == rectPos) //ball has the same coordonates with the rectangle
 			{
 				m_position += Vector2::up * (rectHeight / 2 + m_size / 2);
 				return true;
@@ -142,7 +144,7 @@ bool Ball::CheckCollision(const Rectangle& rect)
 			return true;
 		}
 
-		Vector2 difference{ delta1, delta2 };
+		Vector2 difference{ deltaX, deltaY };
 		difference.Normalize();
 		difference *= m_size / 2;
 
@@ -176,7 +178,6 @@ void Ball::ChangeDirection(const Rectangle& rect)
 {
 	auto xRect = rect.GetPosition().GetX();
 	auto yRect = rect.GetPosition().GetY();
-
 
 	if (m_position.GetY() <= yRect + (rect.GetHeight() / 2) && m_position.GetY() >= yRect - rect.GetHeight() / 2)
 	{
@@ -233,6 +234,8 @@ void Ball::ChangeDirection(const Rectangle& rect)
 
 		}
 	}
+
+	m_direction.Normalize();
 }
 
 Ball& Ball::operator=(const Ball& other)

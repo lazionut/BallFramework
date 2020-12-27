@@ -62,7 +62,7 @@ void Rectangle::SetPosition(float x, float y)
     m_position.Set(x, y);
 }
 
-Vector2 Rectangle::GetPosition() const
+const Vector2& Rectangle::GetPosition() const
 {
     return m_position;
 }

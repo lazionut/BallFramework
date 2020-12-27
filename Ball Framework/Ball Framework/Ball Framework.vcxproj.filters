@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Logger">
       <UniqueIdentifier>{989d065c-5609-476c-95aa-6335b4442a9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Framework\UI">
+      <UniqueIdentifier>{d4983564-1a41-44a9-8ef6-67b22c6077d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\UI">
+      <UniqueIdentifier>{603fda9b-22e0-4cac-b90e-52de7d595331}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -96,12 +102,6 @@
     <ClCompile Include="PlayersStatistics.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Time.cpp">
       <Filter>Source Files\Framework\Time</Filter>
     </ClCompile>
@@ -125,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="Paths.cpp">
       <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\Framework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\Framework\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,12 +170,6 @@
     <ClInclude Include="PlayersStatistics.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Header Files\Framework\Time</Filter>
     </ClInclude>
@@ -193,6 +193,12 @@
     </ClInclude>
     <ClInclude Include="Paths.h">
       <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\Framework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files\Framework\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -30,6 +30,8 @@ bool initializeSDL()
 
 int main(int argc, char** argv)
 {
+	Paths::SetFilePath("../Assets/assetsPaths.txt");
+
 	Logger::Initialize();
 
 	srand(time(0));

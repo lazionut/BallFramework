@@ -1,5 +1,6 @@
 #include "BrickBreaker.h"
 
+#pragma region CONSTANTS
 #define WIDTHUNITS 10
 #define HEIGHTUNITS 13
 #define BRICKROWS 7
@@ -15,6 +16,7 @@ constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
 constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
 constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+#pragma endregion
 
 BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
 	: Game("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
@@ -31,24 +33,20 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 	m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
 {
 	m_lastTimeScale = Time::GetTimeScale();
-	Paths::SetFilePath("../Assets/assetsPaths.txt");
-	Paths::AddObjectPath("redBall", "../Assets/redball.png");
-	Paths::AddObjectPath("redheart", "../Assets/redheart.png");
-	Paths::AddObjectPath("star", "../Assets/star.png");
 }
 
 void BrickBreaker::Start()
 {
 	InitializeBricks();
-
 	InitializeHearts();
 
 	m_ballImage = LoadImage(Paths::ReturnObjectPath("redBall"));
-	m_heartImage = LoadImage(Paths::ReturnObjectPath("redheart"));
+	m_heartImage = LoadImage(Paths::ReturnObjectPath("redHeart"));
 	if (m_ballImage == nullptr || m_heartImage == nullptr)
 	{
 		std::cout << "Could not load image\n";
 		Stop();
+		return;
 	}
 
 	ResetBall();
@@ -60,6 +58,8 @@ void BrickBreaker::Start()
 		Stop();
 		return;
 	}
+
+	m_pickUpGenerator.SetDefaultProperties(0.25f, 1.0f, 2.0f);
 }
 
 void BrickBreaker::ResetBall()
@@ -73,14 +73,21 @@ void BrickBreaker::Update()
 	m_paddle.Move();
 	m_ball.Move();
 
-	if (m_pickUp.IsActionActive())
+	if (m_isPickCreated)
 	{
-		m_pickUp.ContinueAction();
-	}
+		if (m_pickUp.IsActionActive())
+		{
+			if (m_pickUp.ContinueAction())
+			{
+				m_isPickCreated = false;
+				return;
+			}
+		}
 
-	if (m_pickUp.IsMoving())
-	{
-		m_pickUp.Move();
+		if (m_pickUp.IsMoving())
+		{
+			m_pickUp.Move();
+		}
 	}
 }
 
@@ -91,12 +98,34 @@ void BrickBreaker::OnClose()
 	Time::SetTimeScale(m_lastTimeScale);
 }
 
+#pragma region Collision Methods
+
 void BrickBreaker::CheckCollision()
 {
 	CheckPaddleWallCollision();
 	CheckBallWallCollision();
-	CheckBallPaddleColision();
-	CheckBallBrickColision();
+	CheckBallPaddleCollision();
+	CheckBallBrickCollision();
+
+	if (m_isPickActive)
+	{
+		if (m_pickUp.IsMoving())
+		{
+			if (m_pickUp.CheckCollision(m_paddle))
+			{
+				m_pickUp.InvokeAction();
+				m_isPickActive = false;
+			}
+		}
+		else //check collision with ball
+		{
+			if (m_pickUp.CheckCollision(m_ball))
+			{
+				m_pickUp.InvokeAction();
+				m_isPickActive = false;
+			}
+		}
+	}
 }
 
 void BrickBreaker::CheckPaddleWallCollision()
@@ -111,7 +140,7 @@ void BrickBreaker::CheckPaddleWallCollision()
 	}
 }
 
-bool BrickBreaker::CheckBallWallCollision()
+void BrickBreaker::CheckBallWallCollision()
 {
 	const Vector2& ballPosition = m_ball.GetPosition();
 
@@ -119,7 +148,7 @@ bool BrickBreaker::CheckBallWallCollision()
 	{
 		m_ball.GetPosition().SetX(RIGHTLIMIT - m_ball.GetSize() / 2);
 		m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
-		return true;
+		return;
 	}
 	else if (ballPosition.GetX() - m_ball.GetSize() / 2 < LEFTLIMIT)
 	{
@@ -131,7 +160,7 @@ bool BrickBreaker::CheckBallWallCollision()
 	{
 		m_ball.GetPosition().SetY(BRICKLIMIT_Y);
 		m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
-		return true;
+		return;
 	}
 
 	if (ballPosition.GetY() < LOWERLIMIT)
@@ -142,15 +171,14 @@ bool BrickBreaker::CheckBallWallCollision()
 		{
 			//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
 			m_playersStatistics.UpdateStatistics("Player4", true);
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", NULL);
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", nullptr);
 			Stop();
 		}
 		ResetBall();
 	}
-	return false;
 }
 
-void BrickBreaker::CheckBallPaddleColision()
+void BrickBreaker::CheckBallPaddleCollision()
 {
 	if (m_ball.CheckCollision(m_paddle))
 	{
@@ -182,7 +210,7 @@ void BrickBreaker::CheckBallPaddleColision()
 	}
 }
 
-void BrickBreaker::CheckBallBrickColision()
+void BrickBreaker::CheckBallBrickCollision()
 {
 	for (auto& row : m_bricks)
 	{
@@ -196,7 +224,6 @@ void BrickBreaker::CheckBallBrickColision()
 				}
 
 				m_ball.ChangeDirection(*element);
-				m_ball.GetDirection().Normalize();
 				row.erase(element);
 				m_score.AddPoints(1);
 				return;
@@ -204,6 +231,10 @@ void BrickBreaker::CheckBallBrickColision()
 		}
 	}
 }
+
+#pragma endregion
+
+#pragma region Input Events
 
 void BrickBreaker::KeyPressed(const SDL_Keycode& key)
 {
@@ -238,11 +269,15 @@ void BrickBreaker::MouseReleased(const SDL_MouseButtonEvent& mouse)
 	}
 }
 
+#pragma endregion
+
+#pragma region Render Methods
+
 void BrickBreaker::Render(SDL_Renderer* renderer)
 {
 	m_renderer = renderer;
 	SDL_Rect rect;
-	const auto& scale = GetScale();
+	decltype(auto) scale = GetScale();
 
 	scale.PointToPixel(rect, m_paddle.GetPosition(), m_paddle.GetWidth(), m_paddle.GetHeight());
 	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
@@ -254,14 +289,81 @@ void BrickBreaker::Render(SDL_Renderer* renderer)
 	RenderButton(m_renderer);
 
 	scale.PointToPixel(rect, m_ball.GetPosition(), m_ball.GetSize(), m_ball.GetSize());
-	SDL_RenderCopy(m_renderer, m_ballImage, NULL, &rect);
+	SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &rect);
 
-	if (m_isPickCreated)
+	if (m_isPickActive)
 	{
 		scale.PointToPixel(rect, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
 		SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &rect);
 	}
 }
+
+void BrickBreaker::RenderBricks(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	const auto& scale = GetScale();
+
+	for (const auto& iter1 : m_bricks)
+	{
+		for (const auto& iter2 : iter1)
+		{
+			scale.PointToPixel(rect, iter2.GetPosition(), iter2.GetWidth(), iter2.GetHeight());
+			SDL_RenderFillRect(renderer, &rect);
+		}
+	}
+}
+
+void BrickBreaker::RenderScore(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	SDL_Texture* fontTexture = m_score.GetText(renderer);
+
+	if (m_score.GetScore() < 10)
+	{
+		GetScale().PointToPixel(rect, 0.0f, 6.1f, 0.5f, 0.9f);
+	}
+	else
+	{
+		GetScale().PointToPixel(rect, 0.0f, 6.1f, 1.0f, 0.9f);
+	}
+
+	if (m_buttonFont != nullptr)
+	{
+		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
+		SDL_DestroyTexture(fontTexture);
+	}
+	else
+	{
+		std::cout << "Font was not loaded!" << std::endl;
+	}
+}
+
+void BrickBreaker::RenderHearts(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	decltype(auto) scale = GetScale();
+
+	for (const auto& iter : m_hearts)
+	{
+		scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
+		SDL_RenderCopy(renderer, m_heartImage, nullptr, &rect);
+	}
+}
+
+void BrickBreaker::RenderButton(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	decltype(auto) scale = GetScale();
+
+	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
+	m_pauseButton.SetRect(rect);
+	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
+	SDL_RenderCopy(renderer, m_pauseButton.GetText(renderer), nullptr, &rect);
+}
+
+#pragma endregion
+
+#pragma region Init Methods
 
 void BrickBreaker::InitializeBricks()
 {
@@ -283,21 +385,6 @@ void BrickBreaker::InitializeBricks()
 	}
 }
 
-void BrickBreaker::RenderBricks(SDL_Renderer* renderer)
-{
-	SDL_Rect rect;
-	const auto& scale = GetScale();
-
-	for (const auto& iter1 : m_bricks)
-	{
-		for (const auto& iter2 : iter1)
-		{
-			scale.PointToPixel(rect, iter2.GetPosition(), iter2.GetWidth(), iter2.GetHeight());
-			SDL_RenderFillRect(renderer, &rect);
-		}
-	}
-}
-
 void BrickBreaker::InitializeHearts()
 {
 	float ofset = 0.25;
@@ -316,16 +403,7 @@ void BrickBreaker::InitializeHearts()
 	m_hearts.resize(m_heartCounter);
 }
 
-void BrickBreaker::RenderHearts(SDL_Renderer* renderer)
-{
-	SDL_Rect rect;
-	const auto& scale = GetScale();
-	for (const auto& iter : m_hearts)
-	{
-		scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
-		SDL_RenderCopy(renderer, m_heartImage, NULL, &rect);
-	}
-}
+#pragma endregion
 
 void BrickBreaker::CreatePickUp(const Vector2& position)
 {
@@ -369,66 +447,27 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 			return;
 		}
 
-		m_isPickActive = true;
 		m_pickUp.SetPosition(position);
-		m_pickUp.SetSize(1);
-		m_pickUp.SetSpeed(1);
+		m_isPickActive = true;
 	}
 	else
 	{
 		m_isPickCreated = false;
-		m_isPickActive = false;
 	}
 }
 
-void BrickBreaker::RenderScore(SDL_Renderer* renderer)
-{
-	SDL_Rect rect;
-	SDL_Texture* fontTexture = m_score.GetText(renderer);
-	if (m_score.GetScore() < 10)
-	{
-		GetScale().PointToPixel(rect, 0.0f, 6.1f, 0.5f, 0.9f);
-	}
-	else
-	{
-		GetScale().PointToPixel(rect, 0.0f, 6.1f, 1.0f, 0.9f);
-	}
-	if (m_buttonFont != nullptr)
-	{
-		SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
-		SDL_DestroyTexture(fontTexture);
-	}
-	else
-	{
-		std::cout << "Font was not loaded!" << std::endl;
-	}
-}
-
-void BrickBreaker::RenderButton(SDL_Renderer* renderer)
-{
-	SDL_Rect rect;
-	const auto& scale = GetScale();
-
-	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
-	m_pauseButton.SetRect(rect);
-	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
-	SDL_RenderCopy(renderer, m_pauseButton.GetText(renderer), nullptr, &rect);
-}
 
 bool BrickBreaker::IsInBounds(Sint32 x, Sint32 y)
 {
-	if (x > m_pauseButton.GetRect().x && x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
-		&& y > m_pauseButton.GetRect().y && y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h)
-	{
-		return true;
-	}
-	return false;
+	return (x > m_pauseButton.GetRect().x && x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
+		&& y > m_pauseButton.GetRect().y && y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h);
 }
 
 void BrickBreaker::Pause()
 {
 	m_pauseButton.ChangeFontColor(m_renderer);
 	Repaint();
+
 	if (!m_isPaused)
 	{
 		m_lastTimeScale = Time::GetTimeScale();

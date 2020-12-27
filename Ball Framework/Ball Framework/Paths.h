@@ -1,9 +1,9 @@
 #pragma once
-#include<iostream>
-#include<string>
-#include<cstdint>
-#include<unordered_map>
-#include<fstream>
+#include <iostream>
+#include <string>
+#include <cstdint>
+#include <unordered_map>
+#include <fstream>
 
 class Paths
 {
