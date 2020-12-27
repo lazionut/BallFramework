@@ -31,6 +31,10 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 	m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
 {
 	m_lastTimeScale = Time::GetTimeScale();
+	Paths::SetFilePath("../Assets/assetsPaths.txt");
+	Paths::AddObjectPath("redBall", "../Assets/redball.png");
+	Paths::AddObjectPath("redheart", "../Assets/redheart.png");
+	Paths::AddObjectPath("star", "../Assets/star.png");
 }
 
 void BrickBreaker::Start()
@@ -39,8 +43,8 @@ void BrickBreaker::Start()
 
 	InitializeHearts();
 
-	m_ballImage = LoadImage("../Assets/redball.png");
-	m_heartImage = LoadImage("../Assets/redheart.png");
+	m_ballImage = LoadImage(Paths::ReturnObjectPath("redBall"));
+	m_heartImage = LoadImage(Paths::ReturnObjectPath("redheart"));
 	if (m_ballImage == nullptr || m_heartImage == nullptr)
 	{
 		std::cout << "Could not load image\n";
@@ -49,7 +53,7 @@ void BrickBreaker::Start()
 
 	ResetBall();
 
-	m_pickUpImage = LoadImage("../Assets/star.png");
+	m_pickUpImage = LoadImage(Paths::ReturnObjectPath("star"));
 	if (m_pickUpImage == nullptr)
 	{
 		std::cout << "could not load pickup texture\n";

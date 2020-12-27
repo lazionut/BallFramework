@@ -17,11 +17,31 @@ std::string Paths::GetFilePath()
 
 void Paths::AddObjectPath(const std::string& objectKey, const std::string& path)
 {
+	if (m_filePath == "") return;
+	auto it = m_assetsPaths.find(objectKey);
+	if (it == m_assetsPaths.end())
+		++m_numberOfAssets;
+	m_assetsPaths[objectKey] = path;
+
+	std::ofstream fout(m_filePath);
+
+	fout << m_numberOfAssets << std::endl;
+	for (auto&& asset : m_assetsPaths)
+	{
+		fout << asset.first << " " << asset.second << std::endl;
+	}
+	fout.close();
 }
 
 std::string Paths::ReturnObjectPath(const std::string& objectKey)
 {
-	return std::string();
+	if (m_filePath == "" || m_numberOfAssets == 0) return "";
+	auto it = m_assetsPaths.find(objectKey);
+	if (it != m_assetsPaths.end())
+	{
+		return it->second;
+	}
+	return "";
 }
 
 Paths::Paths()

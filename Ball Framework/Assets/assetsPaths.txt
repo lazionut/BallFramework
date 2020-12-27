@@ -1,0 +1,4 @@
+3
+redBall ../Assets/redball.png
+star ../Assets/star.png
+redheart ../Assets/redheart.png

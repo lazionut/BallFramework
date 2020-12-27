@@ -8,6 +8,7 @@
 #include "Score.h"
 #include "Button.h"
 #include "PlayersStatistics.h"
+#include "Paths.h"
 
 class BrickBreaker : public Game
 {
