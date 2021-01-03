@@ -7,6 +7,7 @@
 #include "PickUpGenerator.h"
 #include "Score.h"
 #include "Button.h"
+#include "Paths.h"
 
 class Pong : public Game
 {
