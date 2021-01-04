@@ -2,16 +2,16 @@
 #include <chrono>
 #include "Time.h"
 
+using namespace std::chrono;
+
 class TimeManager
 {
 private:
-	double realDelta;
+	double m_realDelta;
 
-	std::chrono::time_point<std::chrono::system_clock> last;
-	std::chrono::time_point<std::chrono::system_clock> now;
+	time_point<system_clock> m_last;
+	time_point<system_clock> m_now;
 
-	TimeManager(const TimeManager&) = delete;
-	TimeManager& operator=(const TimeManager&) = delete;
 public:
 	TimeManager();
 

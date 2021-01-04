@@ -1,42 +1,42 @@
 #include "TimeManager.h"
 
 TimeManager::TimeManager()
-    : realDelta{ 0.0 }, now{ std::chrono::system_clock::now() }, last{ std::chrono::system_clock::now() } {}
+    : m_realDelta{ 0.0 }, m_now{ system_clock::now() }, m_last{ system_clock::now() } {}
 
 void TimeManager::ResetTime()
 {
-    Time::deltaTime = 0.0;
-    Time::unscaledDelta = 0.0;
-    Time::realTime = 0.0;
-    Time::gameTime = 0.0;
-    Time::timeScale = 1.0f;
+    Time::s_deltaTime = 0.0;
+    Time::s_unscaledDelta = 0.0;
+    Time::s_realTime = 0.0;
+    Time::s_gameTime = 0.0;
+    Time::s_timeScale = 1.0f;
 }
 
 void TimeManager::UpdateTime()
 {
-    now = std::chrono::system_clock::now();
+    m_now = system_clock::now();
 
-    std::chrono::duration<double> dif = now - last;
-    realDelta = dif.count();
-    double scaledDelta = realDelta * Time::GetTimeScale();
+    duration<double> dif = m_now - m_last;
+    m_realDelta = dif.count();
+    double scaledDelta = m_realDelta * Time::GetTimeScale();
 
-    Time::deltaTime += scaledDelta;
-    Time::unscaledDelta += realDelta;
-    Time::gameTime += scaledDelta;
-    Time::realTime += realDelta;
-    Time::scaledTimeSinceStart += scaledDelta;
-    Time::timeSinceStart += realDelta;
+    Time::s_deltaTime += scaledDelta;
+    Time::s_unscaledDelta += m_realDelta;
+    Time::s_gameTime += scaledDelta;
+    Time::s_realTime += m_realDelta;
+    Time::s_scaledTimeSinceStart += scaledDelta;
+    Time::s_timeSinceStart += m_realDelta;
 
-    last = now;
+    m_last = m_now;
 }
 
 void TimeManager::UpdateDone()
 {
-    Time::deltaTime = 0.0;
-    Time::unscaledDelta = 0.0;
+    Time::s_deltaTime = 0.0;
+    Time::s_unscaledDelta = 0.0;
 }
 
 double TimeManager::GetRealDelta()
 {
-    return realDelta;
+    return m_realDelta;
 }
