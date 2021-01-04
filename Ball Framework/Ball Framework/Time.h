@@ -6,13 +6,13 @@ class Time
 private:
 	friend class TimeManager;
 
-	static double s_deltaTime;
-	static double s_timeSinceStart;
-	static double s_realTime;
-	static double s_gameTime;
-	static double s_scaledTimeSinceStart;
-	static double s_unscaledDelta;
-	static float s_timeScale;
+	static double deltaTime;
+	static double timeSinceStart;
+	static double realTime;
+	static double gameTime;
+	static double scaledTimeSinceStart;
+	static double unscaledDelta;
+	static float timeScale;
 
 	Time();
 	Time(const Time&) = delete;

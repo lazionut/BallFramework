@@ -5,11 +5,11 @@ TimeManager::TimeManager()
 
 void TimeManager::ResetTime()
 {
-    Time::s_deltaTime = 0.0;
-    Time::s_unscaledDelta = 0.0;
-    Time::s_realTime = 0.0;
-    Time::s_gameTime = 0.0;
-    Time::s_timeScale = 1.0f;
+    Time::deltaTime = 0.0;
+    Time::unscaledDelta = 0.0;
+    Time::realTime = 0.0;
+    Time::gameTime = 0.0;
+    Time::timeScale = 1.0f;
 }
 
 void TimeManager::UpdateTime()
@@ -20,20 +20,20 @@ void TimeManager::UpdateTime()
     realDelta = dif.count();
     double scaledDelta = realDelta * Time::GetTimeScale();
 
-    Time::s_deltaTime += scaledDelta;
-    Time::s_unscaledDelta += realDelta;
-    Time::s_gameTime += scaledDelta;
-    Time::s_realTime += realDelta;
-    Time::s_scaledTimeSinceStart += scaledDelta;
-    Time::s_timeSinceStart += realDelta;
+    Time::deltaTime += scaledDelta;
+    Time::unscaledDelta += realDelta;
+    Time::gameTime += scaledDelta;
+    Time::realTime += realDelta;
+    Time::scaledTimeSinceStart += scaledDelta;
+    Time::timeSinceStart += realDelta;
 
     last = now;
 }
 
 void TimeManager::UpdateDone()
 {
-    Time::s_deltaTime = 0.0;
-    Time::s_unscaledDelta = 0.0;
+    Time::deltaTime = 0.0;
+    Time::unscaledDelta = 0.0;
 }
 
 double TimeManager::GetRealDelta()

@@ -5,10 +5,10 @@
 class TimeManager
 {
 private:
-	double m_realDelta;
+	double realDelta;
 
-	std::chrono::time_point<std::chrono::system_clock> m_last;
-	std::chrono::time_point<std::chrono::system_clock> m_now;
+	std::chrono::time_point<std::chrono::system_clock> last;
+	std::chrono::time_point<std::chrono::system_clock> now;
 
 	TimeManager(const TimeManager&) = delete;
 	TimeManager& operator=(const TimeManager&) = delete;
