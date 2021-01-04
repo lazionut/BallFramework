@@ -34,7 +34,7 @@ const PickUp& PickUpGenerator::CreatePaddleSpeedChangePickUp(Paddle& paddle, flo
 	m_pickUp.SetActions
 	(
 		[&paddle, speed]() -> void { PickUpActions::FasterPaddle(paddle, speed); },
-		[&paddle, speed]() -> void { PickUpActions::SmallerPaddle(paddle, speed); },
+		[&paddle, speed]() -> void { PickUpActions::SlowerPaddle(paddle, speed); },
 		m_actionTime
 	);
 

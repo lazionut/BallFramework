@@ -59,7 +59,7 @@ void BrickBreaker::Start()
 		return;
 	}
 
-	m_pickUpGenerator.SetDefaultProperties(0.25f, 1.0f, 2.0f);
+	m_pickUpGenerator.SetDefaultProperties(0.25f, 2.0f, 2.0f);
 }
 
 void BrickBreaker::ResetBall()
@@ -426,7 +426,7 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 			break;
 		case Generator::PADDLESPEEDCHANGE:
 			m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(m_paddle, 3);
-			m_pickUp.SetDirection(m_paddle.GetPosition() - position);
+			m_pickUp.SetDirection(Vector2::down);
 			m_pickUp.StartMoving();
 			std::cout << "moving pickUp\n";
 			break;
@@ -455,7 +455,6 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 		m_isPickCreated = false;
 	}
 }
-
 
 bool BrickBreaker::IsInBounds(Sint32 x, Sint32 y)
 {

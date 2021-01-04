@@ -1,47 +1,47 @@
 #include "Time.h"
 
-double Time::deltaTime = 0.0;
-double Time::timeSinceStart = 0.0;
-double Time::realTime = 0.0;
-double Time::gameTime = 0.0;
-double Time::scaledTimeSinceStart = 0.0;
-double Time::unscaledDelta = 0.0;
-float  Time::timeScale = 1.0f;
+double Time::s_deltaTime = 0.0;
+double Time::s_timeSinceStart = 0.0;
+double Time::s_realTime = 0.0;
+double Time::s_gameTime = 0.0;
+double Time::s_scaledTimeSinceStart = 0.0;
+double Time::s_unscaledDelta = 0.0;
+float  Time::s_timeScale = 1.0f;
 
 double Time::GetTimeSinceStartUp()
 {
-	return timeSinceStart;
+	return s_timeSinceStart;
 }
 
 double Time::GetDeltaTime()
 {
-	return deltaTime;
+	return s_deltaTime;
 }
 
 double Time::GetRealTime()
 {
-	return realTime;
+	return s_realTime;
 }
 
 double Time::GetUnscaledDeltaTime()
 {
-	return unscaledDelta;
+	return s_unscaledDelta;
 }
 
 double Time::GetScaledTimeSinceStart()
 {
-	return scaledTimeSinceStart;
+	return s_scaledTimeSinceStart;
 }
 
 float Time::GetTimeScale()
 {
-	return timeScale;
+	return s_timeScale;
 }
 
 void Time::SetTimeScale(float timeScale)
 {
 	if (timeScale >= 0.0f)
 	{
-		Time::timeScale = timeScale;
+		Time::s_timeScale = timeScale;
 	}
 }
