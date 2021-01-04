@@ -45,7 +45,7 @@ void Pong::Start()
 {
 	InitializeBricks();
 
-	m_ballImage = LoadImage("../Assets/ball.png");
+	m_ballImage = LoadImage(Paths::ReturnObjectPath("ball"));
 	if (m_ballImage == nullptr)
 	{
 		std::cout << "Could not load the ball image!\n";
@@ -54,13 +54,15 @@ void Pong::Start()
 	}
 	m_ball.SetDirection(pow(-1, (rand() % 2)), 0);
 
-	m_pickUpImage = LoadImage("../Assets/star.png");
+	m_pickUpImage = LoadImage(Paths::ReturnObjectPath("star"));
 	if (m_pickUpImage == nullptr)
 	{
 		std::cout << "could not load pickup texture\n";
 		Stop();
 		return;
 	}
+
+	m_pickUpGenerator.SetDefaultProperties(1.0f, 1.0f, 5.0f);
 }
 
 void Pong::Update()
@@ -70,14 +72,21 @@ void Pong::Update()
 
 	m_ball.Move();
 
-	if (m_pickUp.IsActionActive())
+	if (m_isPickCreated)
 	{
-		m_pickUp.ContinueAction();
-	}
+		if (m_pickUp.IsActionActive())
+		{
+			if (m_pickUp.ContinueAction())
+			{
+				m_isPickCreated = false;
+				return;
+			}
+		}
 
-	if (m_pickUp.IsMoving())
-	{
-		m_pickUp.Move();
+		if (m_pickUp.IsMoving())
+		{
+			m_pickUp.Move();
+		}
 	}
 }
 
@@ -192,15 +201,29 @@ void Pong::CheckBallBrickCollision()
 
 void Pong::CheckPickUpCollision()
 {
-	float ballSize = m_ball.GetSize() / 2;
-	float pickUpSize = m_pickUp.GetSize() / 2;
-
-	if (m_isPickActive &&
-		(m_pickUp.GetPosition() - m_ball.GetPosition()).GetSquareLength() < ballSize * ballSize + pickUpSize * pickUpSize)
+	if (m_isPickActive)
 	{
-		std::cout << "pickUp collision\n";
-		m_pickUp.InvokeAction();
-		m_isPickActive = false;
+		if (m_pickUp.IsMoving())
+		{
+			if (m_pickUp.CheckCollision(m_paddlePlayer1))
+			{
+				m_pickUp.InvokeAction();
+				m_isPickActive = false;
+			}
+			else if (m_pickUp.CheckCollision(m_paddlePlayer2))
+			{
+				m_pickUp.InvokeAction();
+				m_isPickActive = false;
+			}
+		}
+		else
+		{
+			if (m_pickUp.CheckCollision(m_ball))
+			{
+				m_pickUp.InvokeAction();
+				m_isPickActive = false;
+			}
+		}
 	}
 }
 
@@ -211,7 +234,7 @@ void Pong::CheckScoreCondition()
 		m_scorePlayer1.AddPoints(1);
 		if (m_scorePlayer1.GetScore() == 5)
 		{
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player2 won!", NULL);
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player2 won!", nullptr);
 			Stop();
 		}
 		m_ball.SetPosition(0, 0);
@@ -223,7 +246,7 @@ void Pong::CheckScoreCondition()
 		m_scorePlayer2.AddPoints(1);
 		if (m_scorePlayer2.GetScore() == 5)
 		{
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player1 won!", NULL);
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player1 won!", nullptr);
 			Stop();
 		}
 		m_ball.SetPosition(0, 0);
@@ -271,7 +294,7 @@ void Pong::Render(SDL_Renderer* renderer)
 {
 	m_renderer = renderer;
 	SDL_Rect aux;
-	const auto& scale = GetScale();
+	decltype(auto) scale = GetScale();
 
 	SDL_SetRenderDrawColor(m_renderer, 0, 255, 0, 255);
 	scale.PointToPixel(aux, m_paddlePlayer1.GetPosition(), m_paddlePlayer1.GetWidth(), m_paddlePlayer1.GetHeight());
@@ -324,7 +347,7 @@ void Pong::InitializeBricks()
 void Pong::RenderBricks(SDL_Renderer* renderer)
 {
 	SDL_Rect rect;
-	const auto& scale = GetScale();
+	decltype(auto) scale = GetScale();
 	for (const auto& rowIterator : m_bricks)
 		for (const auto& columnIterator : rowIterator)
 		{
@@ -397,20 +420,19 @@ void Pong::CreatePickUp(const Vector2& position)
 			break;
 		}
 
+		m_pickUp.SetPosition(position);
 		m_isPickActive = true;
-		//m_pickUp.Set(position, Vector2(0.75f, 0.75f), Vector2(rand() % 3 - 1, 0), 4.5f);
 	}
 	else
 	{
 		m_isPickCreated = false;
-		m_isPickActive = false;
 	}
 }
 
 void Pong::RenderPlayersScore(SDL_Renderer* renderer)
 {
 	SDL_Rect aux1, aux2;
-	const auto& scale = GetScale();
+	decltype(auto) scale = GetScale();
 
 	SDL_Texture* scoreTexture1 = m_scorePlayer1.GetText(renderer);
 	scale.PointToPixel(aux1, 2, 4, 0.5f, 0.5f);
@@ -434,23 +456,18 @@ void Pong::RenderPlayersScore(SDL_Renderer* renderer)
 void Pong::RenderButton(SDL_Renderer* renderer)
 {
 	SDL_Rect rect;
-	const auto& scale = GetScale();
+	decltype(auto) scale = GetScale();
 
 	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
 	m_pauseButton.SetRect(rect);
 	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
 	SDL_RenderCopy(renderer, m_pauseButton.GetText(renderer), nullptr, &rect);
-
 }
 
 bool Pong::IsInBounds(Sint32 x, Sint32 y)
 {
-	if (x > m_pauseButton.GetRect().x && x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
-		&& y > m_pauseButton.GetRect().y && y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h)
-	{
-		return true;
-	}
-	return false;
+	return (x > m_pauseButton.GetRect().x && x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
+		&& y > m_pauseButton.GetRect().y && y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h);
 }
 
 void Pong::Pause()
