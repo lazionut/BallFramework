@@ -10,14 +10,14 @@ void PickUpActions::SlowDown()
 	Time::SetTimeScale(1);
 }
 
-void PickUpActions::SmallerPaddle(Paddle& paddle, float difference)
+void PickUpActions::SmallerPaddle(Paddle& paddle, const Vector2& difference)
 {
-	paddle.SetWidth(paddle.GetWidth() - 2);
+	paddle.DecreaseSize(difference);
 }
 
-void PickUpActions::BiggerPaddle(Paddle& paddle, float difference)
+void PickUpActions::BiggerPaddle(Paddle& paddle, const Vector2& difference)
 {
-	paddle.SetWidth(paddle.GetWidth() + 2);
+	paddle.AddSize(difference);
 }
 
 void PickUpActions::FasterPaddle(Paddle& paddle, float speed)

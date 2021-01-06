@@ -19,10 +19,12 @@ const PickUp& PickUpGenerator::CreateSpeedPickUp()
 
 const PickUp& PickUpGenerator::CreatePaddleSizeChangePickUp(Paddle& paddle, float difference)
 {
+	Vector2 sizeDifference = m_paddleSize * difference;
+
 	m_pickUp.SetActions
 	(
-		[&paddle, difference]() -> void { PickUpActions::BiggerPaddle(paddle, difference); },
-		[&paddle, difference]() -> void { PickUpActions::SmallerPaddle(paddle, difference); },
+		[&paddle, difference, sizeDifference]() -> void { PickUpActions::BiggerPaddle(paddle, sizeDifference); },
+		[&paddle, difference, sizeDifference]() -> void { PickUpActions::SmallerPaddle(paddle, sizeDifference); },
 		m_actionTime
 	);
 
@@ -87,14 +89,15 @@ const PickUp& PickUpGenerator::CreateRemovePointsPickUp(Score& score, uint16_t p
 	return m_pickUp;
 }
 
-void PickUpGenerator::SetDefaultProperties(const float size, const float speed, const float time)
+void PickUpGenerator::SetDefaultProperties(const Vector2& paddleSize, const float ballSize, const float speed, const float time)
 {
 	m_actionTime = time;
-	m_pickUp.SetSize(size);
+	m_pickUp.SetSize(ballSize);
 	m_pickUp.SetSpeed(speed);
+	m_paddleSize = paddleSize;
 }
 
-PickUpGenerator::PickUpGenerator(const float size, const float speed, const float time)
+PickUpGenerator::PickUpGenerator(const Vector2& paddleSize, const float ballSize, const float speed, const float time)
 {
-	SetDefaultProperties(size, speed, time);
+	SetDefaultProperties(paddleSize, ballSize, speed, time);
 }

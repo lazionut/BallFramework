@@ -37,6 +37,7 @@ void Game::Stop()
 	m_running = false;
 }
 
+[[nodiscard("SDL Texture")]]
 SDL_Texture* Game::LoadImage(const std::string& path) const
 {
 	return m_renderer.LoadImage(path);

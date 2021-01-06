@@ -28,6 +28,7 @@ protected:
 	virtual void MouseReleased(const SDL_MouseButtonEvent& mouse) = 0;
 	virtual void Render(SDL_Renderer* renderer) = 0;
 
+	[[nodiscard("SDL Texture")]]
 	SDL_Texture* LoadImage(const std::string& path) const;
 
 	const ScreenScale& GetScale() const;

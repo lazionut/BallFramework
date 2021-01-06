@@ -39,6 +39,7 @@ const SDL_Color& Renderer::GetBackgroundColor() const
 	return m_backgroundColor;
 }
 
+[[nodiscard("SDL Texture")]]
 SDL_Texture* Renderer::LoadImage(const std::string& path) const
 {
 	SDL_Surface* loadedImage = IMG_Load(path.c_str());

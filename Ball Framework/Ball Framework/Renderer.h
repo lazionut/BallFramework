@@ -17,6 +17,7 @@ public:
 	const ScreenScale& GetScale() const;
 	const SDL_Color& GetBackgroundColor() const;
 
+	[[nodiscard("SDL Texture")]]
 	SDL_Texture* LoadImage(const std::string& path) const;
 
 	void SetBackgroundColor(const SDL_Color& color);

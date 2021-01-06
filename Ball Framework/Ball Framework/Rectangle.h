@@ -20,6 +20,12 @@ public:
     void SetPosition(float x, float y);
     const Vector2& GetPosition() const;
 
+    void SetSize(float width, float height);
+    void SetSize(const Vector2& size);
+
+    void AddSize(const Vector2& size);
+    void DecreaseSize(const Vector2& size);
+
     Rectangle& operator=(const Rectangle& other);
     Rectangle& operator=(Rectangle&& other) noexcept;
 

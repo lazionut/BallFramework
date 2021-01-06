@@ -16,6 +16,21 @@ constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
 constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
 constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+
+//pickUp constants
+#define PICKUPSPAWNCHANCE 20
+#define ACTIONTIME 2.0f
+#define PICKUPSIZECHANGE 0.25f
+#define PICKUPSPEEDCHANGE 2.0f
+
+#define PADDLESIZEDIFFERENCE 1.0f
+#define PADDLESPEEDDIFFERENCE 3.0f
+
+#define BALLSIZEDIFFERENCE 1.25f
+#define BALLSPEEDDIFFERENCE 4.0f
+
+#define MAXSCOREDIFFERENCE 5
+
 #pragma endregion
 
 BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
@@ -59,7 +74,7 @@ void BrickBreaker::Start()
 		return;
 	}
 
-	m_pickUpGenerator.SetDefaultProperties(0.25f, 2.0f, 2.0f);
+	m_pickUpGenerator.SetDefaultProperties(Vector2::right , PICKUPSIZECHANGE, PICKUPSPEEDCHANGE, ACTIONTIME);
 }
 
 void BrickBreaker::ResetBall()
@@ -301,13 +316,13 @@ void BrickBreaker::Render(SDL_Renderer* renderer)
 void BrickBreaker::RenderBricks(SDL_Renderer* renderer)
 {
 	SDL_Rect rect;
-	const auto& scale = GetScale();
+	decltype(auto) scale = GetScale();
 
-	for (const auto& iter1 : m_bricks)
+	for (const auto& row : m_bricks)
 	{
-		for (const auto& iter2 : iter1)
+		for (const auto& item : row)
 		{
-			scale.PointToPixel(rect, iter2.GetPosition(), iter2.GetWidth(), iter2.GetHeight());
+			scale.PointToPixel(rect, item.GetPosition(), item.GetWidth(), item.GetHeight());
 			SDL_RenderFillRect(renderer, &rect);
 		}
 	}
@@ -363,7 +378,7 @@ void BrickBreaker::RenderButton(SDL_Renderer* renderer)
 
 #pragma endregion
 
-#pragma region Init Methods
+#pragma region Initialize Methods
 
 void BrickBreaker::InitializeBricks()
 {
@@ -387,20 +402,17 @@ void BrickBreaker::InitializeBricks()
 
 void BrickBreaker::InitializeHearts()
 {
-	float ofset = 0.25;
-	float x = LEFTLIMIT + 0.5;
-	float y = LOWERLIMIT + 0.1;
+	float offset = 0.25f;
+	float x = LEFTLIMIT + 0.5f;
+	float y = LOWERLIMIT + 0.1f;
 
 	m_hearts.resize(m_heartCounter);
 
-	for (int index = 0; index < m_heartCounter; ++index)
+	for (auto&& heart : m_hearts)
 	{
-		Rectangle rect;
-		m_hearts.push_back(rect);
-		m_hearts[index].Set(Vector2(x, y), HEARTSIZE, HEARTSIZE);
-		x = x + ofset + HEARTSIZE;
+		heart.Set(Vector2(x, y), HEARTSIZE, HEARTSIZE);
+		x += offset + HEARTSIZE;
 	}
-	m_hearts.resize(m_heartCounter);
 }
 
 #pragma endregion
@@ -409,7 +421,7 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 {
 	using Generator = PickUpGenerator::Actions;
 
-	if ((rand() % 100) > 20)
+	if ((rand() % 100) > PICKUPSPAWNCHANCE)
 	{
 		m_isPickCreated = true;
 
@@ -419,28 +431,26 @@ void BrickBreaker::CreatePickUp(const Vector2& position)
 			m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
 			break;
 		case Generator::PADDLESIZECHANGE:
-			m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_paddle, 3);
-			m_pickUp.SetDirection(m_paddle.GetPosition() - position);
-			m_pickUp.StartMoving();
-			std::cout << "moving pickUp\n";
-			break;
-		case Generator::PADDLESPEEDCHANGE:
-			m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(m_paddle, 3);
+			m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_paddle, PADDLESIZEDIFFERENCE);
 			m_pickUp.SetDirection(Vector2::down);
 			m_pickUp.StartMoving();
-			std::cout << "moving pickUp\n";
+			break;
+		case Generator::PADDLESPEEDCHANGE:
+			m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(m_paddle, PADDLESPEEDDIFFERENCE);
+			m_pickUp.SetDirection(Vector2::down);
+			m_pickUp.StartMoving();
 			break;
 		case Generator::BALLSIZECHANGE:
-			m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(m_ball, 1.25f);
+			m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(m_ball, BALLSIZEDIFFERENCE);
 			break;
 		case Generator::BALLSPEEDCHANGE:
-			m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(m_ball, 4);
+			m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(m_ball, BALLSPEEDDIFFERENCE);
 			break;
 		case Generator::BONUSPOINTS:
-			m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(m_score, rand() % 5 + 1);
+			m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(m_score, rand() % MAXSCOREDIFFERENCE + 1);
 			break;
 		case Generator::REMOVEPOINTS:
-			m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(m_score, rand() % 5 + 1);
+			m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(m_score, rand() % MAXSCOREDIFFERENCE + 1);
 			break;
 		default:
 			m_isPickCreated = false;

@@ -67,6 +67,30 @@ const Vector2& Rectangle::GetPosition() const
     return m_position;
 }
 
+void Rectangle::SetSize(float width, float height)
+{
+    m_width = width;
+    m_height = height;
+}
+
+void Rectangle::SetSize(const Vector2& size)
+{
+    m_width = size.GetX();
+    m_height = size.GetY();
+}
+
+void Rectangle::AddSize(const Vector2& size)
+{
+    m_width += size.GetX();
+    m_height += size.GetY();
+}
+
+void Rectangle::DecreaseSize(const Vector2& size)
+{
+    m_width -= size.GetX();
+    m_height -= size.GetY();
+}
+
 Rectangle& Rectangle::operator=(const Rectangle& other)
 {
     m_position = other.m_position;

@@ -62,7 +62,7 @@ void Pong::Start()
 		return;
 	}
 
-	m_pickUpGenerator.SetDefaultProperties(1.0f, 1.0f, 5.0f);
+	m_pickUpGenerator.SetDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
 }
 
 void Pong::Update()
