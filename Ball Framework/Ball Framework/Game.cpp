@@ -11,7 +11,7 @@ void Game::InitGame(const std::string& title, int32_t x, int32_t y, uint16_t wid
 	if(m_renderer.InitRenderer(title.c_str(), x, y, width, height, flags))
 	{
 		m_maxFPS = maxFPS;
-		m_gameEvent = new SDL_Event;
+		m_gameEvent = std::make_unique<SDL_Event>();
 		m_running = true;
 	}
 }
@@ -28,7 +28,6 @@ void Game::Run()
 
 void Game::Clean()
 {
-	delete m_gameEvent;
 	std::cout << "Game cleaned!\n";
 }
 
@@ -123,7 +122,7 @@ void Game::Repaint()
 
 void Game::HandleEvents()
 {
-	while (SDL_PollEvent(m_gameEvent))
+	while (SDL_PollEvent(m_gameEvent.get()))
 	{
 		switch (m_gameEvent->type)
 		{
@@ -151,7 +150,7 @@ void Game::HandleEvents()
 	}
 }
 
-void Game::HandleWindowEvents(const SDL_Event* gameEvent)
+void Game::HandleWindowEvents(std::unique_ptr<SDL_Event>& gameEvent)
 {
 	switch (gameEvent->window.event)
 	{

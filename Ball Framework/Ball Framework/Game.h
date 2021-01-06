@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include "Renderer.h"
 #include "Time.h"
 #include "TimeManager.h"
@@ -42,14 +44,14 @@ private:
 
 	TimeManager m_timeManager;
 	Renderer m_renderer;
-	SDL_Event* m_gameEvent;
+	std::unique_ptr<SDL_Event> m_gameEvent;
 	uint16_t m_maxFPS;
 	bool m_running = false;
 	
 	void GameLoop();
 
 	void HandleEvents();
-	void HandleWindowEvents(const SDL_Event* gameEvent);
+	void HandleWindowEvents(std::unique_ptr<SDL_Event>& gameEvent);
 
 	void InitGame(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS);
 	void Clean();
