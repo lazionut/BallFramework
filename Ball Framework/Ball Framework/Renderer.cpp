@@ -55,6 +55,15 @@ SDL_Texture* Renderer::LoadImage(const std::string& path) const
 	return nullptr;
 }
 
+[[nodiscard("SDL Texture")]]
+SDL_Texture* Renderer::MakeText(const std::string& text, const SDL_Color& fontColor, TTF_Font* font) const
+{
+	SDL_Surface* loadedText = TTF_RenderText_Solid(font, text.c_str(), fontColor);
+	SDL_Texture* sdlText= SDL_CreateTextureFromSurface(m_renderer, loadedText);
+	SDL_FreeSurface(loadedText);
+	return  sdlText;
+}
+
 void Renderer::SetBackgroundColor(const SDL_Color& color)
 {
 	m_backgroundColor = color;

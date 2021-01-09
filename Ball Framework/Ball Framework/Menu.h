@@ -31,6 +31,8 @@ public:
 	bool IsInBounds(Sint32 x, Sint32 y);
 	void PerformAction();
 
+	void DestroyButtons();
+
 	TTF_Font* GetFont();
 
 private:
@@ -38,5 +40,5 @@ private:
 	void InitButtons();
 	TTF_Font* m_font;
 	SDL_Renderer* m_renderer;
-	Button* m_lastButton;
+	Button* m_lastButton; 
 };

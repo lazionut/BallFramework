@@ -43,7 +43,7 @@ BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint
 	m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ false },
 	m_heartImage{ nullptr }, m_heartCounter{ 3 },
 	m_score{ font },
-	m_buttonFont{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, black, white, "||", m_buttonFont },
+	m_buttonFont{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, black, white, "||"},
 	m_isPaused{ false },
 	m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
 {
@@ -57,6 +57,8 @@ void BrickBreaker::Start()
 
 	m_ballImage = LoadImage(Paths::ReturnObjectPath("redBall"));
 	m_heartImage = LoadImage(Paths::ReturnObjectPath("redHeart"));
+	m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+
 	if (m_ballImage == nullptr || m_heartImage == nullptr)
 	{
 		std::cout << "Could not load image\n";
@@ -373,7 +375,7 @@ void BrickBreaker::RenderButton(SDL_Renderer* renderer)
 	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
 	m_pauseButton.SetRect(rect);
 	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
-	SDL_RenderCopy(renderer, m_pauseButton.GetText(renderer), nullptr, &rect);
+	SDL_RenderCopy(renderer, m_pauseButton.GetText(), nullptr, &rect);
 }
 
 #pragma endregion
@@ -474,7 +476,8 @@ bool BrickBreaker::IsInBounds(Sint32 x, Sint32 y)
 
 void BrickBreaker::Pause()
 {
-	m_pauseButton.ChangeFontColor(m_renderer);
+	m_pauseButton.ChangeFontColor();
+	m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor() ,m_buttonFont));
 	Repaint();
 
 	if (!m_isPaused)

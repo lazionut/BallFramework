@@ -32,6 +32,8 @@ protected:
 
 	[[nodiscard("SDL Texture")]]
 	SDL_Texture* LoadImage(const std::string& path) const;
+	[[nodiscard("SDL Texture")]]
+	SDL_Texture* MakeText(const std::string& text, const SDL_Color& fontColor, TTF_Font* font) const;
 
 	const ScreenScale& GetScale() const;
 	void SetBackgroundColor(const SDL_Color& color);

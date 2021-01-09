@@ -42,6 +42,12 @@ SDL_Texture* Game::LoadImage(const std::string& path) const
 	return m_renderer.LoadImage(path);
 }
 
+[[nodiscard("SDL Texture")]]
+SDL_Texture* Game::MakeText(const std::string& text, const SDL_Color& fontColor, TTF_Font* font) const
+{
+	return m_renderer.MakeText(text, fontColor, font);
+}
+
 const ScreenScale& Game::GetScale() const
 {
 	return m_renderer.GetScale();

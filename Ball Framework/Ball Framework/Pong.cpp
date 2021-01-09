@@ -35,7 +35,7 @@ Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint
 	m_bricks{ BRICKCOLUMNS }, m_bricksNumber{ 0 },
 	m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ true },
 	m_scorePlayer1{ font }, m_scorePlayer2{ font },
-	m_buttonFont{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.38f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, black, white, "||", m_buttonFont },
+	m_buttonFont{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.38f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, black, white, "||"},
 	m_isPaused{ false }
 {
 	m_lastTimeScale = Time::GetTimeScale();
@@ -46,6 +46,8 @@ void Pong::Start()
 	InitializeBricks();
 
 	m_ballImage = LoadImage(Paths::ReturnObjectPath("ball"));
+	m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+
 	if (m_ballImage == nullptr)
 	{
 		std::cout << "Could not load the ball image!\n";
@@ -461,7 +463,7 @@ void Pong::RenderButton(SDL_Renderer* renderer)
 	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
 	m_pauseButton.SetRect(rect);
 	scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
-	SDL_RenderCopy(renderer, m_pauseButton.GetText(renderer), nullptr, &rect);
+	SDL_RenderCopy(renderer, m_pauseButton.GetText(), nullptr, &rect);
 }
 
 bool Pong::IsInBounds(Sint32 x, Sint32 y)
@@ -472,7 +474,8 @@ bool Pong::IsInBounds(Sint32 x, Sint32 y)
 
 void Pong::Pause()
 {
-	m_pauseButton.ChangeFontColor(m_renderer);
+	m_pauseButton.ChangeFontColor();
+	m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
 	Repaint();
 	if (!m_isPaused)
 	{

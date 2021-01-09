@@ -19,6 +19,8 @@ public:
 
 	[[nodiscard("SDL Texture")]]
 	SDL_Texture* LoadImage(const std::string& path) const;
+	[[nodiscard("SDL Texture")]]
+	SDL_Texture* MakeText(const std::string& text, const SDL_Color& fontColor, TTF_Font* font) const;
 
 	void SetBackgroundColor(const SDL_Color& color);
 	void SetSize(uint16_t width, uint16_t height);
