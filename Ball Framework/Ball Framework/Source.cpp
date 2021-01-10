@@ -5,7 +5,9 @@
 #include "BrickBreaker.h"
 #include "Menu.h"
 #include "TestGame.h"
-#include "../LoggerDLL/Logger.h"
+
+using namespace BallFramework;
+using namespace myLogger;
 
 bool initializeSDL()
 {
@@ -33,7 +35,7 @@ int main(int argc, char** argv)
 	Paths::SetFilePath("../Assets/assetsPaths.txt");
 
 	Logger::Initialize();
-	INFO("System was initialized!");
+	LOGGING_INFO("System was initialized!");
 
 	srand(time(0));
 

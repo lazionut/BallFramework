@@ -6,39 +6,43 @@
 #include <vector>
 #include <SDL_ttf.h>
 
-
-class Menu : public Game
+namespace BallFramework
 {
-public:
-	Menu(int16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
 
-	void InitMenu();
-	void LoadFont();
+	class Menu : public Game
+	{
+	public:
+		Menu(int16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
 
-	void Start() override;
-	void OnClose() override;
-	void CheckCollision() override;
-	void Update() override;
+		void InitMenu();
+		void LoadFont();
 
-	void KeyPressed(const SDL_Keycode& key) override;
-	void KeyReleased(const SDL_Keycode& key) override;
+		void Start() override;
+		void OnClose() override;
+		void CheckCollision() override;
+		void Update() override;
 
-	void MousePressed(const SDL_MouseButtonEvent& mouse) override;
-	void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
+		void KeyPressed(const SDL_Keycode& key) override;
+		void KeyReleased(const SDL_Keycode& key) override;
 
-	void Render(SDL_Renderer* renderer) override;
+		void MousePressed(const SDL_MouseButtonEvent& mouse) override;
+		void MouseReleased(const SDL_MouseButtonEvent& mouse) override;
 
-	bool IsInBounds(Sint32 x, Sint32 y);
-	void PerformAction();
+		void Render(SDL_Renderer* renderer) override;
 
-	void DestroyButtons();
+		bool IsInBounds(Sint32 x, Sint32 y);
+		void PerformAction();
 
-	TTF_Font* GetFont();
+		void DestroyButtons();
 
-private:
-	std::vector<Button> m_buttons;
-	void InitButtons();
-	TTF_Font* m_font;
-	SDL_Renderer* m_renderer;
-	Button* m_lastButton; 
-};
+		TTF_Font* GetFont();
+
+	private:
+		std::vector<Button> m_buttons;
+		void InitButtons();
+		TTF_Font* m_font;
+		SDL_Renderer* m_renderer;
+		Button* m_lastButton;
+	};
+
+}

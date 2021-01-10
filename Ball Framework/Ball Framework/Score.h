@@ -5,27 +5,32 @@
 #include <iostream>
 #include "Vector2.h"
 
-class Score
+namespace BallFramework
 {
-public:
-	Score(TTF_Font* font);
-	void AddPoints(uint16_t points);
-	uint16_t GetScore() const;
-	std::string ConvertToString();
 
-	SDL_Texture* GetText(SDL_Renderer* renderer);
+	class Score
+	{
+	public:
+		Score(TTF_Font* font);
+		void AddPoints(uint16_t points);
+		uint16_t GetScore() const;
+		std::string ConvertToString();
 
-	void SetPosition(const Vector2& position);
-	void SetWidth(float width);
-	void SetHeight(float height);
+		SDL_Texture* GetText(SDL_Renderer* renderer);
 
-	Vector2 GetPosition();
-	float GetWidth();
-	float GetHeight();
+		void SetPosition(const Vector2& position);
+		void SetWidth(float width);
+		void SetHeight(float height);
 
-private:
-	uint16_t m_points;
-	TTF_Font* m_font;
-	Vector2 m_position;
-	float m_width, m_height;
-};
+		Vector2 GetPosition();
+		float GetWidth();
+		float GetHeight();
+
+	private:
+		uint16_t m_points;
+		TTF_Font* m_font;
+		Vector2 m_position;
+		float m_width, m_height;
+	};
+
+}

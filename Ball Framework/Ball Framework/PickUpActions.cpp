@@ -1,62 +1,66 @@
 #include "PickUpActions.h"
 
-void PickUpActions::SpeedUp()
+namespace BallFramework
 {
-	Time::SetTimeScale(2);
-}
 
-void PickUpActions::SlowDown()
-{
-	Time::SetTimeScale(1);
-}
+	void PickUpActions::SpeedUp()
+	{
+		Time::SetTimeScale(2);
+	}
 
-void PickUpActions::SmallerPaddle(Paddle& paddle, const Vector2& difference)
-{
-	paddle.DecreaseSize(difference);
-}
+	void PickUpActions::SlowDown()
+	{
+		Time::SetTimeScale(1);
+	}
 
-void PickUpActions::BiggerPaddle(Paddle& paddle, const Vector2& difference)
-{
-	paddle.AddSize(difference);
-}
+	void PickUpActions::SmallerPaddle(Paddle& paddle, const Vector2& difference)
+	{
+		paddle.DecreaseSize(difference);
+	}
 
-void PickUpActions::FasterPaddle(Paddle& paddle, float speed)
-{
-	paddle.SetSpeed(paddle.GetSpeed() + speed);
-}
+	void PickUpActions::BiggerPaddle(Paddle& paddle, const Vector2& difference)
+	{
+		paddle.AddSize(difference);
+	}
 
-void PickUpActions::SlowerPaddle(Paddle& paddle, float speed)
-{
-	paddle.SetSpeed(paddle.GetSpeed() - speed);
-}
+	void PickUpActions::FasterPaddle(Paddle& paddle, float speed)
+	{
+		paddle.SetSpeed(paddle.GetSpeed() + speed);
+	}
 
-void PickUpActions::BiggerBall(Ball& ball, float x)
-{
-	ball.SetSize(ball.GetSize() + 1);
-}
+	void PickUpActions::SlowerPaddle(Paddle& paddle, float speed)
+	{
+		paddle.SetSpeed(paddle.GetSpeed() - speed);
+	}
 
-void PickUpActions::SmallerBall(Ball& ball, float x)
-{
-	ball.SetSize(ball.GetSize() - 1);
-}
+	void PickUpActions::BiggerBall(Ball& ball, float x)
+	{
+		ball.SetSize(ball.GetSize() + 1);
+	}
 
-void PickUpActions::FasterBall(Ball& ball, float speed)
-{
-	ball.AddSpeed(speed);
-}
+	void PickUpActions::SmallerBall(Ball& ball, float x)
+	{
+		ball.SetSize(ball.GetSize() - 1);
+	}
 
-void PickUpActions::SlowerBall(Ball& ball, float speed)
-{
-	ball.AddSpeed(-speed);
-}
+	void PickUpActions::FasterBall(Ball& ball, float speed)
+	{
+		ball.AddSpeed(speed);
+	}
 
-void PickUpActions::BonusPoints(Score& score, int points)
-{
-	score.AddPoints(points);
-}
+	void PickUpActions::SlowerBall(Ball& ball, float speed)
+	{
+		ball.AddSpeed(-speed);
+	}
 
-void PickUpActions::RemovePoints(Score& score, int points)
-{
-	score.AddPoints(-points);
-}
+	void PickUpActions::BonusPoints(Score& score, int points)
+	{
+		score.AddPoints(points);
+	}
 
+	void PickUpActions::RemovePoints(Score& score, int points)
+	{
+		score.AddPoints(-points);
+	}
+
+}

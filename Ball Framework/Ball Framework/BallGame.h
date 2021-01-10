@@ -13,66 +13,70 @@
 #include "Paths.h"
 #include "Colors.h"
 
-class BallGame : public Game
+namespace BallFramework
 {
-public:
 
-	BallGame();
-	BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit);
+	class BallGame : public Game
+	{
+	public:
 
-private: //inherited methods
+		BallGame();
+		BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit);
 
-	void Update() override final;
-	void OnClose() override final;
-	void KeyPressed(const SDL_Keycode& key) override final;
-	void KeyReleased(const SDL_Keycode& key) override final;
-	void MousePressed(const SDL_MouseButtonEvent& mouse) override final;
-	void MouseReleased(const SDL_MouseButtonEvent& mouse) override final;
-	void Render(SDL_Renderer* renderer) override final;
+	private: //inherited methods
 
-private://not inherited methods
-	void Pause();
-	void RenderButton(SDL_Renderer* renderer);
-	bool IsMouseInButtonBounds(Sint32 x, Sint32 y);
+		void Update() override final;
+		void OnClose() override final;
+		void KeyPressed(const SDL_Keycode& key) override final;
+		void KeyReleased(const SDL_Keycode& key) override final;
+		void MousePressed(const SDL_MouseButtonEvent& mouse) override final;
+		void MouseReleased(const SDL_MouseButtonEvent& mouse) override final;
+		void Render(SDL_Renderer* renderer) override final;
 
-	void RenderBricks(SDL_Renderer* renderer);
+	private://not inherited methods
+		void Pause();
+		void RenderButton(SDL_Renderer* renderer);
+		bool IsMouseInButtonBounds(Sint32 x, Sint32 y);
 
-	void RenderScore(SDL_Renderer* renderer);
+		void RenderBricks(SDL_Renderer* renderer);
 
-	virtual void CreatePickUp(const Vector2& position) = 0;
+		void RenderScore(SDL_Renderer* renderer);
 
-private: //SDL objects
-	SDL_Renderer* m_renderer;
-	SDL_Texture* m_ballImage;
-	SDL_Texture* m_pickUpImage;
-	TTF_Font* m_buttonFont;
-	SDL_Color m_color;
+		virtual void CreatePickUp(const Vector2& position) = 0;
 
-private:// custom types
+	private: //SDL objects
+		SDL_Renderer* m_renderer;
+		SDL_Texture* m_ballImage;
+		SDL_Texture* m_pickUpImage;
+		TTF_Font* m_buttonFont;
+		SDL_Color m_color;
 
-	Paddle m_player1;
-	std::optional<Paddle> m_player2;
+	private:// custom types
 
-	std::vector<std::vector<Rectangle>> m_bricks;
+		Paddle m_player1;
+		std::optional<Paddle> m_player2;
 
-	Ball m_ball;
+		std::vector<std::vector<Rectangle>> m_bricks;
 
-	PickUpGenerator m_pickupgenerator;
-	PickUp m_pickUp;
+		Ball m_ball;
 
-	Button m_pauseButton;
+		PickUpGenerator m_pickupgenerator;
+		PickUp m_pickUp;
 
-	Score m_score1;
-	std::optional<Score> m_score2;
+		Button m_pauseButton;
 
-	PlayersStatistics m_playersStatistics;
+		Score m_score1;
+		std::optional<Score> m_score2;
 
-private: //primitive types
-	bool m_isPickCreated;
-	bool m_isPickActive;
+		PlayersStatistics m_playersStatistics;
 
-	float m_lastTimeScale;
-	bool m_isPaused;
+	private: //primitive types
+		bool m_isPickCreated;
+		bool m_isPickActive;
 
-};
+		float m_lastTimeScale;
+		bool m_isPaused;
 
+	};
+
+}

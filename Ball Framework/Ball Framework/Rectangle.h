@@ -1,38 +1,43 @@
 #pragma once
 #include"Vector2.h"
 
-class Rectangle
+namespace BallFramework
 {
-public:
-    Rectangle();
-    Rectangle(const Vector2& position, const float& width, const float& height);
-    Rectangle(const Rectangle& other);
-    Rectangle(Rectangle&& other) noexcept;
 
-    void Set(const Vector2& position, float width, float height);
-    void Set(float x, float y, float width, float height);
+	class Rectangle
+	{
+	public:
+		Rectangle();
+		Rectangle(const Vector2& position, const float& width, const float& height);
+		Rectangle(const Rectangle& other);
+		Rectangle(Rectangle&& other) noexcept;
 
-    void SetWidth(float width);
-    float GetWidth() const;
-    void SetHeight(float height);
-    float GetHeight() const;
-    void SetPosition(const Vector2& position);
-    void SetPosition(float x, float y);
-    const Vector2& GetPosition() const;
+		void Set(const Vector2& position, float width, float height);
+		void Set(float x, float y, float width, float height);
 
-    void SetSize(float width, float height);
-    void SetSize(const Vector2& size);
+		void SetWidth(float width);
+		float GetWidth() const;
+		void SetHeight(float height);
+		float GetHeight() const;
+		void SetPosition(const Vector2& position);
+		void SetPosition(float x, float y);
+		const Vector2& GetPosition() const;
 
-    void AddSize(const Vector2& size);
-    void DecreaseSize(const Vector2& size);
+		void SetSize(float width, float height);
+		void SetSize(const Vector2& size);
 
-    Rectangle& operator=(const Rectangle& other);
-    Rectangle& operator=(Rectangle&& other) noexcept;
+		void AddSize(const Vector2& size);
+		void DecreaseSize(const Vector2& size);
 
-    friend std::istream& operator>>(std::istream& in, Rectangle& other);
-    friend std::ostream& operator<<(std::ostream& out, Rectangle& other);
+		Rectangle& operator=(const Rectangle& other);
+		Rectangle& operator=(Rectangle&& other) noexcept;
 
-protected:
-    Vector2 m_position;
-    float m_width, m_height;
-};
+		friend std::istream& operator>>(std::istream& in, Rectangle& other);
+		friend std::ostream& operator<<(std::ostream& out, Rectangle& other);
+
+	protected:
+		Vector2 m_position;
+		float m_width, m_height;
+	};
+
+}

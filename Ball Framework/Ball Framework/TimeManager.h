@@ -2,23 +2,27 @@
 #include <chrono>
 #include "Time.h"
 
-using namespace std::chrono;
-
-class TimeManager
+namespace BallFramework
 {
-private:
-	double m_realDelta;
 
-	time_point<system_clock> m_last;
-	time_point<system_clock> m_now;
+	using namespace std::chrono;
 
-public:
-	TimeManager();
+	class TimeManager
+	{
+	private:
+		double m_realDelta;
 
-	void ResetTime();
-	void UpdateTime();
-	void UpdateDone();
+		time_point<system_clock> m_last;
+		time_point<system_clock> m_now;
 
-	double GetRealDelta();
-};
+	public:
+		TimeManager();
 
+		void ResetTime();
+		void UpdateTime();
+		void UpdateDone();
+
+		double GetRealDelta();
+	};
+
+}

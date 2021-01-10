@@ -1,126 +1,131 @@
 #include "Rectangle.h"
 
-Rectangle::Rectangle() :
-    m_position{ Vector2::Vector2(0.0f,0.0f) }, m_width{ 0.0f }, m_height{ 0.0f }{
-}
-
-Rectangle::Rectangle(const Vector2& position, const float& width, const float& height) :
-    m_position{ position }, m_width(width), m_height{ height }{
-}
-
-Rectangle::Rectangle(const Rectangle& other)
+namespace BallFramework
 {
-    *this = other;
-}
 
-Rectangle::Rectangle(Rectangle&& other) noexcept
-{
-    *this = std::move(other);
-}
+	Rectangle::Rectangle() :
+		m_position{ Vector2::Vector2(0.0f,0.0f) }, m_width{ 0.0f }, m_height{ 0.0f }{
+	}
 
-void Rectangle::Set(const Vector2& position, float width, float height)
-{
-    m_position = position;
-    m_width = width;
-    m_height = height;
-}
+	Rectangle::Rectangle(const Vector2& position, const float& width, const float& height) :
+		m_position{ position }, m_width(width), m_height{ height }{
+	}
 
-void Rectangle::Set(float x, float y, float width, float height)
-{
-    m_position.Set(x, y);
-    m_width = width;
-    m_height = height;
-}
+	Rectangle::Rectangle(const Rectangle& other)
+	{
+		*this = other;
+	}
 
-void Rectangle::SetWidth(float width)
-{
-    m_width = width;
-}
+	Rectangle::Rectangle(Rectangle&& other) noexcept
+	{
+		*this = std::move(other);
+	}
 
-float Rectangle::GetWidth() const
-{
-    return m_width;
-}
+	void Rectangle::Set(const Vector2& position, float width, float height)
+	{
+		m_position = position;
+		m_width = width;
+		m_height = height;
+	}
 
-void Rectangle::SetHeight(float height)
-{
-    m_height = height;
-}
+	void Rectangle::Set(float x, float y, float width, float height)
+	{
+		m_position.Set(x, y);
+		m_width = width;
+		m_height = height;
+	}
 
-float Rectangle::GetHeight() const
-{
-    return m_height;
-}
+	void Rectangle::SetWidth(float width)
+	{
+		m_width = width;
+	}
 
-void Rectangle::SetPosition(const Vector2& position)
-{
-    m_position = position;
-}
+	float Rectangle::GetWidth() const
+	{
+		return m_width;
+	}
 
-void Rectangle::SetPosition(float x, float y)
-{
-    m_position.Set(x, y);
-}
+	void Rectangle::SetHeight(float height)
+	{
+		m_height = height;
+	}
 
-const Vector2& Rectangle::GetPosition() const
-{
-    return m_position;
-}
+	float Rectangle::GetHeight() const
+	{
+		return m_height;
+	}
 
-void Rectangle::SetSize(float width, float height)
-{
-    m_width = width;
-    m_height = height;
-}
+	void Rectangle::SetPosition(const Vector2& position)
+	{
+		m_position = position;
+	}
 
-void Rectangle::SetSize(const Vector2& size)
-{
-    m_width = size.GetX();
-    m_height = size.GetY();
-}
+	void Rectangle::SetPosition(float x, float y)
+	{
+		m_position.Set(x, y);
+	}
 
-void Rectangle::AddSize(const Vector2& size)
-{
-    m_width += size.GetX();
-    m_height += size.GetY();
-}
+	const Vector2& Rectangle::GetPosition() const
+	{
+		return m_position;
+	}
 
-void Rectangle::DecreaseSize(const Vector2& size)
-{
-    m_width -= size.GetX();
-    m_height -= size.GetY();
-}
+	void Rectangle::SetSize(float width, float height)
+	{
+		m_width = width;
+		m_height = height;
+	}
 
-Rectangle& Rectangle::operator=(const Rectangle& other)
-{
-    m_position = other.m_position;
-    m_width = other.m_width;
-    m_height = other.m_height;
-    return *this;
-}
+	void Rectangle::SetSize(const Vector2& size)
+	{
+		m_width = size.GetX();
+		m_height = size.GetY();
+	}
 
-Rectangle& Rectangle::operator=(Rectangle&& other) noexcept
-{
-    m_position = other.m_position;
-    m_width = other.m_width;
-    m_height = other.m_height;
-    new(&other) Rectangle;
-    return *this;
-}
+	void Rectangle::AddSize(const Vector2& size)
+	{
+		m_width += size.GetX();
+		m_height += size.GetY();
+	}
 
-std::istream& operator>>(std::istream& in, Rectangle& other)
-{
-    in >> other.m_position;
-    in >> other.m_width;
-    in >> other.m_height;
-    return in;
+	void Rectangle::DecreaseSize(const Vector2& size)
+	{
+		m_width -= size.GetX();
+		m_height -= size.GetY();
+	}
 
-}
+	Rectangle& Rectangle::operator=(const Rectangle& other)
+	{
+		m_position = other.m_position;
+		m_width = other.m_width;
+		m_height = other.m_height;
+		return *this;
+	}
 
-std::ostream& operator<<(std::ostream& out, Rectangle& other)
-{
-    out << "Position" << other.m_position;
-    out << " Width: " << other.m_width;
-    out << " Height: " << other.m_height;
-    return out;
+	Rectangle& Rectangle::operator=(Rectangle&& other) noexcept
+	{
+		m_position = other.m_position;
+		m_width = other.m_width;
+		m_height = other.m_height;
+		new(&other) Rectangle;
+		return *this;
+	}
+
+	std::istream& operator>>(std::istream& in, Rectangle& other)
+	{
+		in >> other.m_position;
+		in >> other.m_width;
+		in >> other.m_height;
+		return in;
+
+	}
+
+	std::ostream& operator<<(std::ostream& out, Rectangle& other)
+	{
+		out << "Position" << other.m_position;
+		out << " Width: " << other.m_width;
+		out << " Height: " << other.m_height;
+		return out;
+	}
+
 }

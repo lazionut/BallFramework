@@ -5,26 +5,30 @@
 #include <string>
 #include "PlayerEntry.h"
 
-class PlayersStatistics
+namespace BallFramework
 {
-public:
-	PlayersStatistics();
-	PlayersStatistics(const std::string& filePath);
-	void ReadStatistics(const std::string& inFile);
-	void UpdateStatistics(std::string playerName, bool isWon);
 
-	friend std::ostream& operator<<(std::ostream& outStream, PlayersStatistics& other);
+	class PlayersStatistics
+	{
+	public:
+		PlayersStatistics();
+		PlayersStatistics(const std::string& filePath);
+		void ReadStatistics(const std::string& inFile);
+		void UpdateStatistics(std::string playerName, bool isWon);
 
-	struct classcomp {
-		bool operator() (const int left, const int right) const
-		{
-			return left > right;
-		}
+		friend std::ostream& operator<<(std::ostream& outStream, PlayersStatistics& other);
+
+		struct classcomp {
+			bool operator() (const int left, const int right) const
+			{
+				return left > right;
+			}
+		};
+	private:
+
+		std::multimap<int, PlayerEntry, classcomp>m_statistics;
+		std::string m_filePath;
+		int m_noPlayers;
 	};
-private:
 
-	std::multimap<int, PlayerEntry, classcomp>m_statistics;
-	std::string m_filePath;
-	int m_noPlayers;
-};
-
+}
