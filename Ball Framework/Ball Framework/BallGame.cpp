@@ -48,3 +48,15 @@ bool BallGame::IsMouseInButtonBounds(Sint32 x, Sint32 y)
 	return (x > m_pauseButton.GetRect().x && x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
 		&& y > m_pauseButton.GetRect().y && y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h);
 }
+
+void BallGame::RenderBricks(SDL_Renderer* renderer)
+{
+	SDL_Rect rect;
+	decltype(auto) scale = GetScale();
+	for (const auto& rowIterator : m_bricks)
+		for (const auto& columnIterator : rowIterator)
+		{
+			scale.PointToPixel(rect, columnIterator.GetPosition(), columnIterator.GetHeight(), columnIterator.GetWidth());
+			SDL_RenderFillRect(renderer, &rect);
+		}
+}
