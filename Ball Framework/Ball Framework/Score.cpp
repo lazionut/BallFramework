@@ -3,8 +3,8 @@
 namespace BallFramework
 {
 
-	Score::Score(TTF_Font* font) :
-		m_font{ font },
+	Score::Score(const SDL_Color& color) :
+		m_scoreColor {color},
 		m_position{ Vector2::zero },
 		m_width{ 0 }, m_height{ 0 }
 	{
@@ -21,21 +21,30 @@ namespace BallFramework
 		return m_points;
 	}
 
+	SDL_Color Score::GetScoreColor() const
+	{
+		return m_scoreColor;
+	}
+
 	std::string Score::ConvertToString()
 	{
 		return std::to_string(m_points);
 	}
 
-	SDL_Texture* Score::GetText(SDL_Renderer* renderer)
+	SDL_Texture* Score::GetText()
 	{
-		SDL_Color white = { 255, 255, 255 };
-		SDL_Surface* loadedText = TTF_RenderText_Solid(m_font, ConvertToString().c_str(), white);
+		return m_scoreText;
+	}
 
-		if (loadedText)
+	void Score::SetText(SDL_Texture* text)
+	{
+		if (m_scoreText != nullptr) {
+			SDL_DestroyTexture(m_scoreText);
+			m_scoreText = text;
+		}
+		else
 		{
-			SDL_Texture* result = SDL_CreateTextureFromSurface(renderer, loadedText);
-			SDL_FreeSurface(loadedText);
-			return result;
+			m_scoreText = text;
 		}
 	}
 

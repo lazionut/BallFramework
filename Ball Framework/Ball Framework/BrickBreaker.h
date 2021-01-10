@@ -58,7 +58,7 @@ namespace BallFramework
 		SDL_Texture* m_ballImage;
 		SDL_Texture* m_pickUpImage;
 		SDL_Texture* m_heartImage;
-		TTF_Font* m_buttonFont;
+		TTF_Font* m_font;
 
 	private: //objects
 		Paddle m_paddle;

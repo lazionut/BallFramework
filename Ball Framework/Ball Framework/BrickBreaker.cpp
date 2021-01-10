@@ -45,8 +45,8 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 		m_bricks{ BRICKROWS },
 		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ false },
 		m_heartImage{ nullptr }, m_heartCounter{ 3 },
-		m_score{ font },
-		m_buttonFont{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, black, white, "||" },
+		m_score{ white },
+		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, black, white, "||" },
 		m_isPaused{ false },
 		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
 	{
@@ -60,7 +60,8 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("redBall"));
 		m_heartImage = LoadGameImage(Paths::ReturnObjectPath("redHeart"));
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_font));
+		m_score.SetText(MakeText(std::to_string(m_score.GetScore()), white, m_font));
 
 		if (m_ballImage == nullptr)
 		{
@@ -141,12 +142,10 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 		if (m_paddle.GetPosition().GetX() < LEFTLIMIT + m_paddle.GetWidth() / 2)
 		{
 			m_paddle.SetPosition(LEFTLIMIT + m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
-			LOGGING_INFO("BrickBreaker -> player paddle-left wall collision");
 		}
 		else if (m_paddle.GetPosition().GetX() > RIGHTLIMIT - m_paddle.GetWidth() / 2)
 		{
 			m_paddle.SetPosition(RIGHTLIMIT - m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
-			LOGGING_INFO("BrickBreaker -> player paddle-right wall collision");
 		}
 	}
 
@@ -242,6 +241,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 					LOGGING_INFO("BrickBreaker -> ball-brick collision");
 
 					m_score.AddPoints(1);
+					m_score.SetText(MakeText(m_score.ConvertToString(), white, m_font));
 					return;
 				}
 			}
@@ -357,7 +357,6 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 	void BrickBreaker::RenderScore(SDL_Renderer* renderer)
 	{
 		SDL_Rect rect;
-		SDL_Texture* fontTexture = m_score.GetText(renderer);
 
 		if (m_score.GetScore() < 10)
 		{
@@ -368,10 +367,9 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 			GetScale().PointToPixel(rect, 0.0f, 6.1f, 1.0f, 0.9f);
 		}
 
-		if (m_buttonFont != nullptr)
+		if (m_font != nullptr)
 		{
-			SDL_RenderCopy(renderer, fontTexture, nullptr, &rect);
-			SDL_DestroyTexture(fontTexture);
+			SDL_RenderCopy(renderer, m_score.GetText(), nullptr, &rect);
 		}
 		else
 		{
@@ -504,7 +502,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 	void BrickBreaker::Pause()
 	{
 		m_pauseButton.ChangeFontColor();
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_font));
 		Repaint();
 
 		if (!m_isPaused)

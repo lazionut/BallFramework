@@ -37,8 +37,8 @@ namespace BallFramework
 		m_ball{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 10 }, m_ballImage{ nullptr },
 		m_bricks{ BRICKCOLUMNS }, m_bricksNumber{ 0 },
 		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ true },
-		m_scorePlayer1{ font }, m_scorePlayer2{ font },
-		m_buttonFont{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.38f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, black, white, "||" },
+		m_scorePlayer1{ white }, m_scorePlayer2{ white },
+		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.38f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, black, white, "||" },
 		m_isPaused{ false }
 	{
 		m_lastTimeScale = Time::GetTimeScale();
@@ -49,7 +49,9 @@ namespace BallFramework
 		InitializeBricks();
 
 		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("ball"));
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_font));
+		m_scorePlayer1.SetText(MakeText(m_scorePlayer1.ConvertToString(), white, m_font));
+		m_scorePlayer2.SetText(MakeText(m_scorePlayer2.ConvertToString(), white, m_font));
 
 		if (m_ballImage == nullptr)
 		{
@@ -246,6 +248,8 @@ namespace BallFramework
 		if (m_ball.GetPosition().GetX() < LEFTLIMIT)
 		{
 			m_scorePlayer1.AddPoints(1);
+			m_scorePlayer1.SetText(MakeText(m_scorePlayer1.ConvertToString(), white, m_font));
+			Repaint();
 			if (m_scorePlayer1.GetScore() == 5)
 			{
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player2 won!", nullptr);
@@ -258,6 +262,8 @@ namespace BallFramework
 		else if (m_ball.GetPosition().GetX() > RIGHTLIMIT)
 		{
 			m_scorePlayer2.AddPoints(1);
+			m_scorePlayer2.SetText(MakeText(m_scorePlayer2.ConvertToString(), white, m_font));
+			Repaint();
 			if (m_scorePlayer2.GetScore() == 5)
 			{
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player1 won!", nullptr);
@@ -448,18 +454,13 @@ namespace BallFramework
 		SDL_Rect aux1, aux2;
 		decltype(auto) scale = GetScale();
 
-		SDL_Texture* scoreTexture1 = m_scorePlayer1.GetText(renderer);
 		scale.PointToPixel(aux1, 2, 4, 0.5f, 0.5f);
-
-		SDL_Texture* scoreTexture2 = m_scorePlayer2.GetText(renderer);
 		scale.PointToPixel(aux2, -2, 4, 0.5f, 0.5f);
 
-		if (scoreTexture1 != nullptr && scoreTexture2 != nullptr)
+		if (m_scorePlayer1.GetText() != nullptr && m_scorePlayer2.GetText() != nullptr)
 		{
-			SDL_RenderCopy(renderer, scoreTexture1, nullptr, &aux1);
-			SDL_RenderCopy(renderer, scoreTexture2, nullptr, &aux2);
-			SDL_DestroyTexture(scoreTexture1);
-			SDL_DestroyTexture(scoreTexture2);
+			SDL_RenderCopy(renderer, m_scorePlayer1.GetText(), nullptr, &aux1);
+			SDL_RenderCopy(renderer, m_scorePlayer2.GetText(), nullptr, &aux2);
 		}
 		else
 		{
@@ -487,7 +488,7 @@ namespace BallFramework
 	void Pong::Pause()
 	{
 		m_pauseButton.ChangeFontColor();
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_font));
 		Repaint();
 		if (!m_isPaused)
 		{

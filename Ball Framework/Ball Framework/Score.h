@@ -11,12 +11,15 @@ namespace BallFramework
 	class Score
 	{
 	public:
-		Score(TTF_Font* font);
+		Score(const SDL_Color& color);
 		void AddPoints(uint16_t points);
+
 		uint16_t GetScore() const;
+		SDL_Color GetScoreColor() const;
 		std::string ConvertToString();
 
-		SDL_Texture* GetText(SDL_Renderer* renderer);
+		SDL_Texture* GetText();
+		void SetText(SDL_Texture* text);
 
 		void SetPosition(const Vector2& position);
 		void SetWidth(float width);
@@ -28,8 +31,9 @@ namespace BallFramework
 
 	private:
 		uint16_t m_points;
-		TTF_Font* m_font;
 		Vector2 m_position;
+		SDL_Texture* m_scoreText;
+		SDL_Color m_scoreColor;
 		float m_width, m_height;
 	};
 

@@ -102,18 +102,17 @@ namespace BallFramework
 
 	void Menu::PerformAction()
 	{
+		Game* game;
 		if (m_lastButton == &m_buttons.at(0))
 		{
-			Game* pong = new Pong(1000, 500, m_font, SDL_WINDOW_RESIZABLE, 60);
-			pong->Run();
-			delete pong;
+			game = new Pong(1000, 500, m_font, SDL_WINDOW_RESIZABLE, 60);
 		}
-		else 
+		else
 		{
-			Game* brickb = new BrickBreaker(500, 650, m_font, SDL_WINDOW_RESIZABLE, 60);
-			brickb->Run();
-			delete brickb;
+			game = new BrickBreaker(500, 650, m_font, SDL_WINDOW_RESIZABLE, 60);
 		}
+		game->Run();
+		delete game;
 	}
 
 	void Menu::DestroyButtons()
