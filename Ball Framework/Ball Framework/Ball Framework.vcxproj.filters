@@ -49,12 +49,6 @@
     <Filter Include="Source Files\Framework\PickUp">
       <UniqueIdentifier>{4b1d2ef4-1bb4-4007-92be-a6dd85bc23fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Logger">
-      <UniqueIdentifier>{aec19a05-e002-48a9-937c-3c2857b1ee6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Logger">
-      <UniqueIdentifier>{989d065c-5609-476c-95aa-6335b4442a9e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Framework\UI">
       <UniqueIdentifier>{d4983564-1a41-44a9-8ef6-67b22c6077d0}</UniqueIdentifier>
     </Filter>
@@ -119,9 +113,6 @@
     </ClCompile>
     <ClCompile Include="PlayerEntry.cpp">
       <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Logger.cpp">
-      <Filter>Source Files\Logger</Filter>
     </ClCompile>
     <ClCompile Include="Paths.cpp">
       <Filter>Source Files\Framework</Filter>
@@ -193,9 +184,6 @@
     </ClInclude>
     <ClInclude Include="PlayerEntry.h">
       <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Logger.h">
-      <Filter>Header Files\Logger</Filter>
     </ClInclude>
     <ClInclude Include="Paths.h">
       <Filter>Header Files\Framework</Filter>

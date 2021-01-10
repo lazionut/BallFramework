@@ -5,7 +5,7 @@
 #include "BrickBreaker.h"
 #include "Menu.h"
 #include "TestGame.h"
-#include "Logger.h"
+#include "../LoggerDLL/Logger.h"
 
 bool initializeSDL()
 {
@@ -33,6 +33,7 @@ int main(int argc, char** argv)
 	Paths::SetFilePath("../Assets/assetsPaths.txt");
 
 	Logger::Initialize();
+	INFO("System was initialized!");
 
 	srand(time(0));
 
