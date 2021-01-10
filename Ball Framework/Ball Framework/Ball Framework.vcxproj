@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="BallGame.cpp" />
     <ClCompile Include="BrickBreaker.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -175,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="BallGame.h" />
     <ClInclude Include="BrickBreaker.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Game.h" />
