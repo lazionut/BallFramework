@@ -34,6 +34,8 @@ namespace BallFramework
 		LOGGING_WARN("Game cleaned!");
 	}
 
+#pragma region PROTECTED METHODS
+
 	void Game::Stop()
 	{
 		m_running = false;
@@ -67,6 +69,19 @@ namespace BallFramework
 		color = { red, green, blue, alpha };
 		m_renderer.SetBackgroundColor(color);
 	}
+
+	void Game::Repaint()
+	{
+		SDL_Renderer* renderer = m_renderer.GetRenderer();
+		SDL_Color color = m_renderer.GetBackgroundColor();
+
+		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+		SDL_RenderClear(renderer);
+		Render(renderer);
+		SDL_RenderPresent(renderer);
+	}
+
+#pragma endregion
 
 	void Game::GameLoop()
 	{
@@ -118,17 +133,7 @@ namespace BallFramework
 		}
 	}
 
-	void Game::Repaint()
-	{
-		SDL_Renderer* renderer = m_renderer.GetRenderer();
-		SDL_Color color = m_renderer.GetBackgroundColor();
-
-		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-		SDL_RenderClear(renderer);
-		Render(renderer);
-		SDL_RenderPresent(renderer);
-	}
-
+#pragma region EVENTS
 	void Game::HandleEvents()
 	{
 		while (SDL_PollEvent(m_gameEvent.get()))
@@ -163,12 +168,12 @@ namespace BallFramework
 	{
 		switch (gameEvent->window.event)
 		{
-			//case SDL_WINDOWEVENT_SHOWN:
-			//	SDL_Log("Window %d shown", gameEvent->window.windowID);
-			//	break;
-			//case SDL_WINDOWEVENT_HIDDEN:
-			//	SDL_Log("Window %d hidden", gameEvent->window.windowID);
-			//	break;
+		//case SDL_WINDOWEVENT_SHOWN:
+		//	SDL_Log("Window %d shown", gameEvent->window.windowID);
+		//	break;
+		//case SDL_WINDOWEVENT_HIDDEN:
+		//	SDL_Log("Window %d hidden", gameEvent->window.windowID);
+		//	break;
 		case SDL_WINDOWEVENT_EXPOSED:
 			break;
 		case SDL_WINDOWEVENT_MOVED:
@@ -180,11 +185,23 @@ namespace BallFramework
 			m_renderer.SetSize(gameEvent->window.data1, gameEvent->window.data2);
 			break;
 		case SDL_WINDOWEVENT_MINIMIZED:
+			m_lastTime = Time::GetTimeScale();
 			Time::SetTimeScale(0.0f);
+			LOGGING_WARN("Window minimized!");
 			break;
 		case SDL_WINDOWEVENT_RESTORED:
+			Time::SetTimeScale(m_lastTime);
+			LOGGING_WARN("Window restored!");
 			break;
 		case SDL_WINDOWEVENT_MAXIMIZED:
+			m_lastTime = Time::GetTimeScale();
+			LOGGING_WARN("Window maximazed!");
+			break;
+		case SDL_WINDOWEVENT_ENTER:
+			LOGGING_WARN("Window entered, window id: {0}", gameEvent->window.windowID);
+			break;
+		case SDL_WINDOWEVENT_LEAVE:
+			LOGGING_WARN("Window leave, window id: {0}", gameEvent->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
 			break;
@@ -195,13 +212,14 @@ namespace BallFramework
 			LOGGING_WARN("Window closed!");
 			break;
 		default:
+			LOGGING_WARN("unknown event: {0}", gameEvent->window.event);
 			break;
 		}
 	}
+#pragma endregion
 
 	Game::~Game()
 	{
 		Clean();
 	}
-
 }

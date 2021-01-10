@@ -99,7 +99,7 @@ namespace BallFramework
 	{
 		SDL_DestroyTexture(m_ballImage);
 		SDL_DestroyTexture(m_pickUpImage);
-		Time::SetTimeScale(m_lastTimeScale);
+		Time::SetTimeScale(1.0f);
 		m_bricks.erase(m_bricks.begin(), m_bricks.end());
 	}
 

@@ -13,12 +13,12 @@ namespace BallFramework
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
 
-	constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
-	constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
-	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
-	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
+constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
+constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
@@ -122,7 +122,7 @@ namespace BallFramework
 	{
 		SDL_DestroyTexture(m_ballImage);
 		SDL_DestroyTexture(m_heartImage);
-		Time::SetTimeScale(m_lastTimeScale);
+		Time::SetTimeScale(1.0f);
 	}
 
 #pragma region Collision Methods
@@ -511,12 +511,12 @@ namespace BallFramework
 		{
 			m_lastTimeScale = Time::GetTimeScale();
 			Time::SetTimeScale(0);
-			m_isPaused = true;
+			m_isPaused = !m_isPaused;
 		}
 		else
 		{
 			Time::SetTimeScale(m_lastTimeScale);
-			m_isPaused = false;
+			m_isPaused = !m_isPaused;
 		}
 	}
 

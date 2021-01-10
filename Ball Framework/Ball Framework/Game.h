@@ -50,7 +50,8 @@ namespace BallFramework
 		Renderer m_renderer;
 		std::unique_ptr<SDL_Event> m_gameEvent;
 		uint16_t m_maxFPS;
-		bool m_running = false;
+		bool m_running;
+		float m_lastTime;
 
 		void GameLoop();
 
