@@ -30,6 +30,11 @@ private: //inherited methods
 	void MouseReleased(const SDL_MouseButtonEvent& mouse) override = 0;
 	void Render(SDL_Renderer* renderer) override = 0;
 
+private://not inherited methods
+	void Pause();
+	void RenderButton(SDL_Renderer* renderer);
+	bool IsMouseInButtonBounds(Sint32 x, Sint32 y);
+
 private: //SDL objects
 	SDL_Renderer* m_renderer;
 	SDL_Texture* m_ballImage;
