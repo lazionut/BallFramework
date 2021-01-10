@@ -23,7 +23,6 @@ namespace BallFramework
 		virtual ~Game();
 
 	protected:
-
 		virtual void Start() = 0;
 		virtual void OnClose() = 0;
 		virtual void CheckCollision() = 0;
@@ -47,7 +46,6 @@ namespace BallFramework
 		void Repaint();
 
 	private:
-
 		TimeManager m_timeManager;
 		Renderer m_renderer;
 		std::unique_ptr<SDL_Event> m_gameEvent;

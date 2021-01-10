@@ -22,7 +22,6 @@ namespace BallFramework
 		Time& operator=(const Time&) = delete;
 
 	public:
-
 		static double GetTimeSinceStartUp();
 		static double GetDeltaTime();
 		static double GetRealTime();

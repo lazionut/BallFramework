@@ -13,7 +13,6 @@ namespace BallFramework
 		PlayerEntry(const PlayerEntry& other) noexcept;
 		PlayerEntry(PlayerEntry&& other) noexcept;
 
-
 		std::string GetPlayerName() const;
 		int GetGamesPlayed() const;
 		int GetGamesWon() const;
@@ -25,7 +24,6 @@ namespace BallFramework
 
 		PlayerEntry& operator= (const PlayerEntry& other);
 		PlayerEntry& operator= (PlayerEntry&& other) noexcept;
-
 
 		bool operator>(const PlayerEntry& other) const;
 		bool operator>=(const PlayerEntry& other) const;

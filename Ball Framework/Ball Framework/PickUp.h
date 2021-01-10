@@ -12,7 +12,6 @@ namespace BallFramework
 	class PickUp : public Ball
 	{
 	public:
-
 		PickUp();
 		PickUp(std::function<void()> startAction, const Vector2& position, const float size, const Vector2& direction, float speed);
 		PickUp(std::function<void()> startAction, std::function<void()> stopAction);
@@ -30,7 +29,6 @@ namespace BallFramework
 		void StartMoving();
 
 	private:
-
 		std::function<void()> m_startAction;
 		std::function<void()> m_StopAction;
 		float m_time;

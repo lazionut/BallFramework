@@ -1,6 +1,6 @@
 #pragma once
-#include"Vector2.h"
-#include"Time.h"
+#include "Vector2.h"
+#include "Time.h"
 #include "Rectangle.h"
 
 namespace BallFramework

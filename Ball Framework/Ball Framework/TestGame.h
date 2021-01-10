@@ -12,7 +12,6 @@ namespace BallFramework
 		TestGame(uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
 
 	private:
-
 		void Start() override;
 		void OnClose() override;
 		void CheckCollision() override;

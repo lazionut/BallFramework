@@ -53,7 +53,7 @@ namespace BallFramework
 
 		if (m_ballImage == nullptr)
 		{
-			std::cout << "Could not load the ball image!\n";
+			LOGGING_ERROR("Pong ball image not found!");
 			Stop();
 			return;
 		}
@@ -62,7 +62,7 @@ namespace BallFramework
 		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
 		if (m_pickUpImage == nullptr)
 		{
-			std::cout << "could not load pickup texture\n";
+			LOGGING_ERROR("Pong pick-up image not found!");
 			Stop();
 			return;
 		}
@@ -372,7 +372,7 @@ namespace BallFramework
 			auto difference = 0.0f;
 
 			auto type = m_pickUpGenerator.GetPickUpType();
-			std::cout << "PickUp type is: " << static_cast<int>(type) << "\n";
+			LOGGING_INFO("Pong pick-up type is: {0}", static_cast<int>(type));
 
 			switch (type)
 			{
@@ -454,7 +454,7 @@ namespace BallFramework
 		}
 		else
 		{
-			std::cout << "Font was not loaded!" << std::endl;
+			LOGGING_ERROR("Pong font not found!");
 		}
 	}
 

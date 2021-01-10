@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <unordered_map>
 #include <fstream>
+#include "../LoggerDLL/Logger.h"
 
 namespace BallFramework
 {
@@ -18,7 +19,6 @@ namespace BallFramework
 		static std::string ReturnObjectPath(const std::string& objectKey);
 
 	private:
-
 		Paths();
 		Paths(const Paths&) = delete;
 

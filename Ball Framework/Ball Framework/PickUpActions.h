@@ -4,8 +4,8 @@
 #include "Score.h"
 
 namespace BallFramework
-
 {
+
 	class PickUpActions
 	{
 	public:

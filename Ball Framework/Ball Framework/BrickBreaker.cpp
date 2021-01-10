@@ -62,9 +62,16 @@ namespace BallFramework
 		m_heartImage = LoadGameImage(Paths::ReturnObjectPath("redHeart"));
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
 
-		if (m_ballImage == nullptr || m_heartImage == nullptr)
+		if (m_ballImage == nullptr)
 		{
-			std::cout << "Could not load image\n";
+			LOGGING_ERROR("BrickBreaker ball image not found!");
+			Stop();
+			return;
+		}
+
+		if (m_heartImage == nullptr)
+		{
+			LOGGING_ERROR("BrickBreaker heart image not found!");
 			Stop();
 			return;
 		}
@@ -74,7 +81,7 @@ namespace BallFramework
 		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
 		if (m_pickUpImage == nullptr)
 		{
-			std::cout << "could not load pickup texture\n";
+			LOGGING_ERROR("BrickBreaker pick-up image not found!");
 			Stop();
 			return;
 		}
@@ -354,7 +361,7 @@ namespace BallFramework
 		}
 		else
 		{
-			std::cout << "Font was not loaded!" << std::endl;
+			LOGGING_ERROR("BrickBreaker font not found!");
 		}
 	}
 
@@ -429,6 +436,9 @@ namespace BallFramework
 		if ((rand() % 100) > PICKUPSPAWNCHANCE)
 		{
 			m_isPickCreated = true;
+
+			auto type = m_pickUpGenerator.GetPickUpType();
+			LOGGING_INFO("BrickBreaker pick-up type is: {0}", static_cast<int>(type));
 
 			switch (m_pickUpGenerator.GetPickUpType())
 			{

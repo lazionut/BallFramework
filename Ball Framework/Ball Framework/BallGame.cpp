@@ -44,14 +44,6 @@ namespace BallFramework
 
 	}
 
-	void BallGame::OnClose()
-	{
-		SDL_DestroyTexture(m_ballImage);
-		SDL_DestroyTexture(m_pickUpImage);
-		Time::SetTimeScale(m_lastTimeScale);
-		m_bricks.erase(m_bricks.begin(), m_bricks.end());
-	}
-
 	void BallGame::KeyPressed(const SDL_Keycode& key)
 	{
 		if (!m_isPaused)
@@ -189,7 +181,7 @@ namespace BallFramework
 			}
 			else
 			{
-				std::cout << "Font was not loaded!" << std::endl;
+				LOGGING_ERROR("BallGame score font not found!");
 			}
 		}
 
@@ -200,7 +192,7 @@ namespace BallFramework
 		}
 		else
 		{
-			std::cout << "Font was not loaded!" << std::endl;
+			LOGGING_ERROR("BallGame score font not found!");
 		}
 
 	}

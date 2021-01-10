@@ -14,14 +14,14 @@ namespace BallFramework
 		InitMenu();
 	}
 
-
 	void Menu::InitMenu()
 	{
 		LoadFont();
 		InitButtons();
 	}
 
-	void Menu::Start() {
+	void Menu::Start() 
+	{
 	}
 
 	void Menu::OnClose()
@@ -48,14 +48,16 @@ namespace BallFramework
 
 	void Menu::MousePressed(const SDL_MouseButtonEvent& mouse)
 	{
-		if (IsInBounds(mouse.x, mouse.y)) {
+		if (IsInBounds(mouse.x, mouse.y)) 
+		{
 			m_lastButton->ChangeBackColor();
 		}
 	}
 
 	void Menu::MouseReleased(const SDL_MouseButtonEvent& mouse)
 	{
-		if (m_lastButton != nullptr && IsInBounds(mouse.x, mouse.y)) {
+		if (m_lastButton != nullptr && IsInBounds(mouse.x, mouse.y)) 
+		{
 			m_lastButton->ChangeBackColor();
 			PerformAction();
 		}
@@ -102,12 +104,12 @@ namespace BallFramework
 	{
 		if (m_lastButton == &m_buttons.at(0))
 		{
-
 			Game* pong = new Pong(1000, 500, m_font, SDL_WINDOW_RESIZABLE, 60);
 			pong->Run();
 			delete pong;
 		}
-		else {
+		else 
+		{
 			Game* brickb = new BrickBreaker(500, 650, m_font, SDL_WINDOW_RESIZABLE, 60);
 			brickb->Run();
 			delete brickb;
@@ -124,7 +126,7 @@ namespace BallFramework
 		m_font = TTF_OpenFont("../Assets/Pixel7.ttf", 24);
 		if (m_font == NULL)
 		{
-			std::cout << "Could not load the font! " << TTF_GetError() << std::endl;
+			LOGGING_ERROR("Menu font not found!");
 			TTF_CloseFont(m_font);
 		}
 	}
@@ -139,15 +141,17 @@ namespace BallFramework
 		int count = 0;
 		for (auto& button : m_buttons)
 		{
-			if (count == 0) {
+			if (count == 0) 
+			{
 				button.SetButton(Vector2(0.0f, 3.0f), 3.0f, 0.7f, white, black, "Play Pong");
 				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 			}
-			else {
+			else 
+			{
 				button.SetButton(Vector2(0.0f, 1.5f), 5.0f, 0.7f, white, black, "Play BrickBreaker");
 				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 			}
-			count++;
+			++count;
 		}
 	}
 

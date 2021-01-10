@@ -7,13 +7,11 @@ namespace BallFramework
 	static SDL_Color red = Colors::ReturnBasicColor(static_cast<uint8_t>(Colors::BasicColors::red));;
 	static SDL_Color black = Colors::ReturnBasicColor(static_cast<uint8_t>(Colors::BasicColors::black));
 
-
 	Button::Button()
 		: Rectangle{ Vector2::zero, 0.0f, 0.0f },
 		m_text{ "" }, m_backColor{ white }, m_fontColor{ black }, m_changedBack{ false }, m_changedFont{ false },
 		m_buttonText{ nullptr }, m_rect{ 0, 0, 0, 0 }
 	{
-
 	}
 
 	Button::Button(const Vector2& position, const float& width, const float& height, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& text)
@@ -21,7 +19,6 @@ namespace BallFramework
 		m_text{ text }, m_backColor{ backColor }, m_fontColor{ fontColor }, m_changedBack{ false },
 		m_changedFont{ false }, m_buttonText{ nullptr }, m_rect{ 0, 0, 0, 0 }
 	{
-
 	}
 
 	SDL_Color Button::GetBackColor() const

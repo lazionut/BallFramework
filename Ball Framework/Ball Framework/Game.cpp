@@ -31,7 +31,7 @@ namespace BallFramework
 
 	void Game::Clean()
 	{
-		std::cout << "Game cleaned!\n";
+		LOGGING_WARN("Game cleaned!");
 	}
 
 	void Game::Stop()
@@ -111,7 +111,7 @@ namespace BallFramework
 
 			if (fpsTimer >= 1.0)
 			{
-				std::cout << "FPS: " << fpsCounter << "\n";
+				LOGGING_TRACE("FPS: {0}", fpsCounter);
 				fpsCounter = 0;
 				fpsTimer = 0.0;
 			}
@@ -174,7 +174,7 @@ namespace BallFramework
 		case SDL_WINDOWEVENT_MOVED:
 			m_timeManager.UpdateTime();
 			m_timeManager.UpdateDone();
-			std::cout << "windows moved\n";
+			LOGGING_WARN("Window moved!");
 			break;
 		case SDL_WINDOWEVENT_RESIZED:
 			m_renderer.SetSize(gameEvent->window.data1, gameEvent->window.data2);
@@ -192,7 +192,7 @@ namespace BallFramework
 			break;
 		case SDL_WINDOWEVENT_CLOSE:
 			m_running = false;
-			SDL_Log("Window %d closed", gameEvent->window.windowID);
+			LOGGING_WARN("Window closed!");
 			break;
 		default:
 			break;

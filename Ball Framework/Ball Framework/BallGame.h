@@ -19,14 +19,10 @@ namespace BallFramework
 	class BallGame : public Game
 	{
 	public:
-
-		BallGame();
 		BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit);
 
 	private: //inherited methods
-
 		void Update() override final;
-		void OnClose() override final;
 		void KeyPressed(const SDL_Keycode& key) override final;
 		void KeyReleased(const SDL_Keycode& key) override final;
 		void MousePressed(const SDL_MouseButtonEvent& mouse) override final;
@@ -35,11 +31,11 @@ namespace BallFramework
 
 	private://not inherited methods
 		void Pause();
-		void RenderButton(SDL_Renderer* renderer);
+
 		bool IsMouseInButtonBounds(Sint32 x, Sint32 y);
 
+		void RenderButton(SDL_Renderer* renderer);
 		void RenderBricks(SDL_Renderer* renderer);
-
 		void RenderScore(SDL_Renderer* renderer);
 
 		virtual void CreatePickUp(const Vector2& position) = 0;
@@ -52,7 +48,6 @@ namespace BallFramework
 		SDL_Color m_color;
 
 	private:// custom types
-
 		Paddle m_player1;
 		std::optional<Paddle> m_player2;
 
@@ -76,7 +71,6 @@ namespace BallFramework
 
 		float m_lastTimeScale;
 		bool m_isPaused;
-
 	};
 
 }

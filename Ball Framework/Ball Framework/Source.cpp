@@ -13,15 +13,15 @@ bool initializeSDL()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 	{
-		std::cout << "Subsystem initialized!\n";
+		LOGGING_WARN("Subsystem initialized!");
 
 		if (IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)
 		{
-			std::cout << "SDL_IMAGE initialized!\n";
+			LOGGING_WARN("SDL_image initialized!");
 
 			if (TTF_Init() == 0)
 			{
-				std::cout << "TTF initialized!\n";
+				LOGGING_WARN("TTF initialized!");
 				return true;
 			}
 		}
@@ -32,10 +32,9 @@ bool initializeSDL()
 
 int main(int argc, char** argv)
 {
-	Paths::SetFilePath("../Assets/assetsPaths.txt");
-
 	Logger::Initialize();
-	LOGGING_INFO("System was initialized!");
+
+	Paths::SetFilePath("../Assets/assetsPaths.txt");
 
 	srand(time(0));
 

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "PickUp.h"
 #include "PickUpActions.h"
 
@@ -9,7 +8,6 @@ namespace BallFramework
 	class PickUpGenerator
 	{
 	public:
-
 		enum class Actions : uint8_t
 		{
 			SPEEDCHANGE,

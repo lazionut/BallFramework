@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include "ScreenScale.h"
 #include <SDL_TTF.h>
+#include "../LoggerDLL/Logger.h"
 
 namespace BallFramework
 {
@@ -29,8 +30,8 @@ namespace BallFramework
 		void SetSize(uint16_t width, uint16_t height);
 
 		~Renderer();
-	private:
 
+	private:
 		void Clean();
 
 		SDL_Window* m_window;

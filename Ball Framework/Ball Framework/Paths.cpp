@@ -20,7 +20,9 @@ namespace BallFramework
 
 	void Paths::AddObjectPath(const std::string& objectKey, const std::string& path)
 	{
-		if (m_filePath == "") return;
+		if (m_filePath == "") 
+			return;
+
 		auto it = m_assetsPaths.find(objectKey);
 		if (it == m_assetsPaths.end())
 			++m_numberOfAssets;
@@ -38,7 +40,9 @@ namespace BallFramework
 
 	std::string Paths::ReturnObjectPath(const std::string& objectKey)
 	{
-		if (m_filePath == "" || m_numberOfAssets == 0) return "";
+		if (m_filePath == "" || m_numberOfAssets == 0)
+			return "";
+
 		auto it = m_assetsPaths.find(objectKey);
 		if (it != m_assetsPaths.end())
 		{
@@ -62,6 +66,7 @@ namespace BallFramework
 				m_numberOfAssets = 0;
 				return;
 			}
+
 			fin >> m_numberOfAssets;
 			std::string objectKey, path;
 			for (auto index = 0; index < m_numberOfAssets; index++)
@@ -72,8 +77,9 @@ namespace BallFramework
 			}
 			fin.close();
 		}
-		else {
-			std::cout << "Could not open file!";
+		else 
+		{
+			LOGGING_ERROR("File from path not found!");
 		}
 	}
 

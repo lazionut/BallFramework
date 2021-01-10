@@ -13,12 +13,12 @@ namespace BallFramework
 
 		if (m_window)
 		{
-			std::cout << "window created!\n";
+			LOGGING_WARN("Window created!");
 			m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 
 			if (m_renderer)
 			{
-				std::cout << "renderer created!\n";
+				LOGGING_WARN("Renderer created!");
 				m_scale.Set(width, height);
 
 				return true;
@@ -54,7 +54,7 @@ namespace BallFramework
 			return result;
 		}
 
-		std::cout << "Could not load the image!\n";
+		LOGGING_ERROR("Image not found!");
 		return nullptr;
 	}
 
@@ -79,7 +79,7 @@ namespace BallFramework
 
 	Renderer::~Renderer()
 	{
-		std::cout << "renderer cleaned!\n";
+		LOGGING_WARN("Renderer cleaned!");
 		Clean();
 	}
 

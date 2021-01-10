@@ -3,10 +3,6 @@
 namespace BallFramework
 {
 
-	PlayersStatistics::PlayersStatistics()
-	{
-	}
-
 	PlayersStatistics::PlayersStatistics(const std::string& filePath) : m_noPlayers{ 0 }, m_filePath{ filePath }
 	{
 		ReadStatistics(filePath);
@@ -45,7 +41,7 @@ namespace BallFramework
 			}
 		}
 		else
-			std::cout << "File could not be opened ";
+			LOGGING_ERROR("Player statistics file not found!");
 		fin.close();
 	}
 
@@ -71,6 +67,7 @@ namespace BallFramework
 					break;
 				};
 			}
+
 			if (!found)
 			{
 				++m_noPlayers;
@@ -101,10 +98,8 @@ namespace BallFramework
 
 	std::ostream& operator<<(std::ostream& outStream, PlayersStatistics& other)
 	{
-
 		for (auto& player : other.m_statistics)
 		{
-
 			outStream << player.second.GetPlayerName() << " ";
 			outStream << player.second.GetGamesPlayed() << " ";
 			outStream << player.second.GetGamesWon() << " ";

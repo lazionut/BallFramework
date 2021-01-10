@@ -19,7 +19,7 @@ namespace BallFramework
 
 		if (ballImage == nullptr)
 		{
-			std::cout << "Could not load ball image!\n";
+			LOGGING_ERROR("Test ball image not found!");
 			Stop();
 			return;
 		}

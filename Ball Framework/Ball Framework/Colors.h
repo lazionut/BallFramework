@@ -10,7 +10,6 @@ namespace BallFramework
 	class Colors
 	{
 	public:
-
 		static enum class BasicColors
 		{
 			white,
@@ -55,6 +54,7 @@ namespace BallFramework
 		static void ClearCustomColor(std::string colorName);
 
 		static SDL_Color ReturnCustomColor(std::string colorName);
+
 	private:
 		Colors();
 	};
