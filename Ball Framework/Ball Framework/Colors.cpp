@@ -16,6 +16,35 @@
 //const SDL_Color Colors::brown = SDL_Color{ 130, 65, 65, 255 };
 //const SDL_Color Colors::gray = SDL_Color{ 130, 130, 130, 255 };
 
+std::unordered_map<std::string, std::tuple<uint8_t, uint8_t, uint8_t>> Colors::CustomColors;
+
+void Colors::AddCustomColor(std::string colorName, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0)
+{
+	CustomColors[colorName] = std::make_tuple(r, g, b);
+}
+
+bool Colors::RemoveCustomColor(std::string colorName)
+{
+	if (CustomColors.erase(colorName))
+		return true;
+	else return false;
+}
+
+void Colors::ClearCustomColor(std::string colorName)
+{
+	CustomColors.clear();
+}
+
+SDL_Color Colors::ReturnCustomColor(std::string colorName)
+{
+	if (CustomColors.find(colorName) != CustomColors.end())
+	{
+		auto&& [r, g, b] = CustomColors[colorName];
+		return SDL_Color{ r, g, b , 255 };
+	}
+	return SDL_Color{ 0,0,0,0 };
+}
+
 Colors::Colors()
 {
 }

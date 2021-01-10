@@ -45,6 +45,13 @@ public:
 	 const static SDL_Color brown;
 	 const static SDL_Color gray;*/
 
+	static std::unordered_map<std::string, std::tuple<uint8_t, uint8_t, uint8_t>> CustomColors;
+
+	static void AddCustomColor(std::string colorName, uint8_t r, uint8_t g, uint8_t b);
+	static bool RemoveCustomColor(std::string colorName);
+	static void ClearCustomColor(std::string colorName);
+
+	static SDL_Color ReturnCustomColor(std::string colorName);
 private:
 	Colors();
 };

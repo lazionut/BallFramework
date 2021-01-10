@@ -135,6 +135,9 @@
     <ClCompile Include="BallGame.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Colors.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -204,6 +207,9 @@
       <Filter>Header Files\Framework\UI</Filter>
     </ClInclude>
     <ClInclude Include="BallGame.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Colors.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,8 +1,8 @@
 #include "Button.h"
 
-static SDL_Color white = { 255, 255, 255, 255 };
-static SDL_Color red = { 255, 0, 0, 255 };
-static SDL_Color black = { 0, 0, 0, 255 };
+static SDL_Color white = Colors::ReturnBasicColor(static_cast<uint8_t>(Colors::BasicColors::white));
+static SDL_Color red = Colors::ReturnBasicColor(static_cast<uint8_t>(Colors::BasicColors::red));;
+static SDL_Color black = Colors::ReturnBasicColor(static_cast<uint8_t>(Colors::BasicColors::black));
 
 
 Button::Button()

@@ -1,5 +1,6 @@
 #pragma once
 #include "Rectangle.h"
+#include "Colors.h"
 #include <SDL_ttf.h>
 
 
