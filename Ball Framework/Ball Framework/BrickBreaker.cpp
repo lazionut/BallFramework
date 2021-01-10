@@ -64,14 +64,14 @@ namespace BallFramework
 
 		if (m_ballImage == nullptr)
 		{
-			LOGGING_ERROR("BrickBreaker ball image not found!");
+			LOGGING_ERROR("BrickBreaker -> ball image not found!");
 			Stop();
 			return;
 		}
 
 		if (m_heartImage == nullptr)
 		{
-			LOGGING_ERROR("BrickBreaker heart image not found!");
+			LOGGING_ERROR("BrickBreaker -> heart image not found!");
 			Stop();
 			return;
 		}
@@ -81,7 +81,7 @@ namespace BallFramework
 		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
 		if (m_pickUpImage == nullptr)
 		{
-			LOGGING_ERROR("BrickBreaker pick-up image not found!");
+			LOGGING_ERROR("BrickBreaker -> pick-up image not found!");
 			Stop();
 			return;
 		}
@@ -133,26 +133,7 @@ namespace BallFramework
 		CheckBallWallCollision();
 		CheckBallPaddleCollision();
 		CheckBallBrickCollision();
-
-		if (m_isPickActive)
-		{
-			if (m_pickUp.IsMoving())
-			{
-				if (m_pickUp.CheckCollision(m_paddle))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-				}
-			}
-			else //check collision with ball
-			{
-				if (m_pickUp.CheckCollision(m_ball))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-				}
-			}
-		}
+		CheckPickUpCollision();
 	}
 
 	void BrickBreaker::CheckPaddleWallCollision()
@@ -160,10 +141,12 @@ namespace BallFramework
 		if (m_paddle.GetPosition().GetX() < LEFTLIMIT + m_paddle.GetWidth() / 2)
 		{
 			m_paddle.SetPosition(LEFTLIMIT + m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
+			LOGGING_INFO("BrickBreaker -> player paddle-left wall collision");
 		}
 		else if (m_paddle.GetPosition().GetX() > RIGHTLIMIT - m_paddle.GetWidth() / 2)
 		{
 			m_paddle.SetPosition(RIGHTLIMIT - m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
+			LOGGING_INFO("BrickBreaker -> player paddle-right wall collision");
 		}
 	}
 
@@ -175,25 +158,27 @@ namespace BallFramework
 		{
 			m_ball.GetPosition().SetX(RIGHTLIMIT - m_ball.GetSize() / 2);
 			m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
-			return;
+			LOGGING_INFO("BrickBreaker -> ball-right wall collision");
 		}
 		else if (ballPosition.GetX() - m_ball.GetSize() / 2 < LEFTLIMIT)
 		{
 			m_ball.SetPosition(LEFTLIMIT + m_ball.GetSize() / 2, m_ball.GetPosition().GetY());
 			m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+			LOGGING_INFO("BrickBreaker -> ball-left wall collision");
 		}
 
 		if (ballPosition.GetY() > BRICKLIMIT_Y)
 		{
 			m_ball.GetPosition().SetY(BRICKLIMIT_Y);
 			m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
-			return;
+			LOGGING_INFO("BrickBreaker -> ball-upper wall collision");
 		}
 
 		if (ballPosition.GetY() < LOWERLIMIT)
 		{
 			m_hearts.pop_back();
 			--m_heartCounter;
+			LOGGING_INFO("BrickBreaker -> lose one heart");
 			if (m_heartCounter == 0)
 			{
 				//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
@@ -233,6 +218,7 @@ namespace BallFramework
 			else
 			{
 				m_ball.SetDirection(Vector2::down);
+				LOGGING_INFO("BrickBreaker -> ball-paddle lose collision");
 			}
 		}
 	}
@@ -252,8 +238,36 @@ namespace BallFramework
 
 					m_ball.ChangeDirection(*element);
 					row.erase(element);
+
+					LOGGING_INFO("BrickBreaker -> ball-brick collision");
+
 					m_score.AddPoints(1);
 					return;
+				}
+			}
+		}
+	}
+
+	void BrickBreaker::CheckPickUpCollision()
+	{
+		if (m_isPickActive)
+		{
+			if (m_pickUp.IsMoving())
+			{
+				if (m_pickUp.CheckCollision(m_paddle))
+				{
+					m_pickUp.InvokeAction();
+					m_isPickActive = false;
+					LOGGING_INFO("BrickBreaker -> player paddle-pick-up collision");
+				}
+			}
+			else 
+			{
+				if (m_pickUp.CheckCollision(m_ball))
+				{
+					m_pickUp.InvokeAction();
+					m_isPickActive = false;
+					LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
 				}
 			}
 		}
@@ -361,7 +375,7 @@ namespace BallFramework
 		}
 		else
 		{
-			LOGGING_ERROR("BrickBreaker font not found!");
+			LOGGING_ERROR("BrickBreaker -> font not found!");
 		}
 	}
 
@@ -438,7 +452,7 @@ namespace BallFramework
 			m_isPickCreated = true;
 
 			auto type = m_pickUpGenerator.GetPickUpType();
-			LOGGING_INFO("BrickBreaker pick-up type is: {0}", static_cast<int>(type));
+			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(type));
 
 			switch (m_pickUpGenerator.GetPickUpType())
 			{

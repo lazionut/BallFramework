@@ -53,7 +53,7 @@ namespace BallFramework
 
 		if (m_ballImage == nullptr)
 		{
-			LOGGING_ERROR("Pong ball image not found!");
+			LOGGING_ERROR("Pong -> ball image not found!");
 			Stop();
 			return;
 		}
@@ -62,7 +62,7 @@ namespace BallFramework
 		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
 		if (m_pickUpImage == nullptr)
 		{
-			LOGGING_ERROR("Pong pick-up image not found!");
+			LOGGING_ERROR("Pong -> pick-up image not found!");
 			Stop();
 			return;
 		}
@@ -142,11 +142,13 @@ namespace BallFramework
 
 			m_ball.GetPosition().SetY(UPPERLIMIT - m_ball.GetSize() / 2);
 			m_ball.GetDirection().GetY() *= -1;
+			LOGGING_INFO("Pong -> ball-upper wall collision");
 		}
 		else if (m_ball.GetPosition().GetY() - m_ball.GetSize() / 2 < LOWERLIMIT)
 		{
 			m_ball.GetPosition().SetY(LOWERLIMIT + m_ball.GetSize() / 2);
 			m_ball.GetDirection().GetY() *= -1;
+			LOGGING_INFO("Pong -> ball-lower wall collision");
 		}
 	}
 
@@ -162,6 +164,7 @@ namespace BallFramework
 			m_ball.GetDirection().SetY(difference);
 			m_ball.AddSpeed(0.25f);
 			m_ball.GetDirection().Normalize();
+			LOGGING_INFO("Pong -> ball-player1 paddle collision");
 		}
 		else if (m_ball.CheckCollision(m_paddlePlayer2))
 		{
@@ -173,6 +176,7 @@ namespace BallFramework
 			m_ball.GetDirection().SetY(difference);
 			m_ball.AddSpeed(0.25f);
 			m_ball.GetDirection().Normalize();
+			LOGGING_INFO("Pong -> ball-player2 paddle collision");
 		}
 	}
 
@@ -189,6 +193,8 @@ namespace BallFramework
 
 					m_ball.ChangeDirection(*element);
 					row.erase(element);
+
+					LOGGING_INFO("Pong -> ball-brick collision");
 
 					--m_bricksNumber;
 
@@ -214,11 +220,13 @@ namespace BallFramework
 				{
 					m_pickUp.InvokeAction();
 					m_isPickActive = false;
+					LOGGING_INFO("Pong -> player1 paddle-pick-up collision");
 				}
 				else if (m_pickUp.CheckCollision(m_paddlePlayer2))
 				{
 					m_pickUp.InvokeAction();
 					m_isPickActive = false;
+					LOGGING_INFO("Pong -> player2 paddle-pick-up collision");
 				}
 			}
 			else
@@ -227,6 +235,7 @@ namespace BallFramework
 				{
 					m_pickUp.InvokeAction();
 					m_isPickActive = false;
+					LOGGING_INFO("Pong -> ball-pick-up collision");
 				}
 			}
 		}
@@ -372,7 +381,7 @@ namespace BallFramework
 			auto difference = 0.0f;
 
 			auto type = m_pickUpGenerator.GetPickUpType();
-			LOGGING_INFO("Pong pick-up type is: {0}", static_cast<int>(type));
+			LOGGING_INFO("Pong -> pick-up type is: {0}", static_cast<int>(type));
 
 			switch (type)
 			{
@@ -454,7 +463,7 @@ namespace BallFramework
 		}
 		else
 		{
-			LOGGING_ERROR("Pong font not found!");
+			LOGGING_ERROR("Pong -> font not found!");
 		}
 	}
 
