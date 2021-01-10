@@ -1,6 +1,5 @@
 #include "BallGame.h"
 
-
 BallGame::BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit) :
 	Game(title, width, height, flags, maxFPS, widthUnit, heightUnit),
 	m_renderer{ nullptr },
@@ -12,6 +11,114 @@ BallGame::BallGame(const std::string& title, uint16_t width, uint16_t height, TT
 	m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
 {
 	m_lastTimeScale = Time::GetTimeScale();
+}
+
+void BallGame::Update()
+{
+	m_player1.Move();
+
+	if (m_player2.has_value())
+		m_player2->Move();
+
+	m_ball.Move();
+
+	if (m_isPickCreated)
+	{
+		if (m_pickUp.IsActionActive())
+		{
+			if (m_pickUp.ContinueAction())
+			{
+				m_isPickCreated = false;
+				return;
+			}
+		}
+
+		if (m_pickUp.IsMoving())
+		{
+			m_pickUp.Move();
+		}
+	}
+
+}
+
+void BallGame::OnClose()
+{
+	SDL_DestroyTexture(m_ballImage);
+	SDL_DestroyTexture(m_pickUpImage);
+	Time::SetTimeScale(m_lastTimeScale);
+	m_bricks.erase(m_bricks.begin(), m_bricks.end());
+}
+
+void BallGame::KeyPressed(const SDL_Keycode& key)
+{
+	if (!m_isPaused)
+	{
+		m_player1.KeyPressed(key);
+		if (m_player2.has_value())
+			m_player2->KeyPressed(key);
+	}
+}
+
+void BallGame::KeyReleased(const SDL_Keycode& key)
+{
+	if (key == SDLK_p || key == SDLK_ESCAPE)
+	{
+		Pause();
+	}
+	else if (!m_isPaused)
+	{
+		m_player1.KeyReleased(key);
+		if (m_player2.has_value())
+			m_player2->KeyReleased(key);
+	}
+}
+
+void BallGame::MousePressed(const SDL_MouseButtonEvent& mouse)
+{
+	IsMouseInButtonBounds(mouse.x, mouse.y);
+}
+
+void BallGame::MouseReleased(const SDL_MouseButtonEvent& mouse)
+{
+	if (IsMouseInButtonBounds(mouse.x, mouse.y))
+	{
+		Pause();
+	}
+}
+
+void BallGame::Render(SDL_Renderer* renderer)
+{
+	m_renderer = renderer;
+
+	SDL_Rect aux;
+	decltype(auto) scale = GetScale();
+
+	RenderButton(m_renderer);
+
+	auto& [r, g, b, a] = m_color;
+
+	SDL_SetRenderDrawColor(m_renderer, r, g, b, a);
+
+	scale.PointToPixel(aux, m_player1.GetPosition(), m_player1.GetWidth(), m_player1.GetHeight()); //player1
+	SDL_RenderFillRect(m_renderer, &aux);
+
+	if (m_player2.has_value())
+	{
+		scale.PointToPixel(aux, m_player2->GetPosition(), m_player2->GetWidth(), m_player2->GetHeight()); //player2
+		SDL_RenderFillRect(m_renderer, &aux);
+	}
+
+	scale.PointToPixel(aux, m_ball.GetPosition(), m_ball.GetSize(), m_ball.GetSize()); //ball
+	SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &aux);
+
+	RenderScore(m_renderer);
+	RenderBricks(m_renderer);
+
+	if (m_isPickActive)
+	{
+		scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize()); //pickup
+		SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &aux);
+	}
 }
 
 void BallGame::Pause()
@@ -92,4 +199,6 @@ void BallGame::RenderScore(SDL_Renderer* renderer)
 	{
 		std::cout << "Font was not loaded!" << std::endl;
 	}
+
 }
+
