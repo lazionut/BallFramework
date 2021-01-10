@@ -60,3 +60,36 @@ void BallGame::RenderBricks(SDL_Renderer* renderer)
 			SDL_RenderFillRect(renderer, &rect);
 		}
 }
+
+void BallGame::RenderScore(SDL_Renderer* renderer)
+{
+	SDL_Rect aux1, aux2;
+	decltype(auto) scale = GetScale();
+
+	SDL_Texture* scoreTexture1 = m_score1.GetText(renderer);
+	scale.PointToPixel(aux1, m_score1.GetPosition().GetX(), m_score1.GetPosition().GetY(), m_score1.GetWidth(), m_score1.GetHeight());
+	if (m_score2.has_value())
+	{
+		SDL_Texture* scoreTexture2 = m_score2->GetText(renderer);
+		scale.PointToPixel(aux2, m_score2->GetPosition().GetX(), m_score2->GetPosition().GetY(), m_score2->GetWidth(), m_score2->GetHeight());
+		if (scoreTexture2 != nullptr)
+		{
+			SDL_RenderCopy(renderer, scoreTexture2, nullptr, &aux2);
+			SDL_DestroyTexture(scoreTexture2);
+		}
+		else
+		{
+			std::cout << "Font was not loaded!" << std::endl;
+		}
+	}
+
+	if (scoreTexture1 != nullptr)
+	{
+		SDL_RenderCopy(renderer, scoreTexture1, nullptr, &aux1);
+		SDL_DestroyTexture(scoreTexture1);
+	}
+	else
+	{
+		std::cout << "Font was not loaded!" << std::endl;
+	}
+}

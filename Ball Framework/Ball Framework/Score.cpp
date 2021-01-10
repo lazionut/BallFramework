@@ -1,7 +1,9 @@
 #include "Score.h"
 
 Score::Score(TTF_Font* font) :
-	m_font{ font }
+	m_font{ font },
+	m_position {Vector2::zero},
+	m_width{ 0 }, m_height{ 0 } 
 {
 	m_points = 0;
 }
@@ -32,4 +34,34 @@ SDL_Texture* Score::GetText(SDL_Renderer* renderer)
 		SDL_FreeSurface(loadedText);
 		return result;
 	}
+}
+
+void Score::SetPosition(const Vector2& position)
+{
+	m_position = position;
+}
+
+void Score::SetWidth(float width)
+{
+	m_width = width;
+}
+
+void Score::SetHeight(float height)
+{
+	m_height = height;
+}
+
+Vector2 Score::GetPosition()
+{
+	return m_position;
+}
+
+float Score::GetWidth()
+{
+	return m_width;
+}
+
+float Score::GetHeight()
+{
+	return m_height;
 }

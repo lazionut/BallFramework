@@ -31,9 +31,16 @@ private: //inherited methods
 	void Render(SDL_Renderer* renderer) override = 0;
 
 private://not inherited methods
+
 	void Pause();
 	void RenderButton(SDL_Renderer* renderer);
 	bool IsMouseInButtonBounds(Sint32 x, Sint32 y);
+
+	void RenderBricks(SDL_Renderer* renderer);
+
+	void RenderScore(SDL_Renderer* renderer);
+
+	virtual void CreatePickUp(const Vector2& position) = 0;
 
 private: //SDL objects
 	SDL_Renderer* m_renderer;
