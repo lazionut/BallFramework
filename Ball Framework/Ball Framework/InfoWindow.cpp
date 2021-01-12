@@ -35,7 +35,7 @@ namespace BallFramework
 
 	void InfoWindow::KeyPressed(const SDL_Keycode& key)
 	{
-		
+		WriteText(key);
 	}
 
 	void InfoWindow::KeyReleased(const SDL_Keycode& key)
@@ -56,8 +56,17 @@ namespace BallFramework
 		SDL_Rect rect;
 		const auto& scale = GetScale();
 
+		SDL_DestroyTexture(m_textTexture);
+		m_textTexture = MakeText(m_inputText, m_textColor, m_font);
+
 		SDL_DestroyTexture(m_dialogTexture);
 		m_dialogTexture = MakeText(m_dialog.GetDialog(), m_textColor, m_font);
+
+		scale.PointToPixel(rect, Vector2(0.0f, 3.0f), m_dialog.GetDialog().length() / 2, m_height / m_height);
+		SDL_RenderCopy(m_renderer, m_dialogTexture, nullptr, &rect);
+
+		scale.PointToPixel(rect, Vector2::zero, m_inputText.length(), m_height / (m_height / 2.5f));
+		SDL_RenderCopy(m_renderer, m_textTexture, nullptr, &rect);
 	}
 
 	std::string InfoWindow::GetPlayer1Name() const
@@ -71,6 +80,42 @@ namespace BallFramework
 			return m_player2Name.value();
 		}
 		return "";
+	}
+
+	void InfoWindow::WriteText(const SDL_Keycode& key)
+	{
+		if (m_inputText.length() < 9
+			&& ('a' <= key && key <= 'z') || ('0' <= key && key <= '9'))
+		{
+			m_inputText += key;
+		}
+		if (key == SDLK_BACKSPACE && m_inputText.length() > 0)
+		{
+			m_inputText.pop_back();
+		}
+		if ((key == SDLK_KP_ENTER || key == SDLK_RETURN) && m_inputText.length() > 0)
+		{
+			if (m_player1Name.empty()) {
+				m_player1Name = m_inputText;
+				m_inputText.clear();
+
+				if (m_gameType == false) {
+					Stop();
+				}
+				else {
+					m_dialog.OtherPlayer();
+				}
+				return;
+			}
+			else if (m_gameType == true) {
+				if (!m_player2Name.has_value()) {
+					m_player2Name = m_inputText;
+					m_inputText.clear();
+					Stop();
+					return;
+				}
+			}
+		}
 	}
 
 	std::string InfoWindow::Dialog::GetDialog()

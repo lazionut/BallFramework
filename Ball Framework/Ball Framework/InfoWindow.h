@@ -29,14 +29,18 @@ namespace BallFramework
         const std::string& GetPlayer2Name() const;
 
     private:
+        void WriteText(const SDL_Keycode& key);
+
+    private:
+        std::string m_inputText;
 
         std::string m_player1Name;
         std::optional<std::string> m_player2Name;
 
         SDL_Color m_textColor = white;
-        SDL_Color m_textColor = white;
         SDL_Renderer* m_renderer;
 
+        SDL_Texture* m_textTexture;
         SDL_Texture* m_dialogTexture;
 
         TTF_Font* m_font;
