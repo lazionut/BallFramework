@@ -33,7 +33,12 @@ namespace BallFramework
         std::string m_player1Name;
         std::optional<std::string> m_player2Name;
 
+        SDL_Color m_textColor = white;
+        SDL_Color m_textColor = white;
         SDL_Renderer* m_renderer;
+
+        SDL_Texture* m_dialogTexture;
+
         TTF_Font* m_font;
 
         uint16_t m_width;
@@ -41,6 +46,17 @@ namespace BallFramework
 
         bool m_gameType;
 
+        class Dialog {
+
+        public:
+            std::string GetDialog();
+            void OtherPlayer();
+
+        private:
+            std::string md_dialog1 = "Set Player";
+            std::string md_currentPlayer = "1";
+            std::string md_dialog2 = "'s name:";
+        } m_dialog;
     };
 
 }

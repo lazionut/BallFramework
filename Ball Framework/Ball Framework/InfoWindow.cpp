@@ -53,6 +53,11 @@ namespace BallFramework
 	void InfoWindow::Render(SDL_Renderer* renderer)
 	{
 		m_renderer = renderer;
+		SDL_Rect rect;
+		const auto& scale = GetScale();
+
+		SDL_DestroyTexture(m_dialogTexture);
+		m_dialogTexture = MakeText(m_dialog.GetDialog(), m_textColor, m_font);
 	}
 
 	std::string InfoWindow::GetPlayer1Name() const
@@ -66,6 +71,16 @@ namespace BallFramework
 			return m_player2Name.value();
 		}
 		return "";
+	}
+
+	std::string InfoWindow::Dialog::GetDialog()
+	{
+		return md_dialog1 + md_currentPlayer + md_dialog2;
+	}
+
+	void InfoWindow::Dialog::OtherPlayer()
+	{
+		md_currentPlayer = "2";
 	}
 
 }
