@@ -6,9 +6,11 @@ namespace BallFramework
 	InfoWindow::InfoWindow(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, bool gameType,
 		uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit) :
 		Game(title, width, height, flags, maxFPS, widthUnit, heightUnit),
-		
+		m_inputText{ "" },
 		m_font{ font },
 		m_renderer{ nullptr },
+		m_textTexture{ nullptr },
+		m_dialogTexture{ nullptr },
 		m_width{ width },
 		m_height{ height },
 		m_gameType{ gameType }

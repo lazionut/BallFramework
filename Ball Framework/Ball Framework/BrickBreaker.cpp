@@ -36,7 +36,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 #pragma endregion
 
-	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
+	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, const std::string& playerName, uint32_t flags, uint16_t maxFPS)
 		: Game("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 		m_renderer{ nullptr },
@@ -46,6 +46,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ false },
 		m_heartImage{ nullptr }, m_heartCounter{ 3 },
 		m_score{ white },
+		m_playerName{ playerName },
 		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, black, white, "||" },
 		m_isPaused{ false },
 		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
@@ -181,7 +182,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 			if (m_heartCounter == 0)
 			{
 				//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
-				m_playersStatistics.UpdateStatistics("Player4", true);
+				m_playersStatistics.UpdateStatistics(m_playerName, true);
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", nullptr);
 				Stop();
 			}

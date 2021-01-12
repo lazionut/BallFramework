@@ -28,7 +28,7 @@ namespace BallFramework
 
 #pragma endregion
 
-	Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS)
+	Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, const std::string& player1Name, const std::string& player2Name, uint32_t flags, uint16_t maxFPS)
 		: Game("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 		m_renderer{ nullptr },
@@ -38,8 +38,10 @@ namespace BallFramework
 		m_bricks{ BRICKCOLUMNS }, m_bricksNumber{ 0 },
 		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ true },
 		m_scorePlayer1{ white }, m_scorePlayer2{ white },
+		m_player1Name{ player1Name }, m_player2Name{ player2Name },
 		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.38f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, black, white, "||" },
-		m_isPaused{ false }
+		m_isPaused{ false },
+		m_playersStatistics{ "..\\Assets\\statisticsPong.txt" }
 	{
 		m_lastTimeScale = Time::GetTimeScale();
 	}
@@ -252,7 +254,9 @@ namespace BallFramework
 			Repaint();
 			if (m_scorePlayer1.GetScore() == 5)
 			{
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player2 won!", nullptr);
+				m_playersStatistics.UpdateStatistics(m_player1Name, false);
+				m_playersStatistics.UpdateStatistics(m_player2Name, true);
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", m_player2Name.append(" won!").c_str(), nullptr);
 				Stop();
 			}
 			m_ball.SetPosition(0, 0);
@@ -266,7 +270,9 @@ namespace BallFramework
 			Repaint();
 			if (m_scorePlayer2.GetScore() == 5)
 			{
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player1 won!", nullptr);
+				m_playersStatistics.UpdateStatistics(m_player1Name, true);
+				m_playersStatistics.UpdateStatistics(m_player2Name, false);
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", m_player1Name.append(" won!").c_str(), nullptr);
 				Stop();
 			}
 			m_ball.SetPosition(0, 0);

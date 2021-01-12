@@ -5,6 +5,8 @@ namespace BallFramework
 
 #define WIDTHUNITS 10
 #define HEIGHTUNITS 10
+#define MULTIPLAYER true
+
 	constexpr int buttonsNum = 2;
 
 	Menu::Menu(int16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS) :
@@ -102,14 +104,21 @@ namespace BallFramework
 
 	void Menu::PerformAction()
 	{
+		InfoWindow* window;
 		Game* game;
 		if (m_lastButton == &m_buttons.at(0))
 		{
-			game = new Pong(1000, 500, m_font, SDL_WINDOW_RESIZABLE, 60);
+			window = new InfoWindow("Insert Players", 300, 300, m_font, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window->Run();
+			game = new Pong(1000, 500, m_font, window->GetPlayer1Name(), window->GetPlayer2Name(), SDL_WINDOW_RESIZABLE, 60);
+			delete window;
 		}
 		else
 		{
-			game = new BrickBreaker(500, 650, m_font, SDL_WINDOW_RESIZABLE, 60);
+			window = new InfoWindow("Insert Players", 300, 300, m_font, !MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window->Run();
+			game = new BrickBreaker(500, 650, m_font, window->GetPlayer1Name(), SDL_WINDOW_RESIZABLE, 60);
+			delete window;
 		}
 		game->Run();
 		delete game;

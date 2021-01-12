@@ -8,6 +8,7 @@
 #include "Score.h"
 #include "Button.h"
 #include "Paths.h"
+#include "PlayersStatistics.h"
 
 namespace BallFramework
 {
@@ -15,7 +16,7 @@ namespace BallFramework
 	class Pong : public Game
 	{
 	public:
-		Pong(uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags = 0, uint16_t maxFPS = 0);
+		Pong(uint16_t width, uint16_t height, TTF_Font* font, const std::string& player1Name, const std::string& player2Name, uint32_t flags = 0, uint16_t maxFPS = 0);
 
 	private: //override Game class methods
 		void Start() override;
@@ -67,6 +68,11 @@ namespace BallFramework
 
 		Score m_scorePlayer1;
 		Score m_scorePlayer2;
+
+		std::string m_player1Name;
+		std::string m_player2Name;
+
+		PlayersStatistics m_playersStatistics;
 
 		Button m_pauseButton;
 

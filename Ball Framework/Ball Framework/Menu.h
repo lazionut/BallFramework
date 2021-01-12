@@ -3,6 +3,7 @@
 #include "Pong.h"
 #include "BrickBreaker.h"
 #include "Button.h"
+#include "InfoWindow.h"
 #include <vector>
 #include <SDL_ttf.h>
 
@@ -38,8 +39,10 @@ namespace BallFramework
 		TTF_Font* GetFont();
 
 	private:
-		std::vector<Button> m_buttons;
 		void InitButtons();
+
+	private:
+		std::vector<Button> m_buttons;
 		TTF_Font* m_font;
 		SDL_Renderer* m_renderer;
 		Button* m_lastButton;
