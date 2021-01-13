@@ -109,15 +109,15 @@ namespace BallFramework
 
 		if (m_lastButton == &m_buttons.at(0))
 		{
-			window = std::make_unique<InfoWindow>(new InfoWindow("Insert Players", 300, 300, m_font, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20));
+			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, m_font, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
 			window->Run();
-			game = std::make_unique<Pong>(new Pong(1000, 500, m_font, window->GetPlayer1Name(), window->GetPlayer2Name(), SDL_WINDOW_RESIZABLE, 60));
+			game = std::make_unique<Pong>(1000, 500, m_font, window->GetPlayer1Name(), window->GetPlayer2Name(), SDL_WINDOW_RESIZABLE, 60);
 		}
 		else
 		{
-			window = std::make_unique<InfoWindow>(new InfoWindow("Insert Players", 300, 300, m_font, !MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20));
+			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, m_font, !MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
 			window->Run();
-			game = std::make_unique<BrickBreaker>(new BrickBreaker(500, 650, m_font, window->GetPlayer1Name(), SDL_WINDOW_RESIZABLE, 60));
+			game = std::make_unique<BrickBreaker>(500, 650, m_font, window->GetPlayer1Name(), SDL_WINDOW_RESIZABLE, 60);
 		}
 
 		game->Run();
