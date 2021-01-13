@@ -131,7 +131,7 @@ namespace BallFramework
 	void Menu::LoadFont()
 	{
 		m_font = TTF_OpenFont("../Assets/Pixel7.ttf", 24);
-		if (m_font == NULL)
+		if (m_font == nullptr)
 		{
 			LOGGING_ERROR("Menu font not found!");
 			TTF_CloseFont(m_font);

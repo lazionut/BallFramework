@@ -18,16 +18,16 @@ namespace BallFramework
 		SDL_Color GetScoreColor() const;
 		std::string ConvertToString();
 
-		SDL_Texture* GetText();
+		SDL_Texture* GetText() const;
 		void SetText(SDL_Texture* text);
 
 		void SetPosition(const Vector2& position);
 		void SetWidth(float width);
 		void SetHeight(float height);
 
-		Vector2 GetPosition();
-		float GetWidth();
-		float GetHeight();
+		const Vector2& GetPosition() const;
+		float GetWidth() const;
+		float GetHeight() const;
 
 	private:
 		uint16_t m_points;

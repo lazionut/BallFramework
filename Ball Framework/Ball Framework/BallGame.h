@@ -41,27 +41,23 @@ namespace BallFramework
 		virtual void CreatePickUp(const Vector2& position) = 0;
 
 	private: //SDL objects
-		SDL_Renderer* m_renderer;
 		SDL_Texture* m_ballImage;
 		SDL_Texture* m_pickUpImage;
 		TTF_Font* m_buttonFont;
 		SDL_Color m_color;
 
 	private:// custom types
-		Paddle m_player1;
-		std::optional<Paddle> m_player2;
-
+		std::vector<Paddle> m_playerList;
 		std::vector<std::vector<Rectangle>> m_bricks;
 
-		Ball m_ball;
+		std::vector<Ball> m_ballList;
 
 		PickUpGenerator m_pickupgenerator;
 		PickUp m_pickUp;
 
 		Button m_pauseButton;
 
-		Score m_score1;
-		std::optional<Score> m_score2;
+		std::vector<Score> m_scoreList;
 
 		PlayersStatistics m_playersStatistics;
 

@@ -5,9 +5,7 @@ namespace BallFramework
 
 	BallGame::BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit) :
 		Game(title, width, height, flags, maxFPS, widthUnit, heightUnit),
-		m_renderer{ nullptr },
 		m_ballImage{ nullptr },
-		m_score1{ white },
 		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ false },
 		m_buttonFont{ font },
 		m_isPaused{ false },
@@ -18,12 +16,15 @@ namespace BallFramework
 
 	void BallGame::Update()
 	{
-		m_player1.Move();
+		for (auto&& player : m_playerList)
+		{
+			player.Move();
+		}
 
-		if (m_player2.has_value())
-			m_player2->Move();
-
-		m_ball.Move();
+		for (auto&& ball : m_ballList)
+		{
+			ball.Move();
+		}
 
 		if (m_isPickCreated)
 		{
@@ -48,9 +49,10 @@ namespace BallFramework
 	{
 		if (!m_isPaused)
 		{
-			m_player1.KeyPressed(key);
-			if (m_player2.has_value())
-				m_player2->KeyPressed(key);
+			for (auto&& player : m_playerList)
+			{
+				player.KeyPressed(key);
+			}
 		}
 	}
 
@@ -62,9 +64,10 @@ namespace BallFramework
 		}
 		else if (!m_isPaused)
 		{
-			m_player1.KeyReleased(key);
-			if (m_player2.has_value())
-				m_player2->KeyReleased(key);
+			for (auto&& player : m_playerList)
+			{
+				player.KeyReleased(key);
+			}
 		}
 	}
 
@@ -83,31 +86,29 @@ namespace BallFramework
 
 	void BallGame::Render(SDL_Renderer* renderer)
 	{
-		m_renderer = renderer;
-
 		SDL_Rect aux;
 		decltype(auto) scale = GetScale();
 
-		RenderButton(m_renderer);
+		RenderButton(renderer);
 
-		auto& [r, g, b, a] = m_color;
+		auto&& [r, g, b, a] = m_color;
 
-		SDL_SetRenderDrawColor(m_renderer, r, g, b, a);
+		SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
-		scale.PointToPixel(aux, m_player1.GetPosition(), m_player1.GetWidth(), m_player1.GetHeight()); //player1
-		SDL_RenderFillRect(m_renderer, &aux);
-
-		if (m_player2.has_value())
+		for (const auto& player : m_playerList)
 		{
-			scale.PointToPixel(aux, m_player2->GetPosition(), m_player2->GetWidth(), m_player2->GetHeight()); //player2
-			SDL_RenderFillRect(m_renderer, &aux);
+			scale.PointToPixel(aux, player.GetPosition(), player.GetWidth(), player.GetHeight());
+			SDL_RenderFillRect(renderer, &aux);
 		}
 
-		scale.PointToPixel(aux, m_ball.GetPosition(), m_ball.GetSize(), m_ball.GetSize()); //ball
-		SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &aux);
+		for (const auto& ball : m_ballList)
+		{
+			scale.PointToPixel(aux, ball.GetPosition(), ball.GetSize(), ball.GetSize());
+			SDL_RenderCopy(renderer, m_ballImage, nullptr, &aux);
+		}
 
-		RenderScore(m_renderer);
-		RenderBricks(m_renderer);
+		RenderScore(renderer);
+		RenderBricks(renderer);
 
 		if (m_isPickActive)
 		{
@@ -165,33 +166,22 @@ namespace BallFramework
 
 	void BallGame::RenderScore(SDL_Renderer* renderer)
 	{
-		SDL_Rect aux1, aux2;
+		SDL_Rect aux;
 		decltype(auto) scale = GetScale();
 
-		SDL_Texture* scoreTexture1 = m_score1.GetText();
-		scale.PointToPixel(aux1, m_score1.GetPosition().GetX(), m_score1.GetPosition().GetY(), m_score1.GetWidth(), m_score1.GetHeight());
-		if (m_score2.has_value())
+		SDL_Texture* scoreTexture;
+		for (const auto& score : m_scoreList)
 		{
-			scale.PointToPixel(aux2, m_score2->GetPosition().GetX(), m_score2->GetPosition().GetY(), m_score2->GetWidth(), m_score2->GetHeight());
-			if (m_score2->GetText() != nullptr)
-			{
-				SDL_RenderCopy(renderer, m_score2->GetText(), nullptr, &aux2);
-			}
-			else
-			{
-				LOGGING_ERROR("BallGame score font not found!");
-			}
-		}
+			scoreTexture = score.GetText();
 
-		if (m_score1.GetText() != nullptr)
-		{
-			SDL_RenderCopy(renderer, m_score1.GetText(), nullptr, &aux1);
-		}
-		else
-		{
-			LOGGING_ERROR("BallGame score font not found!");
-		}
+			if (scoreTexture == nullptr)
+			{
+				LOGGING_ERROR("Null score texture");
+				continue;
+			}
 
+			scale.PointToPixel(aux, score.GetPosition().GetX(), score.GetPosition().GetY(), score.GetWidth(), score.GetHeight());
+			SDL_RenderCopy(renderer, scoreTexture, nullptr, &aux);
+		}
 	}
-
 }

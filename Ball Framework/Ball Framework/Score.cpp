@@ -31,7 +31,7 @@ namespace BallFramework
 		return std::to_string(m_points);
 	}
 
-	SDL_Texture* Score::GetText()
+	SDL_Texture* Score::GetText() const
 	{
 		return m_scoreText;
 	}
@@ -63,17 +63,17 @@ namespace BallFramework
 		m_height = height;
 	}
 
-	Vector2 Score::GetPosition()
+	const Vector2& Score::GetPosition() const
 	{
 		return m_position;
 	}
 
-	float Score::GetWidth()
+	float Score::GetWidth() const
 	{
 		return m_width;
 	}
 
-	float Score::GetHeight()
+	float Score::GetHeight() const
 	{
 		return m_height;
 	}
