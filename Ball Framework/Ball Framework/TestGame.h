@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "Rectangle.h"
 #include "Ball.h"
+#include "Paths.h"
+#include "logger.h"
 
 namespace BallFramework
 {

@@ -40,11 +40,9 @@ int main(int argc, char** argv)
 
 	if (initializeSDL())
 	{
-		Game* menu = new Menu(500, 500, SDL_WINDOW_RESIZABLE, 20);
+		std::unique_ptr<Game> menu { new TestGame(500, 500, SDL_WINDOW_RESIZABLE, 20) };
 
 		menu->Run();
-
-		delete menu;
 	}
 
 	SDL_Quit();

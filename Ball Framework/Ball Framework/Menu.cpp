@@ -104,24 +104,23 @@ namespace BallFramework
 
 	void Menu::PerformAction()
 	{
-		InfoWindow* window;
-		Game* game;
+		std::unique_ptr<InfoWindow> window;
+		std::unique_ptr<Game> game;
+
 		if (m_lastButton == &m_buttons.at(0))
 		{
-			window = new InfoWindow("Insert Players", 300, 300, m_font, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = std::make_unique<InfoWindow>(new InfoWindow("Insert Players", 300, 300, m_font, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20));
 			window->Run();
-			game = new Pong(1000, 500, m_font, window->GetPlayer1Name(), window->GetPlayer2Name(), SDL_WINDOW_RESIZABLE, 60);
-			delete window;
+			game = std::make_unique<Pong>(new Pong(1000, 500, m_font, window->GetPlayer1Name(), window->GetPlayer2Name(), SDL_WINDOW_RESIZABLE, 60));
 		}
 		else
 		{
-			window = new InfoWindow("Insert Players", 300, 300, m_font, !MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = std::make_unique<InfoWindow>(new InfoWindow("Insert Players", 300, 300, m_font, !MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20));
 			window->Run();
-			game = new BrickBreaker(500, 650, m_font, window->GetPlayer1Name(), SDL_WINDOW_RESIZABLE, 60);
-			delete window;
+			game = std::make_unique<BrickBreaker>(new BrickBreaker(500, 650, m_font, window->GetPlayer1Name(), SDL_WINDOW_RESIZABLE, 60));
 		}
+
 		game->Run();
-		delete game;
 	}
 
 	void Menu::DestroyButtons()

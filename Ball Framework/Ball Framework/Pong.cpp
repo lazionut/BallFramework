@@ -19,12 +19,12 @@ namespace BallFramework
 #define BRICKLIMIT_Y -3
 #define BRICKSPACING 2
 
-	constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
-	constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
-	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
+constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
+constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
