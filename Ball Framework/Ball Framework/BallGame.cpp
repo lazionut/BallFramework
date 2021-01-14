@@ -2,26 +2,28 @@
 
 namespace BallFramework
 {
-
 	BallGame::BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit) :
 		Game(title, width, height, flags, maxFPS, widthUnit, heightUnit),
-		m_ballImage{ nullptr },
-		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ false },
+		m_ballImage{ nullptr }, m_pickUpImage{ nullptr },
+		m_isPickCreated{ false }, m_isPickActive{ false }, m_isPaused{ false },
 		m_buttonFont{ font },
-		m_isPaused{ false },
-		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
+		m_outlineSize{ 0.0f }, m_paddleColor{ 0, 0, 0, 0 }, m_paddleOutline{ 0,0,0,0 },
+		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" },
+		m_lastTimeScale{ Time::GetTimeScale() } {}
+
+	void BallGame::SetPlayers(const std::vector<std::string>& players)
 	{
-		m_lastTimeScale = Time::GetTimeScale();
+		m_playersNames = players;
 	}
 
 	void BallGame::Update()
 	{
-		for (auto&& player : m_playerList)
+		for (auto&& player : m_players)
 		{
 			player.Move();
 		}
 
-		for (auto&& ball : m_ballList)
+		for (auto&& ball : m_balls)
 		{
 			ball.Move();
 		}
@@ -45,11 +47,13 @@ namespace BallFramework
 
 	}
 
+#pragma region Input Methods
+
 	void BallGame::KeyPressed(const SDL_Keycode& key)
 	{
 		if (!m_isPaused)
 		{
-			for (auto&& player : m_playerList)
+			for (auto&& player : m_players)
 			{
 				player.KeyPressed(key);
 			}
@@ -64,7 +68,7 @@ namespace BallFramework
 		}
 		else if (!m_isPaused)
 		{
-			for (auto&& player : m_playerList)
+			for (auto&& player : m_players)
 			{
 				player.KeyReleased(key);
 			}
@@ -73,48 +77,119 @@ namespace BallFramework
 
 	void BallGame::MousePressed(const SDL_MouseButtonEvent& mouse)
 	{
-		IsMouseInButtonBounds(mouse.x, mouse.y);
+		IsMouseOnButton(mouse.x, mouse.y);
 	}
 
 	void BallGame::MouseReleased(const SDL_MouseButtonEvent& mouse)
 	{
-		if (IsMouseInButtonBounds(mouse.x, mouse.y))
+		if (IsMouseOnButton(mouse.x, mouse.y))
 		{
 			Pause();
 		}
 	}
 
-	void BallGame::Render(SDL_Renderer* renderer)
+#pragma endregion
+
+#pragma region Render Methods
+
+	void BallGame::RenderPaddles(SDL_Renderer* renderer)
 	{
 		SDL_Rect aux;
 		decltype(auto) scale = GetScale();
 
-		RenderButton(renderer);
+		SDL_SetRenderDrawColor(renderer, m_paddleOutline.r, m_paddleOutline.g, m_paddleOutline.b, m_paddleOutline.a);
 
-		auto&& [r, g, b, a] = m_color;
+		for (const auto& player : m_players)
+		{
+			scale.PointToPixel(aux, player.GetPosition(),
+				player.GetWidth() + m_outlineSize, player.GetHeight() + m_outlineSize);
+			SDL_RenderFillRect(renderer, &aux);
+		}
 
-		SDL_SetRenderDrawColor(renderer, r, g, b, a);
+		SDL_SetRenderDrawColor(renderer, m_paddleColor.r, m_paddleColor.g, m_paddleColor.b, m_paddleColor.a);
 
-		for (const auto& player : m_playerList)
+		for (const auto& player : m_players)
 		{
 			scale.PointToPixel(aux, player.GetPosition(), player.GetWidth(), player.GetHeight());
 			SDL_RenderFillRect(renderer, &aux);
 		}
+	}
 
-		for (const auto& ball : m_ballList)
+	void BallGame::RenderGameObjects(SDL_Renderer* renderer)
+	{
+		SDL_Rect aux;
+		decltype(auto) scale = GetScale();
+
+		if (m_isPickActive)
+		{
+			scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
+			SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &aux);
+		}
+
+		for (const auto& ball : m_balls)
 		{
 			scale.PointToPixel(aux, ball.GetPosition(), ball.GetSize(), ball.GetSize());
 			SDL_RenderCopy(renderer, m_ballImage, nullptr, &aux);
 		}
+	}
 
-		RenderScore(renderer);
-		RenderBricks(renderer);
+	void BallGame::RenderButton(SDL_Renderer* renderer)
+	{
+		SDL_Rect rect;
+		decltype(auto) scale = GetScale();
 
-		if (m_isPickActive)
+		scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
+		m_pauseButton.SetRect(rect);
+		scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
+		SDL_RenderCopy(renderer, m_pauseButton.GetText(), nullptr, &rect);
+	}
+
+	void BallGame::RenderBricks(SDL_Renderer* renderer)
+	{
+		SDL_Rect rect;
+		decltype(auto) scale = GetScale();
+
+		for (const auto& row : m_bricks)
 		{
-			scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize()); //pickup
-			SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &aux);
+			for (const auto& brick : row)
+			{
+				auto [r, g, b, a] = brick.GetColor();
+				SDL_SetRenderDrawColor(renderer, r, g, b, a);
+
+				scale.PointToPixel(rect, brick.GetPosition(), brick.GetHeight(), brick.GetWidth());
+				SDL_RenderFillRect(renderer, &rect);
+			}
 		}
+	}
+
+	void BallGame::RenderScore(SDL_Renderer* renderer)
+	{
+		SDL_Rect aux;
+		SDL_Texture* scoreTexture;
+		decltype(auto) scale = GetScale();
+
+		for (const auto& score : m_scores)
+		{
+			scoreTexture = score.GetText();
+
+			if (scoreTexture == nullptr)
+			{
+				LOGGING_ERROR("Null score texture");
+				continue;
+			}
+
+			scale.PointToPixel(aux, score.GetPosition(), score.GetWidth(), score.GetHeight());
+			SDL_RenderCopy(renderer, scoreTexture, nullptr, &aux);
+		}
+	}
+
+#pragma endregion
+
+	void BallGame::SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize)
+	{
+		m_paddleColor = paddleColor;
+		m_paddleOutline = outlineColor;
+		m_outlineSize = outlineSize;
 	}
 
 	void BallGame::Pause()
@@ -135,53 +210,10 @@ namespace BallFramework
 		}
 	}
 
-	void BallGame::RenderButton(SDL_Renderer* renderer)
-	{
-		SDL_Rect rect;
-		decltype(auto) scale = GetScale();
-
-		scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
-		m_pauseButton.SetRect(rect);
-		scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
-		SDL_RenderCopy(renderer, m_pauseButton.GetText(), nullptr, &rect);
-	}
-
-	bool BallGame::IsMouseInButtonBounds(Sint32 x, Sint32 y)
+	bool BallGame::IsMouseOnButton(Sint32 x, Sint32 y)
 	{
 		return (x > m_pauseButton.GetRect().x && x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
 			&& y > m_pauseButton.GetRect().y && y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h);
 	}
 
-	void BallGame::RenderBricks(SDL_Renderer* renderer)
-	{
-		SDL_Rect rect;
-		decltype(auto) scale = GetScale();
-		for (const auto& rowIterator : m_bricks)
-			for (const auto& columnIterator : rowIterator)
-			{
-				scale.PointToPixel(rect, columnIterator.GetPosition(), columnIterator.GetHeight(), columnIterator.GetWidth());
-				SDL_RenderFillRect(renderer, &rect);
-			}
-	}
-
-	void BallGame::RenderScore(SDL_Renderer* renderer)
-	{
-		SDL_Rect aux;
-		decltype(auto) scale = GetScale();
-
-		SDL_Texture* scoreTexture;
-		for (const auto& score : m_scoreList)
-		{
-			scoreTexture = score.GetText();
-
-			if (scoreTexture == nullptr)
-			{
-				LOGGING_ERROR("Null score texture");
-				continue;
-			}
-
-			scale.PointToPixel(aux, score.GetPosition().GetX(), score.GetPosition().GetY(), score.GetWidth(), score.GetHeight());
-			SDL_RenderCopy(renderer, scoreTexture, nullptr, &aux);
-		}
-	}
 }

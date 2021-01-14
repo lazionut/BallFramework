@@ -7,7 +7,7 @@ BallFramework::Brick::Brick(const Vector2& position, const float width, const fl
 	: Rectangle(position, width, height), m_id{ 0 }, m_color{ 0, 0, 0, 0 } {}
 
 BallFramework::Brick::Brick(const Vector2& position, const float width, const float height, uint16_t m_id, SDL_Color color)
-	: Rectangle(position, width, height), m_id{ 0 }, m_color{ 0, 0, 0, 0 } {}
+	: Rectangle(position, width, height), m_id{ 0 }, m_color{ color } {}
 
 BallFramework::Brick::Brick(const Brick& other) 
 	: Rectangle(other) , m_id{other.m_id}, m_color{other.m_color} {}

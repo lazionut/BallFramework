@@ -65,15 +65,14 @@ namespace BallFramework
 
 	void Game::SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 	{
-		SDL_Color color;
-		color = { red, green, blue, alpha };
+		const SDL_Color color = { red, green, blue, alpha };
 		m_renderer.SetBackgroundColor(color);
 	}
 
 	void Game::Repaint()
 	{
 		SDL_Renderer* renderer = m_renderer.GetRenderer();
-		SDL_Color color = m_renderer.GetBackgroundColor();
+		const SDL_Color color = m_renderer.GetBackgroundColor();
 
 		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 		SDL_RenderClear(renderer);
@@ -111,7 +110,7 @@ namespace BallFramework
 			{
 				HandleEvents();
 
-				if (Time::GetTimeScale())
+				if (Time::GetTimeScale() > 0)
 				{
 					Update();
 					CheckCollision();

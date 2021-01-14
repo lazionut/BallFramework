@@ -7,44 +7,48 @@ namespace BallFramework
 #define HEIGHTUNITS 10
 
 	TestGame::TestGame(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
-		: Game("Test", width, height, flags, maxFPS), ballImage{ nullptr },
+		: BallGame("Test", width, height, nullptr, flags, maxFPS)
+		/*ballImage{ nullptr },
 		ball{ Vector2(0.0f, 0.5f), 2, Vector2::zero, 5 }, rect{ Vector2::zero, 4, 4 },
-		color{ 0, 255, 0, 255 }
-	{
-	}
+		color{ 0, 255, 0, 255 }*/ {}
 
 	void TestGame::Start()
 	{
-		ballImage = LoadGameImage("../Assets/ball.png");
+		m_ballImage = LoadGameImage("../Assets/ball.png");
 
-		if (ballImage == nullptr)
+		if (m_ballImage == nullptr)
 		{
 			LOGGING_ERROR("Test ball image not found!");
 			Stop();
 			return;
 		}
 
-		color = { 0, 255, 0, 255 };
+		SetPaddlesColors({ 255, 255, 255, 255 }, { 255, 0, 0, 255 }, 0.2);
+
+		//nu trebuie neaparat nu emplace back, se poate folosi si push_back
+		m_players.emplace_back(Vector2::down, 0.5f, 0.5f, Vector2::zero, Vector2::zero, 0, 0, 0);
+		m_balls.emplace_back(Vector2::zero, 1, Vector2::up, 1);
+
+
+		m_bricks.resize(1);
+		SDL_Color color = { 0, 0, 255, 255 };
+		for (int i = 0; i < 3; ++i)
+		{
+			m_bricks[0].emplace_back(Vector2::left * i, 0.5, 0.5, i, color);
+		}
 	}
 
 	void TestGame::OnClose()
 	{
-		SDL_DestroyTexture(ballImage);
+		SDL_DestroyTexture(m_ballImage);
 	}
 
 	void TestGame::CheckCollision()
 	{
-		if (ball.CheckCollision(rect))
-		{
-			color = { 255, 0, 0, 255 };
-		}
-		else
-		{
-			color = { 0, 255, 0, 255 };
-		}
+		//collision
 	}
 
-	void TestGame::Update()
+	/*void TestGame::Update()
 	{
 		ball.Move();
 	}
@@ -73,30 +77,22 @@ namespace BallFramework
 	void TestGame::KeyReleased(const SDL_Keycode& key)
 	{
 		ball.SetDirection(Vector2::zero);
-	}
+	}*/
 
 	void TestGame::Render(SDL_Renderer* renderer)
 	{
-		SDL_Rect aux;
+		//additional render
 
-		const auto& scale = GetScale();
-
-		scale.PointToPixel(aux, rect.GetPosition(), rect.GetWidth(), rect.GetHeight());
-		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-		SDL_RenderFillRect(renderer, &aux);
-
-		scale.PointToPixel(aux, ball.GetPosition(), ball.GetSize(), ball.GetSize());
-
-		SDL_RenderCopy(renderer, ballImage, nullptr, &aux);
-
+		//nu trebuie neaparat in aceasta ordine
+		RenderPaddles(renderer);
+		RenderGameObjects(renderer);
+		RenderBricks(renderer);
+		RenderButton(renderer);
+		RenderScore(renderer);
 	}
 
-	void TestGame::MousePressed(const SDL_MouseButtonEvent& mouse)
+	void TestGame::CreatePickUp(const Vector2& position)
 	{
+		
 	}
-
-	void TestGame::MouseReleased(const SDL_MouseButtonEvent& mouse)
-	{
-	}
-
 }

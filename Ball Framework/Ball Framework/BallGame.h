@@ -1,6 +1,5 @@
 #pragma once
 #include <SDL_ttf.h>
-#include <optional>
 
 #include "Game.h"
 #include "ScreenScale.h"
@@ -12,61 +11,67 @@
 #include "PlayersStatistics.h"
 #include "Paths.h"
 #include "Colors.h"
+#include "Brick.h"
 
 namespace BallFramework
 {
-
 	class BallGame : public Game
 	{
 	public:
-		BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit);
+		BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 
-	private: //inherited methods
-		void Update() override final;
-		void KeyPressed(const SDL_Keycode& key) override final;
-		void KeyReleased(const SDL_Keycode& key) override final;
-		void MousePressed(const SDL_MouseButtonEvent& mouse) override final;
-		void MouseReleased(const SDL_MouseButtonEvent& mouse) override final;
-		void Render(SDL_Renderer* renderer) override final;
+		void SetPlayers(const std::vector<std::string>& players);
 
-	private://not inherited methods
+	protected:
+
+		void SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize);
+
 		void Pause();
 
-		bool IsMouseInButtonBounds(Sint32 x, Sint32 y);
+		bool IsMouseOnButton(Sint32 x, Sint32 y);
 
+		void RenderPaddles(SDL_Renderer* renderer);
+		void RenderGameObjects(SDL_Renderer* renderer);
 		void RenderButton(SDL_Renderer* renderer);
 		void RenderBricks(SDL_Renderer* renderer);
 		void RenderScore(SDL_Renderer* renderer);
 
 		virtual void CreatePickUp(const Vector2& position) = 0;
 
-	private: //SDL objects
-		SDL_Texture* m_ballImage;
-		SDL_Texture* m_pickUpImage;
-		TTF_Font* m_buttonFont;
-		SDL_Color m_color;
-
-	private:// custom types
-		std::vector<Paddle> m_playerList;
-		std::vector<std::vector<Rectangle>> m_bricks;
-
-		std::vector<Ball> m_ballList;
+	protected:
+		std::vector<Paddle> m_players;
+		std::vector<Ball> m_balls;
+		std::vector<std::vector<Brick>> m_bricks;
+		std::vector<Score> m_scores;
 
 		PickUpGenerator m_pickupgenerator;
 		PickUp m_pickUp;
 
 		Button m_pauseButton;
 
-		std::vector<Score> m_scoreList;
-
+		std::vector<std::string> m_playersNames;
 		PlayersStatistics m_playersStatistics;
 
-	private: //primitive types
-		bool m_isPickCreated;
-		bool m_isPickActive;
+		SDL_Texture* m_ballImage;
+		SDL_Texture* m_pickUpImage;
+
+	private:
+		void Update() override final;
+		void KeyPressed(const SDL_Keycode& key) override final;
+		void KeyReleased(const SDL_Keycode& key) override final;
+		void MousePressed(const SDL_MouseButtonEvent& mouse) override final;
+		void MouseReleased(const SDL_MouseButtonEvent& mouse) override final;
+
+	private:
+		TTF_Font* m_buttonFont;
+
+		SDL_Color m_paddleColor;
+		SDL_Color m_paddleOutline;
+		float m_outlineSize;
 
 		float m_lastTimeScale;
+		bool m_isPickCreated;
+		bool m_isPickActive;
 		bool m_isPaused;
 	};
-
 }

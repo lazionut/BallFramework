@@ -36,11 +36,11 @@ int main(int argc, char** argv)
 
 	Paths::SetFilePath("../Assets/assetsPaths.txt");
 
-	srand(time(0));
+	srand(time(nullptr));
 
 	if (initializeSDL())
 	{
-		std::unique_ptr<Game> menu { new Menu(500, 500, SDL_WINDOW_RESIZABLE, 20) };
+		std::unique_ptr<Game> menu { new Menu(500, 500, SDL_WINDOW_RESIZABLE, 60) };
 
 		menu->Run();
 	}
