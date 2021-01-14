@@ -55,6 +55,30 @@
     <Filter Include="Source Files\Framework\UI">
       <UniqueIdentifier>{603fda9b-22e0-4cac-b90e-52de7d595331}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Framework\Game Objects">
+      <UniqueIdentifier>{455c719d-9e21-4c90-bbe0-1bed05ca3ab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Framework\Core">
+      <UniqueIdentifier>{64095887-ca7f-4d70-bf8a-cff6cb6396ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Framework\Rendering">
+      <UniqueIdentifier>{5f19c490-2820-4240-9387-ee63fc6ad801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Framework\Statistics">
+      <UniqueIdentifier>{52a68863-399e-4314-aefe-b71cbd882b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\Game Objects">
+      <UniqueIdentifier>{4f1767f9-4375-4ab2-a385-4523ae9586c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\Core">
+      <UniqueIdentifier>{dd1dd3d0-12c1-4e82-a3e8-2a354d655a9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\Statistics">
+      <UniqueIdentifier>{098fd430-307c-44a8-bc30-1d93050be398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\Rendering">
+      <UniqueIdentifier>{6e709ea2-e72c-48a4-8300-3218c1365be5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -66,35 +90,11 @@
     <ClCompile Include="Pong.cpp">
       <Filter>Source Files\Pong</Filter>
     </ClCompile>
-    <ClCompile Include="Ball.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Paddle.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Rectangle.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Score.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="ScreenScale.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Vector2.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="TestGame.cpp">
       <Filter>Source Files\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayersStatistics.cpp">
-      <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="Time.cpp">
       <Filter>Source Files\Framework\Time</Filter>
@@ -111,9 +111,6 @@
     <ClCompile Include="PickUpGenerator.cpp">
       <Filter>Source Files\Framework\PickUp</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerEntry.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Paths.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
@@ -123,14 +120,44 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\Framework\UI</Filter>
     </ClCompile>
-    <ClCompile Include="BallGame.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Colors.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="InfoWindow.cpp">
       <Filter>Source Files\Framework\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Source Files\Framework\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Paddle.cpp">
+      <Filter>Source Files\Framework\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Rectangle.cpp">
+      <Filter>Source Files\Framework\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Source Files\Framework\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Framework\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="BallGame.cpp">
+      <Filter>Source Files\Framework\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerEntry.cpp">
+      <Filter>Source Files\Framework\Statistics</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayersStatistics.cpp">
+      <Filter>Source Files\Framework\Statistics</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\Framework\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenScale.cpp">
+      <Filter>Source Files\Framework\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Source Files\Framework\Game Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,35 +167,11 @@
     <ClInclude Include="Pong.h">
       <Filter>Header Files\Pong</Filter>
     </ClInclude>
-    <ClInclude Include="Ball.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Paddle.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Rectangle.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Score.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="ScreenScale.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="TestGame.h">
       <Filter>Header Files\Test</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayersStatistics.h">
-      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Header Files\Framework\Time</Filter>
@@ -185,9 +188,6 @@
     <ClInclude Include="PickUpGenerator.h">
       <Filter>Header Files\Framework\PickUp</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerEntry.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Paths.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
@@ -197,14 +197,44 @@
     <ClInclude Include="Menu.h">
       <Filter>Header Files\Framework\UI</Filter>
     </ClInclude>
-    <ClInclude Include="BallGame.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Colors.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="InfoWindow.h">
       <Filter>Header Files\Framework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Header Files\Framework\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Paddle.h">
+      <Filter>Header Files\Framework\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Header Files\Framework\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Framework\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="BallGame.h">
+      <Filter>Header Files\Framework\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Rectangle.h">
+      <Filter>Header Files\Framework\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Framework\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenScale.h">
+      <Filter>Header Files\Framework\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerEntry.h">
+      <Filter>Header Files\Framework\Statistics</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayersStatistics.h">
+      <Filter>Header Files\Framework\Statistics</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Header Files\Framework\Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

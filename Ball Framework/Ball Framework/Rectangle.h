@@ -8,7 +8,7 @@ namespace BallFramework
 	{
 	public:
 		Rectangle();
-		Rectangle(const Vector2& position, const float& width, const float& height);
+		Rectangle(const Vector2& position, const float width, const float height);
 		Rectangle(const Rectangle& other);
 		Rectangle(Rectangle&& other) noexcept;
 
