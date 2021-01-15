@@ -3,13 +3,9 @@
 namespace BallFramework
 {
 
-	static SDL_Color white = Colors::ReturnBasicColor(static_cast<uint8_t>(Colors::BasicColors::white));
-	static SDL_Color red = Colors::ReturnBasicColor(static_cast<uint8_t>(Colors::BasicColors::red));;
-	static SDL_Color black = Colors::ReturnBasicColor(static_cast<uint8_t>(Colors::BasicColors::black));
-
 	Button::Button()
 		: Rectangle{ Vector2::zero, 0.0f, 0.0f },
-		m_text{ "" }, m_backColor{ white }, m_fontColor{ black }, m_changedBack{ false }, m_changedFont{ false },
+		m_text{ "" }, m_backColor{ Colors::white }, m_fontColor{ Colors::black }, m_changedBack{ false }, m_changedFont{ false },
 		m_buttonText{ nullptr }, m_rect{ 0, 0, 0, 0 }
 	{
 	}
@@ -60,12 +56,12 @@ namespace BallFramework
 	{
 		if (!m_changedBack)
 		{
-			SetBackColor(red);
+			SetBackColor(Colors::red);
 			m_changedBack = true;
 		}
 		else
 		{
-			SetBackColor(white);
+			SetBackColor(Colors::white);
 			m_changedBack = false;
 		}
 	}
@@ -74,12 +70,12 @@ namespace BallFramework
 	{
 		if (!m_changedFont)
 		{
-			SetFontColor(red);
+			SetFontColor(Colors::red);
 			m_changedFont = true;
 		}
 		else
 		{
-			SetFontColor(white);
+			SetFontColor(Colors::white);
 			m_changedFont = false;
 		}
 	}
