@@ -7,7 +7,6 @@
 #include "TestGame.h"
 
 using namespace BallFramework;
-using namespace myLogger;
 
 bool initializeSDL()
 {

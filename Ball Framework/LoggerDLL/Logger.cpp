@@ -1,6 +1,6 @@
 #include "Logger.h"
 
-namespace myLogger
+namespace BallFramework
 {
 
 	std::shared_ptr<spdlog::logger> Logger::s_Logger;

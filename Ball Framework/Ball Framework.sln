@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ball Framework", "Ball Fram
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoggerDLL", "LoggerDLL\LoggerDLL.vcxproj", "{5048EDAF-96F4-40C5-93FE-7D834983C265}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BallFramework Testing", "BallFramework Testing\BallFramework Testing.vcxproj", "{98680741-686E-4951-BDA3-BCF2FF7C32D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{5048EDAF-96F4-40C5-93FE-7D834983C265}.Release|x64.Build.0 = Release|x64
 		{5048EDAF-96F4-40C5-93FE-7D834983C265}.Release|x86.ActiveCfg = Release|Win32
 		{5048EDAF-96F4-40C5-93FE-7D834983C265}.Release|x86.Build.0 = Release|Win32
+		{98680741-686E-4951-BDA3-BCF2FF7C32D2}.Debug|x64.ActiveCfg = Debug|x64
+		{98680741-686E-4951-BDA3-BCF2FF7C32D2}.Debug|x64.Build.0 = Debug|x64
+		{98680741-686E-4951-BDA3-BCF2FF7C32D2}.Debug|x86.ActiveCfg = Debug|Win32
+		{98680741-686E-4951-BDA3-BCF2FF7C32D2}.Debug|x86.Build.0 = Debug|Win32
+		{98680741-686E-4951-BDA3-BCF2FF7C32D2}.Release|x64.ActiveCfg = Release|x64
+		{98680741-686E-4951-BDA3-BCF2FF7C32D2}.Release|x64.Build.0 = Release|x64
+		{98680741-686E-4951-BDA3-BCF2FF7C32D2}.Release|x86.ActiveCfg = Release|Win32
+		{98680741-686E-4951-BDA3-BCF2FF7C32D2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
