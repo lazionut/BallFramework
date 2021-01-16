@@ -114,7 +114,7 @@ namespace BallFramework
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<Pong>(1000, 500, m_font, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<PongMP>(1000, 500, m_font, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
 			}
 		}
 		else

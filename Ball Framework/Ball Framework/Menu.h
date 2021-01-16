@@ -1,6 +1,6 @@
 #pragma once
 #include "Game.h"
-#include "Pong.h"
+#include "PongMP.h"
 #include "BrickBreaker.h"
 #include "Button.h"
 #include "InfoWindow.h"

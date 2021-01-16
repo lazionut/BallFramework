@@ -159,6 +159,9 @@
     <ClCompile Include="Brick.cpp">
       <Filter>Source Files\Framework\Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="PongMP.cpp">
+      <Filter>Source Files\Pong</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="Brick.h">
       <Filter>Header Files\Framework\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="PongMP.h">
+      <Filter>Header Files\Pong</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
