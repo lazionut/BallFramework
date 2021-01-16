@@ -3,7 +3,7 @@
 namespace BallFramework
 {
 
-	InfoWindow::InfoWindow(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, bool gameType,
+	InfoWindow::InfoWindow(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint8_t playersNum,
 		uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit) :
 		Game(title, width, height, flags, maxFPS, widthUnit, heightUnit),
 		m_inputText{ "" },
@@ -13,7 +13,10 @@ namespace BallFramework
 		m_dialogTexture{ nullptr },
 		m_width{ width },
 		m_height{ height },
-		m_gameType{ gameType }
+		m_validInput{ false },
+		m_validName{ false },
+		m_playersNumber{ playersNum },
+		m_codeValidation{ "[a-z]+[0-9]*" }
 	{
 	}
 
@@ -71,17 +74,14 @@ namespace BallFramework
 		SDL_RenderCopy(m_renderer, m_textTexture, nullptr, &rect);
 	}
 
-	std::string InfoWindow::GetPlayer1Name() const
+	const std::vector<std::string>& InfoWindow::GetPlayersNames() const
 	{
-		return m_player1Name;
+		return m_playersNames;
 	}
 
-	const std::string& InfoWindow::GetPlayer2Name() const
+	const bool& InfoWindow::GetValidInput() const
 	{
-		if (m_player2Name.has_value()) {
-			return m_player2Name.value();
-		}
-		return "";
+		return m_validInput;
 	}
 
 	void InfoWindow::WriteText(const SDL_Keycode& key)
@@ -90,6 +90,15 @@ namespace BallFramework
 			&& ('a' <= key && key <= 'z') || ('0' <= key && key <= '9'))
 		{
 			m_inputText += key;
+
+			std::smatch match;
+			if (!m_validName && m_inputText.length()>0)
+			{
+				if (std::regex_match(m_inputText, match, m_codeValidation))
+				{
+					m_validName = true;
+				}
+			}
 		}
 		if (key == SDLK_BACKSPACE && m_inputText.length() > 0)
 		{
@@ -97,25 +106,17 @@ namespace BallFramework
 		}
 		if ((key == SDLK_KP_ENTER || key == SDLK_RETURN) && m_inputText.length() > 0)
 		{
-			if (m_player1Name.empty()) {
-				m_player1Name = m_inputText;
+			if (m_validName) {
+				m_playersNames.emplace_back(m_inputText);
 				m_inputText.clear();
-
-				if (m_gameType == false) {
-					Stop();
-				}
-				else {
-					m_dialog.OtherPlayer();
-				}
-				return;
+				m_dialog.OtherPlayer();
+				m_validName = false;
 			}
-			else if (m_gameType == true) {
-				if (!m_player2Name.has_value()) {
-					m_player2Name = m_inputText;
-					m_inputText.clear();
-					Stop();
-					return;
-				}
+
+			if (m_playersNames.size() == m_playersNumber)
+			{
+				m_validInput = true;
+				Stop();
 			}
 		}
 	}
@@ -127,7 +128,8 @@ namespace BallFramework
 
 	void InfoWindow::Dialog::OtherPlayer()
 	{
-		md_currentPlayer = "2";
+		md_playerIndex++;
+		md_currentPlayer = std::to_string(md_playerIndex);
 	}
 
 }

@@ -6,7 +6,8 @@ namespace BallFramework
 	Score::Score(const SDL_Color& color) :
 		m_scoreColor {color},
 		m_position{ Vector2::zero },
-		m_width{ 0 }, m_height{ 0 }
+		m_width{ 0 }, m_height{ 0 },
+		m_scoreText { nullptr }
 	{
 		m_points = 0;
 	}

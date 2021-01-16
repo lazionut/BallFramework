@@ -1,5 +1,5 @@
 #include "Game.h"
-#include <optional>
+#include <regex> 
 
 namespace BallFramework
 {
@@ -8,7 +8,7 @@ namespace BallFramework
         public Game
     {
     public:
-        InfoWindow(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, bool gameType,
+        InfoWindow(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint8_t playersNum,
             uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 
         void Start() override;
@@ -25,8 +25,8 @@ namespace BallFramework
         void Render(SDL_Renderer* renderer) override;
 
     public:
-        std::string GetPlayer1Name() const;
-        const std::string& GetPlayer2Name() const;
+        const std::vector<std::string>& GetPlayersNames() const;
+        const bool& GetValidInput() const;
 
     private:
         void WriteText(const SDL_Keycode& key);
@@ -34,8 +34,10 @@ namespace BallFramework
     private:
         std::string m_inputText;
 
-        std::string m_player1Name;
-        std::optional<std::string> m_player2Name;
+        std::vector<std::string>m_playersNames;
+        uint8_t m_playersNumber;
+
+        const std::regex m_codeValidation;
 
         SDL_Color m_textColor = white;
         SDL_Renderer* m_renderer;
@@ -48,7 +50,8 @@ namespace BallFramework
         uint16_t m_width;
         uint16_t m_height;
 
-        bool m_gameType;
+        bool m_validInput;
+        bool m_validName;
 
         class Dialog {
 
@@ -57,8 +60,9 @@ namespace BallFramework
             void OtherPlayer();
 
         private:
+            int md_playerIndex = 1;
             std::string md_dialog1 = "Set Player";
-            std::string md_currentPlayer = "1";
+            std::string md_currentPlayer = std::to_string(md_playerIndex);
             std::string md_dialog2 = "'s name:";
         } m_dialog;
     };

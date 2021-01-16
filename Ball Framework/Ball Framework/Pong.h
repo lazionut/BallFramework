@@ -16,7 +16,7 @@ namespace BallFramework
 	class Pong : public Game
 	{
 	public:
-		Pong(uint16_t width, uint16_t height, TTF_Font* font, const std::string& player1Name, const std::string& player2Name, uint32_t flags = 0, uint16_t maxFPS = 0);
+		Pong(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags = 0, uint16_t maxFPS = 0);
 
 	private: //override Game class methods
 		void Start() override;

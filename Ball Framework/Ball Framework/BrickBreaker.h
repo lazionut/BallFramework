@@ -17,7 +17,7 @@ namespace BallFramework
 	class BrickBreaker : public Game
 	{
 	public:
-		BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, const std::string& playerName, uint32_t flags = 0, uint16_t maxFPS = 0);
+		BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags = 0, uint16_t maxFPS = 0);
 
 	private: //override Game class methods
 		void Start() override;

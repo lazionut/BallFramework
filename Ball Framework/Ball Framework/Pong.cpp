@@ -28,7 +28,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
-	Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, const std::string& player1Name, const std::string& player2Name, uint32_t flags, uint16_t maxFPS)
+	Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
 		: Game("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 		m_renderer{ nullptr },
@@ -38,7 +38,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		m_bricks{ BRICKCOLUMNS }, m_bricksNumber{ 0 },
 		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ true },
 		m_scorePlayer1{ white }, m_scorePlayer2{ white },
-		m_player1Name{ player1Name }, m_player2Name{ player2Name },
+		m_player1Name{ playersNames.front() }, m_player2Name{ playersNames.back() },
 		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.38f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, black, white, "||" },
 		m_isPaused{ false },
 		m_playersStatistics{ "..\\Assets\\statisticsPong.txt" }
