@@ -36,18 +36,11 @@ namespace BallFramework
 		void CheckPickUpCollision();
 
 		void InitializeBricks();
-		void RenderBricks(SDL_Renderer* renderer);
 
 		void InitializeHearts();
 		void RenderHearts(SDL_Renderer* renderer);
 
 		void CreatePickUp(const Vector2& position) override;
-
-		void RenderScore(SDL_Renderer* renderer);
-
-		void RenderButton(SDL_Renderer* renderer);
-		bool IsInBounds(Sint32 x, Sint32 y);
-		void Pause();
 
 	private: //SDL objects
 		SDL_Renderer* m_renderer;

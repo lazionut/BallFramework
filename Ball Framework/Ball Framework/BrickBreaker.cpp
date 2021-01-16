@@ -112,12 +112,12 @@ namespace BallFramework
 		OURBALL.SetPosition(0, 0);
 	}
 
-
-
 	void BrickBreaker::OnClose()
 	{
 		SDL_DestroyTexture(m_ballImage);
 		SDL_DestroyTexture(m_heartImage);
+		SDL_DestroyTexture(m_pickUpImage);
+		m_bricks.erase(m_bricks.begin(), m_bricks.end());
 		Time::SetTimeScale(1.0f);
 	}
 
@@ -306,44 +306,6 @@ namespace BallFramework
 		}
 	}
 
-	void BrickBreaker::RenderBricks(SDL_Renderer* renderer)
-	{
-		SDL_Rect rect;
-		decltype(auto) scale = GetScale();
-
-		for (const auto& row : m_bricks)
-		{
-			for (const auto& item : row)
-			{
-				scale.PointToPixel(rect, item.GetPosition(), item.GetWidth(), item.GetHeight());
-				SDL_RenderFillRect(renderer, &rect);
-			}
-		}
-	}
-
-	void BrickBreaker::RenderScore(SDL_Renderer* renderer)
-	{
-		SDL_Rect rect;
-
-		if (OURSCORE.GetScore() < 10)
-		{
-			GetScale().PointToPixel(rect, 0.0f, 6.1f, 0.5f, 0.9f);
-		}
-		else
-		{
-			GetScale().PointToPixel(rect, 0.0f, 6.1f, 1.0f, 0.9f);
-		}
-
-		if (m_buttonFont != nullptr)
-		{
-			SDL_RenderCopy(renderer, OURSCORE.GetText(), nullptr, &rect);
-		}
-		else
-		{
-			LOGGING_ERROR("BrickBreaker -> font not found!");
-		}
-	}
-
 	void BrickBreaker::RenderHearts(SDL_Renderer* renderer)
 	{
 		SDL_Rect rect;
@@ -354,17 +316,6 @@ namespace BallFramework
 			scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
 			SDL_RenderCopy(renderer, m_heartImage, nullptr, &rect);
 		}
-	}
-
-	void BrickBreaker::RenderButton(SDL_Renderer* renderer)
-	{
-		SDL_Rect rect;
-		decltype(auto) scale = GetScale();
-
-		scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth(), m_pauseButton.GetHeight());
-		m_pauseButton.SetRect(rect);
-		scale.PointToPixel(rect, m_pauseButton.GetPosition(), m_pauseButton.GetWidth() - 0.2f, m_pauseButton.GetHeight());
-		SDL_RenderCopy(renderer, m_pauseButton.GetText(), nullptr, &rect);
 	}
 
 #pragma endregion
@@ -383,6 +334,7 @@ namespace BallFramework
 			for (auto&& brick : row)
 			{
 				brick.Set(Vector2(x, y), BRICKW, BRICKH);
+				brick.SetColor(Colors::white);
 				x = x + SPACING + BRICKW;
 			}
 
@@ -457,31 +409,6 @@ namespace BallFramework
 		else
 		{
 			m_isPickCreated = false;
-		}
-	}
-
-	bool BrickBreaker::IsInBounds(Sint32 x, Sint32 y)
-	{
-		return (x > m_pauseButton.GetRect().x && x < m_pauseButton.GetRect().x + m_pauseButton.GetRect().w
-			&& y > m_pauseButton.GetRect().y && y < m_pauseButton.GetRect().y + m_pauseButton.GetRect().h);
-	}
-
-	void BrickBreaker::Pause()
-	{
-		m_pauseButton.ChangeFontColor();
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
-		Repaint();
-
-		if (!m_isPaused)
-		{
-			m_lastTimeScale = Time::GetTimeScale();
-			Time::SetTimeScale(0);
-			m_isPaused = !m_isPaused;
-		}
-		else
-		{
-			Time::SetTimeScale(m_lastTimeScale);
-			m_isPaused = !m_isPaused;
 		}
 	}
 

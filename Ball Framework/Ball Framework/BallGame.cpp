@@ -156,7 +156,7 @@ namespace BallFramework
 				auto [r, g, b, a] = brick.GetColor();
 				SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
-				scale.PointToPixel(rect, brick.GetPosition(), brick.GetHeight(), brick.GetWidth());
+				scale.PointToPixel(rect, brick.GetPosition(), brick.GetWidth(), brick.GetHeight());
 				SDL_RenderFillRect(renderer, &rect);
 			}
 		}
