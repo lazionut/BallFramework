@@ -37,9 +37,9 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		m_ball{ Vector2::zero, 0.75f, Vector2(pow(-1, (rand() % 2)), 0), 10 }, m_ballImage{ nullptr },
 		m_bricks{ BRICKCOLUMNS }, m_bricksNumber{ 0 },
 		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ true },
-		m_scorePlayer1{ white }, m_scorePlayer2{ white },
+		m_scorePlayer1{ Colors::white }, m_scorePlayer2{ Colors::white },
 		m_player1Name{ playersNames.front() }, m_player2Name{ playersNames.back() },
-		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.38f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, black, white, "||" },
+		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.38f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, Colors::black, Colors::white, "||" },
 		m_isPaused{ false },
 		m_playersStatistics{ "..\\Assets\\statisticsPong.txt" }
 	{
@@ -52,8 +52,8 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("ball"));
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_font));
-		m_scorePlayer1.SetText(MakeText(m_scorePlayer1.ConvertToString(), white, m_font));
-		m_scorePlayer2.SetText(MakeText(m_scorePlayer2.ConvertToString(), white, m_font));
+		m_scorePlayer1.SetText(MakeText(m_scorePlayer1.ConvertToString(), Colors::white, m_font));
+		m_scorePlayer2.SetText(MakeText(m_scorePlayer2.ConvertToString(), Colors::white, m_font));
 
 		if (m_ballImage == nullptr)
 		{
@@ -250,7 +250,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		if (m_ball.GetPosition().GetX() < LEFTLIMIT)
 		{
 			m_scorePlayer1.AddPoints(1);
-			m_scorePlayer1.SetText(MakeText(m_scorePlayer1.ConvertToString(), white, m_font));
+			m_scorePlayer1.SetText(MakeText(m_scorePlayer1.ConvertToString(), Colors::white, m_font));
 			Repaint();
 			if (m_scorePlayer1.GetScore() == 5)
 			{
@@ -266,7 +266,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		else if (m_ball.GetPosition().GetX() > RIGHTLIMIT)
 		{
 			m_scorePlayer2.AddPoints(1);
-			m_scorePlayer2.SetText(MakeText(m_scorePlayer2.ConvertToString(), white, m_font));
+			m_scorePlayer2.SetText(MakeText(m_scorePlayer2.ConvertToString(), Colors::white, m_font));
 			Repaint();
 			if (m_scorePlayer2.GetScore() == 5)
 			{

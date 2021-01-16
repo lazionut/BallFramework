@@ -159,12 +159,12 @@ namespace BallFramework
 		{
 			if (count == 0) 
 			{
-				button.SetButton(Vector2(0.0f, 3.0f), 3.0f, 0.7f, white, black, "Play Pong");
+				button.SetButton(Vector2(0.0f, 3.0f), 3.0f, 0.7f, Colors::white, Colors::black, "Play Pong");
 				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 			}
 			else 
 			{
-				button.SetButton(Vector2(0.0f, 1.5f), 5.0f, 0.7f, white, black, "Play BrickBreaker");
+				button.SetButton(Vector2(0.0f, 1.5f), 5.0f, 0.7f, Colors::white, Colors::black, "Play BrickBreaker");
 				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 			}
 			++count;

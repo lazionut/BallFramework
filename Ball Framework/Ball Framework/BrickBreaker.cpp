@@ -45,9 +45,9 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 		m_bricks{ BRICKROWS },
 		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ false },
 		m_heartImage{ nullptr }, m_heartCounter{ 3 },
-		m_score{ white },
+		m_score{ Colors::white },
 		m_playerName{ playersNames.front() },
-		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, black, white, "||" },
+		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, Colors::black, Colors::white, "||" },
 		m_isPaused{ false },
 		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
 	{
@@ -62,7 +62,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("redBall"));
 		m_heartImage = LoadGameImage(Paths::ReturnObjectPath("redHeart"));
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_font));
-		m_score.SetText(MakeText(std::to_string(m_score.GetScore()), white, m_font));
+		m_score.SetText(MakeText(std::to_string(m_score.GetScore()), Colors::white, m_font));
 
 		if (m_ballImage == nullptr)
 		{
@@ -242,7 +242,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 					LOGGING_INFO("BrickBreaker -> ball-brick collision");
 
 					m_score.AddPoints(1);
-					m_score.SetText(MakeText(m_score.ConvertToString(), white, m_font));
+					m_score.SetText(MakeText(m_score.ConvertToString(), Colors::white, m_font));
 					return;
 				}
 			}

@@ -39,7 +39,7 @@ namespace BallFramework
 
         const std::regex m_codeValidation;
 
-        SDL_Color m_textColor = white;
+        SDL_Color m_textColor = Colors::white;
         SDL_Renderer* m_renderer;
 
         SDL_Texture* m_textTexture;
