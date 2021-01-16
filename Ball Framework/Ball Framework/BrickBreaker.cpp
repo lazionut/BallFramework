@@ -13,16 +13,17 @@ namespace BallFramework
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
 
-constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
-constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
-constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
-constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+	constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
+	constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
+	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+	constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
-#define ACTIONTIME 2.0f
+#define ACTIONTIME 5.0f
 #define PICKUPSIZECHANGE 0.25f
 #define PICKUPSPEEDCHANGE 2.0f
 
@@ -36,22 +37,32 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 #pragma endregion
 
-	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
-		: Game("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
+#pragma region OUR_OBJECTS
 
-		m_renderer{ nullptr },
-		m_paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0),
-		m_ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f), m_ballImage{ nullptr },
-		m_bricks{ BRICKROWS },
-		m_pickUpImage{ nullptr }, m_isPickCreated{ false }, m_isPickActive{ false },
-		m_heartImage{ nullptr }, m_heartCounter{ 3 },
+#define OURBALL m_balls[0] 
+#define OURPLAYER m_players[0] 
+#define OURSCORE m_scores[0] 
+
+#pragma endregion
+
+	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
+		: BallGame("BrickBreaker", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
+
+		m_renderer{ nullptr }, m_heartImage{ nullptr },
+		m_heartCounter{ 3 }, m_brickCounter{ BRICKCOUNTER },
 		m_score{ Colors::white },
-		m_playerName{ playersNames.front() },
-		m_font{ font }, m_pauseButton{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, Colors::black, Colors::white, "||" },
-		m_isPaused{ false },
-		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" }
+		m_playerName{ playersNames.front() }
 	{
 		m_lastTimeScale = Time::GetTimeScale();
+		m_buttonFont = font;
+		m_isPickCreated = false;
+		m_isPickActive = false;
+		m_isPaused = false;
+		m_pickUpImage = nullptr;
+		m_ballImage = nullptr;
+		m_bricks = std::vector<std::vector<Brick>>{ BRICKROWS };
+		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsBB.txt" };
+		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
 	}
 
 	void BrickBreaker::Start()
@@ -61,8 +72,12 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("redBall"));
 		m_heartImage = LoadGameImage(Paths::ReturnObjectPath("redHeart"));
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_font));
-		m_score.SetText(MakeText(std::to_string(m_score.GetScore()), Colors::white, m_font));
+
+		m_players.emplace_back(Paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0)),
+			m_balls.emplace_back(Ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+		m_score.SetText(MakeText(std::to_string(m_score.GetScore()), Colors::white, m_buttonFont));
+		m_scores.push_back(m_score);
 
 		if (m_ballImage == nullptr)
 		{
@@ -93,32 +108,11 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 	void BrickBreaker::ResetBall()
 	{
-		m_ball.SetDirection(0, 1);
-		m_ball.SetPosition(0, 0);
+		OURBALL.SetDirection(0, 1);
+		OURBALL.SetPosition(0, 0);
 	}
 
-	void BrickBreaker::Update()
-	{
-		m_paddle.Move();
-		m_ball.Move();
 
-		if (m_isPickCreated)
-		{
-			if (m_pickUp.IsActionActive())
-			{
-				if (m_pickUp.ContinueAction())
-				{
-					m_isPickCreated = false;
-					return;
-				}
-			}
-
-			if (m_pickUp.IsMoving())
-			{
-				m_pickUp.Move();
-			}
-		}
-	}
 
 	void BrickBreaker::OnClose()
 	{
@@ -140,37 +134,37 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 	void BrickBreaker::CheckPaddleWallCollision()
 	{
-		if (m_paddle.GetPosition().GetX() < LEFTLIMIT + m_paddle.GetWidth() / 2)
+		if (OURPLAYER.GetPosition().GetX() < LEFTLIMIT + OURPLAYER.GetWidth() / 2)
 		{
-			m_paddle.SetPosition(LEFTLIMIT + m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
+			OURPLAYER.SetPosition(LEFTLIMIT + OURPLAYER.GetWidth() / 2, OURPLAYER.GetPosition().GetY());
 		}
-		else if (m_paddle.GetPosition().GetX() > RIGHTLIMIT - m_paddle.GetWidth() / 2)
+		else if (OURPLAYER.GetPosition().GetX() > RIGHTLIMIT - OURPLAYER.GetWidth() / 2)
 		{
-			m_paddle.SetPosition(RIGHTLIMIT - m_paddle.GetWidth() / 2, m_paddle.GetPosition().GetY());
+			OURPLAYER.SetPosition(RIGHTLIMIT - OURPLAYER.GetWidth() / 2, OURPLAYER.GetPosition().GetY());
 		}
 	}
 
 	void BrickBreaker::CheckBallWallCollision()
 	{
-		const Vector2& ballPosition = m_ball.GetPosition();
+		const Vector2& ballPosition = OURBALL.GetPosition();
 
-		if (ballPosition.GetX() + m_ball.GetSize() / 2 > RIGHTLIMIT)
+		if (ballPosition.GetX() + OURBALL.GetSize() / 2 > RIGHTLIMIT)
 		{
-			m_ball.GetPosition().SetX(RIGHTLIMIT - m_ball.GetSize() / 2);
-			m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+			OURBALL.GetPosition().SetX(RIGHTLIMIT - OURBALL.GetSize() / 2);
+			OURBALL.SetDirection(-OURBALL.GetDirection().GetX(), OURBALL.GetDirection().GetY());
 			LOGGING_INFO("BrickBreaker -> ball-right wall collision");
 		}
-		else if (ballPosition.GetX() - m_ball.GetSize() / 2 < LEFTLIMIT)
+		else if (ballPosition.GetX() - OURBALL.GetSize() / 2 < LEFTLIMIT)
 		{
-			m_ball.SetPosition(LEFTLIMIT + m_ball.GetSize() / 2, m_ball.GetPosition().GetY());
-			m_ball.SetDirection(-m_ball.GetDirection().GetX(), m_ball.GetDirection().GetY());
+			OURBALL.SetPosition(LEFTLIMIT + OURBALL.GetSize() / 2, OURBALL.GetPosition().GetY());
+			OURBALL.SetDirection(-OURBALL.GetDirection().GetX(), OURBALL.GetDirection().GetY());
 			LOGGING_INFO("BrickBreaker -> ball-left wall collision");
 		}
 
 		if (ballPosition.GetY() > BRICKLIMIT_Y)
 		{
-			m_ball.GetPosition().SetY(BRICKLIMIT_Y);
-			m_ball.SetDirection(m_ball.GetDirection().GetX(), -m_ball.GetDirection().GetY());
+			OURBALL.GetPosition().SetY(BRICKLIMIT_Y);
+			OURBALL.SetDirection(OURBALL.GetDirection().GetX(), -OURBALL.GetDirection().GetY());
 			LOGGING_INFO("BrickBreaker -> ball-upper wall collision");
 		}
 
@@ -182,7 +176,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 			if (m_heartCounter == 0)
 			{
 				//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
-				m_playersStatistics.UpdateStatistics(m_playerName, true);
+				m_playersStatistics.UpdateStatistics(m_playerName, false);
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", nullptr);
 				Stop();
 			}
@@ -192,32 +186,32 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 	void BrickBreaker::CheckBallPaddleCollision()
 	{
-		if (m_ball.CheckCollision(m_paddle))
+		if (OURBALL.CheckCollision(OURPLAYER))
 		{
-			if (m_ball.GetPosition().GetY() >= m_paddle.GetPosition().GetY() + m_paddle.GetHeight() / 2) //temporary solution to a bug
+			if (OURBALL.GetPosition().GetY() >= OURPLAYER.GetPosition().GetY() + OURPLAYER.GetHeight() / 2) //temporary solution to a bug
 			{
-				//m_ball.ChangeDirection(m_paddle);
-				float difference = abs(m_ball.GetPosition().GetX() - m_paddle.GetPosition().GetX());
-				m_ball.GetDirection().GetY() *= -1;
+				//OURBALL.ChangeDirection(OURPLAYER);
+				float difference = abs(OURBALL.GetPosition().GetX() - OURPLAYER.GetPosition().GetX());
+				OURBALL.GetDirection().GetY() *= -1;
 
-				//if (m_ball.GetDirection().GetX() >= 0) //prima versiune
+				//if (OURBALL.GetDirection().GetX() >= 0) //prima versiune
 
-				if (m_ball.GetPosition().GetX() >= m_paddle.GetPosition().GetX())
+				if (OURBALL.GetPosition().GetX() >= OURPLAYER.GetPosition().GetX())
 					//asta e a doua optiune de design in care mingea isi schimba dir 
 					//pe axa x in functie de unde pica pe paleta
 				{
-					m_ball.GetDirection().SetX(difference);
+					OURBALL.GetDirection().SetX(difference);
 				}
 				else
 				{
-					m_ball.GetDirection().SetX(-difference);
+					OURBALL.GetDirection().SetX(-difference);
 				}
 
-				m_ball.GetDirection().Normalize();
+				OURBALL.GetDirection().Normalize();
 			}
 			else
 			{
-				m_ball.SetDirection(Vector2::down);
+				OURBALL.SetDirection(Vector2::down);
 				LOGGING_INFO("BrickBreaker -> ball-paddle lose collision");
 			}
 		}
@@ -229,23 +223,32 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 		{
 			for (auto element = row.begin(); element < row.end(); ++element)
 			{
-				if (m_ball.CheckCollision(*element))
+				if (OURBALL.CheckCollision(*element))
 				{
 					if (m_isPickCreated == false)
 					{
 						CreatePickUp(element->GetPosition());
 					}
 
-					m_ball.ChangeDirection(*element);
+					OURBALL.ChangeDirection(*element);
 					row.erase(element);
+					--m_brickCounter;
 
 					LOGGING_INFO("BrickBreaker -> ball-brick collision");
 
-					m_score.AddPoints(1);
-					m_score.SetText(MakeText(m_score.ConvertToString(), Colors::white, m_font));
+					OURSCORE.AddPoints(1);
+					OURSCORE.SetText(MakeText(OURSCORE.ConvertToString(), Colors::white, m_buttonFont));
 					return;
 				}
 			}
+
+		}
+		if (m_brickCounter == 0)
+		{
+			//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
+			m_playersStatistics.UpdateStatistics(m_playerName, true);
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "You won! Congratulations!", nullptr);
+			Stop();
 		}
 	}
 
@@ -255,59 +258,22 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 		{
 			if (m_pickUp.IsMoving())
 			{
-				if (m_pickUp.CheckCollision(m_paddle))
+				if (m_pickUp.CheckCollision(OURPLAYER))
 				{
 					m_pickUp.InvokeAction();
 					m_isPickActive = false;
 					LOGGING_INFO("BrickBreaker -> player paddle-pick-up collision");
 				}
 			}
-			else 
+			else
 			{
-				if (m_pickUp.CheckCollision(m_ball))
+				if (m_pickUp.CheckCollision(OURBALL))
 				{
 					m_pickUp.InvokeAction();
 					m_isPickActive = false;
 					LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
 				}
 			}
-		}
-	}
-
-#pragma endregion
-
-#pragma region Input Events
-
-	void BrickBreaker::KeyPressed(const SDL_Keycode& key)
-	{
-		if (!m_isPaused)
-		{
-			m_paddle.KeyPressed(key);
-		}
-	}
-
-	void BrickBreaker::KeyReleased(const SDL_Keycode& key)
-	{
-		if (key == SDLK_p || key == SDLK_ESCAPE)
-		{
-			Pause();
-		}
-		else if (!m_isPaused)
-		{
-			m_paddle.KeyReleased(key);
-		}
-	}
-
-	void BrickBreaker::MousePressed(const SDL_MouseButtonEvent& mouse)
-	{
-		IsInBounds(mouse.x, mouse.y);
-	}
-
-	void BrickBreaker::MouseReleased(const SDL_MouseButtonEvent& mouse)
-	{
-		if (IsInBounds(mouse.x, mouse.y))
-		{
-			Pause();
 		}
 	}
 
@@ -321,7 +287,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 		SDL_Rect rect;
 		decltype(auto) scale = GetScale();
 
-		scale.PointToPixel(rect, m_paddle.GetPosition(), m_paddle.GetWidth(), m_paddle.GetHeight());
+		scale.PointToPixel(rect, OURPLAYER.GetPosition(), OURPLAYER.GetWidth(), OURPLAYER.GetHeight());
 		SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
 		SDL_RenderFillRect(m_renderer, &rect);
 
@@ -330,7 +296,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 		RenderHearts(m_renderer);
 		RenderButton(m_renderer);
 
-		scale.PointToPixel(rect, m_ball.GetPosition(), m_ball.GetSize(), m_ball.GetSize());
+		scale.PointToPixel(rect, OURBALL.GetPosition(), OURBALL.GetSize(), OURBALL.GetSize());
 		SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &rect);
 
 		if (m_isPickActive)
@@ -359,7 +325,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 	{
 		SDL_Rect rect;
 
-		if (m_score.GetScore() < 10)
+		if (OURSCORE.GetScore() < 10)
 		{
 			GetScale().PointToPixel(rect, 0.0f, 6.1f, 0.5f, 0.9f);
 		}
@@ -368,9 +334,9 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 			GetScale().PointToPixel(rect, 0.0f, 6.1f, 1.0f, 0.9f);
 		}
 
-		if (m_font != nullptr)
+		if (m_buttonFont != nullptr)
 		{
-			SDL_RenderCopy(renderer, m_score.GetText(), nullptr, &rect);
+			SDL_RenderCopy(renderer, OURSCORE.GetText(), nullptr, &rect);
 		}
 		else
 		{
@@ -412,7 +378,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 
 		for (auto&& row : m_bricks)
 		{
-			row.resize(BRICKPERROW);
+			row.resize(BRICKPERROW); //MODIFY
 
 			for (auto&& brick : row)
 			{
@@ -459,26 +425,26 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
 				break;
 			case Generator::PADDLESIZECHANGE:
-				m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(m_paddle, PADDLESIZEDIFFERENCE);
+				m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(OURPLAYER, PADDLESIZEDIFFERENCE);
 				m_pickUp.SetDirection(Vector2::down);
 				m_pickUp.StartMoving();
 				break;
 			case Generator::PADDLESPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(m_paddle, PADDLESPEEDDIFFERENCE);
+				m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(OURPLAYER, PADDLESPEEDDIFFERENCE);
 				m_pickUp.SetDirection(Vector2::down);
 				m_pickUp.StartMoving();
 				break;
 			case Generator::BALLSIZECHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(m_ball, BALLSIZEDIFFERENCE);
+				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(OURBALL, BALLSIZEDIFFERENCE);
 				break;
 			case Generator::BALLSPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(m_ball, BALLSPEEDDIFFERENCE);
+				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(OURBALL, BALLSPEEDDIFFERENCE);
 				break;
 			case Generator::BONUSPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(m_score, rand() % MAXSCOREDIFFERENCE + 1);
+				m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(OURSCORE, rand() % MAXSCOREDIFFERENCE + 1);
 				break;
 			case Generator::REMOVEPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(m_score, rand() % MAXSCOREDIFFERENCE + 1);
+				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(OURSCORE, rand() % MAXSCOREDIFFERENCE + 1);
 				break;
 			default:
 				m_isPickCreated = false;
@@ -503,7 +469,7 @@ constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
 	void BrickBreaker::Pause()
 	{
 		m_pauseButton.ChangeFontColor();
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_font));
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
 		Repaint();
 
 		if (!m_isPaused)

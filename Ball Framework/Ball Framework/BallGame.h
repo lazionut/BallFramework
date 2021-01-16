@@ -44,7 +44,7 @@ namespace BallFramework
 		std::vector<std::vector<Brick>> m_bricks;
 		std::vector<Score> m_scores;
 
-		PickUpGenerator m_pickupgenerator;
+		PickUpGenerator m_pickUpGenerator;
 		PickUp m_pickUp;
 
 		Button m_pauseButton;
@@ -62,7 +62,7 @@ namespace BallFramework
 		void MousePressed(const SDL_MouseButtonEvent& mouse) override final;
 		void MouseReleased(const SDL_MouseButtonEvent& mouse) override final;
 
-	private:
+	protected:
 		TTF_Font* m_buttonFont;
 
 		SDL_Color m_paddleColor;
