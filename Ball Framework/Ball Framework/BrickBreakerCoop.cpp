@@ -111,13 +111,13 @@ namespace BallFramework
 
 		m_pickUpGenerator.SetDefaultProperties(Vector2::right, PICKUPSIZECHANGE, PICKUPSPEEDCHANGE, ACTIONTIME);
 
-		m_paddleColors.push_back(Colors::blue);
-		m_paddleOutlines.push_back(Colors::orange);
-		m_outlineSizes.push_back(0.05f);
+		m_paddleColor.push_back(Colors::blue);
+		m_paddleOutline.push_back(Colors::orange);
+		m_outlineSize.push_back(0.05f);
 
-		m_paddleColors.push_back(Colors::green);
-		m_paddleOutlines.push_back(Colors::violet);
-		m_outlineSizes.push_back(0.05f);
+		m_paddleColor.push_back(Colors::green);
+		m_paddleOutline.push_back(Colors::violet);
+		m_outlineSize.push_back(0.05f);
 	}
 
 	void BrickBreakerCoop::OnClose()
