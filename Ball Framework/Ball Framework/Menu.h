@@ -1,6 +1,8 @@
 #pragma once
 #include "Game.h"
 #include "BrickBreaker.h"
+#include "BrickBreakerCoop.h"
+#include "BrickBreakerVs.h"
 #include "Pong.h"
 #include "PongMP.h"
 #include "Button.h"

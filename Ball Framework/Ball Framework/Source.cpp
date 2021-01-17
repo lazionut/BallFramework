@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 
 	if (initializeSDL())
 	{
-		std::unique_ptr<Game> menu { new Menu(500, 500, SDL_WINDOW_RESIZABLE, 60) };
+		std::unique_ptr<Game> menu { new Menu(500, 700, SDL_WINDOW_RESIZABLE, 60) };
 
 		menu->Run();
 	}

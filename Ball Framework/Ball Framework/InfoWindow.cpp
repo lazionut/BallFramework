@@ -23,6 +23,10 @@ namespace BallFramework
 	void InfoWindow::Start()
 	{
 		SDL_StartTextInput();
+		if (m_playersNumber == 1)
+		{
+			m_dialog.SetDialog("");
+		}
 	}
 
 	void InfoWindow::OnClose()
@@ -109,7 +113,11 @@ namespace BallFramework
 			if (m_validName) {
 				m_playersNames.emplace_back(m_inputText);
 				m_inputText.clear();
-				m_dialog.OtherPlayer();
+
+				if (m_playersNames.size() < m_playersNumber)
+				{
+					m_dialog.OtherPlayer();
+				}
 				m_validName = false;
 			}
 
@@ -131,5 +139,11 @@ namespace BallFramework
 		md_playerIndex++;
 		md_currentPlayer = std::to_string(md_playerIndex);
 	}
+
+	void InfoWindow::Dialog::SetDialog(const std::string& text)
+	{
+		md_currentPlayer = text;
+	}
+
 
 }

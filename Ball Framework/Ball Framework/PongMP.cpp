@@ -51,7 +51,7 @@ namespace BallFramework
 		m_ballImage = nullptr;
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKCOLUMNS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsPong.txt" };
-		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.3f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
+		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.4f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
 	}
 
 	void PongMP::Start()

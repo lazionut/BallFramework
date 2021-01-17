@@ -6,14 +6,14 @@ namespace BallFramework
 	Button::Button()
 		: Rectangle{ Vector2::zero, 0.0f, 0.0f },
 		m_text{ "" }, m_backColor{ Colors::white }, m_fontColor{ Colors::black }, m_changedBack{ false }, m_changedFont{ false },
-		m_buttonText{ nullptr }, m_rect{ 0, 0, 0, 0 }
+		m_buttonText{ nullptr }, m_rect{ 0, 0, 0, 0 }, m_buttonId{ 0 }
 	{
 	}
 
 	Button::Button(const Vector2& position, const float& width, const float& height, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& text)
 		: Rectangle{ position, width, height },
 		m_text{ text }, m_backColor{ backColor }, m_fontColor{ fontColor }, m_changedBack{ false },
-		m_changedFont{ false }, m_buttonText{ nullptr }, m_rect{ 0, 0, 0, 0 }
+		m_changedFont{ false }, m_buttonText{ nullptr }, m_rect{ 0, 0, 0, 0 }, m_buttonId{ 0 }
 	{
 	}
 
@@ -52,6 +52,11 @@ namespace BallFramework
 		return m_text;
 	}
 
+	const int& Button::GetButtonId() const
+	{
+		return m_buttonId;
+	}
+
 	void Button::ChangeBackColor()
 	{
 		if (!m_changedBack)
@@ -85,12 +90,18 @@ namespace BallFramework
 		SDL_DestroyTexture(m_buttonText);
 	}
 
-	void Button::SetButton(const Vector2& position, const float& width, const float& height, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& text)
+	void Button::SetButton(const Vector2& position, const float& width, const float& height, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& text, int id)
 	{
 		Set(position, width, height);
 		m_text = text;
 		m_backColor = backColor;
 		m_fontColor = fontColor;
+		m_buttonId = id;
+	}
+
+	void Button::SetId(int id)
+	{
+		m_buttonId = id;
 	}
 
 	SDL_Texture* Button::GetText() const

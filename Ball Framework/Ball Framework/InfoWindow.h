@@ -56,10 +56,11 @@ namespace BallFramework
 
 		public:
 			std::string GetDialog();
+			void SetDialog(const std::string& text);
 			void OtherPlayer();
 
 		private:
-			int md_playerIndex = 1;
+			uint8_t md_playerIndex = 1;
 			std::string md_dialog1 = "Set Player";
 			std::string md_currentPlayer = std::to_string(md_playerIndex);
 			std::string md_dialog2 = "'s name:";
