@@ -8,7 +8,6 @@ namespace BallFramework
 		m_ballImage{ nullptr }, m_pickUpImage{ nullptr },
 		m_isPickCreated{ false }, m_isPickActive{ false }, m_isPaused{ false },
 		m_buttonFont{ font },
-		m_outlineSize{ 0.0f }, m_paddleColor{ 0, 0, 0, 0 }, m_paddleOutline{ 0,0,0,0 },
 		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" },
 		m_lastTimeScale{ Time::GetTimeScale() } {}
 
@@ -187,13 +186,6 @@ namespace BallFramework
 	}
 
 #pragma endregion
-
-	void BallGame::SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize)
-	{
-		m_paddleColor = paddleColor;
-		m_paddleOutline = outlineColor;
-		m_outlineSize = outlineSize;
-	}
 
 	void BallGame::Pause()
 	{

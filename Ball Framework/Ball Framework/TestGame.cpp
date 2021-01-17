@@ -23,7 +23,7 @@ namespace BallFramework
 			return;
 		}
 
-		SetPaddlesColors({ 255, 255, 255, 255 }, { 255, 0, 0, 255 }, 0.2);
+		//SetPaddlesColors({ 255, 255, 255, 255 }, { 255, 0, 0, 255 }, 0.2); nu mai exista setterul
 
 		//nu trebuie neaparat nu emplace back, se poate folosi si push_back
 		m_players.emplace_back(Vector2::down, 0.5f, 0.5f, Vector2::zero, Vector2::zero, 0, 0, 0);
