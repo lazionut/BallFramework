@@ -165,6 +165,9 @@
     <ClCompile Include="BrickBreakerCoop.cpp">
       <Filter>Source Files\BrickBreaker</Filter>
     </ClCompile>
+    <ClCompile Include="BrickBreakerVs.cpp">
+      <Filter>Source Files\BrickBreaker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -246,6 +249,9 @@
       <Filter>Header Files\Pong</Filter>
     </ClInclude>
     <ClInclude Include="BrickBreakerCoop.h">
+      <Filter>Header Files\BrickBreaker</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickBreakerVs.h">
       <Filter>Header Files\BrickBreaker</Filter>
     </ClInclude>
   </ItemGroup>

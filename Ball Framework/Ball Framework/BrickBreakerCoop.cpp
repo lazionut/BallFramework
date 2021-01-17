@@ -144,28 +144,12 @@ namespace BallFramework
 		SDL_Rect rect;
 		decltype(auto) scale = GetScale();
 
-		/*scale.PointToPixel(rect, PLAYER1.GetPosition(), PLAYER1.GetWidth(), PLAYER1.GetHeight());
-		SDL_SetRenderDrawColor(m_renderer, 0, 0, 255, 255);
-		SDL_RenderFillRect(m_renderer, &rect);
-
-		scale.PointToPixel(rect, PLAYER2.GetPosition(), PLAYER2.GetWidth(), PLAYER2.GetHeight());
-		SDL_SetRenderDrawColor(m_renderer, 0, 255, 0, 255);
-		SDL_RenderFillRect(m_renderer, &rect);*/
-
 		RenderPaddles(m_renderer);
 		RenderBricks(m_renderer);
 		RenderScore(m_renderer);
 		RenderHearts(m_renderer);
 		RenderButton(m_renderer);
-
-		scale.PointToPixel(rect, OURBALL.GetPosition(), OURBALL.GetSize(), OURBALL.GetSize());
-		SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &rect);
-
-		if (m_isPickActive)
-		{
-			scale.PointToPixel(rect, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
-			SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &rect);
-		}
+		RenderGameObjects(m_renderer);
 	}
 
 	void BrickBreakerCoop::ResetBall()

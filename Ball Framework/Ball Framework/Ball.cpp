@@ -1,5 +1,5 @@
 #include "Ball.h"
-
+#include <SDL_ttf.h>
 namespace BallFramework
 {
 
@@ -46,6 +46,16 @@ namespace BallFramework
 	float Ball::GetSpeed() const
 	{
 		return m_speed;
+	}
+
+	uint16_t Ball::GetId() const noexcept
+	{
+		return m_id;
+	}
+
+	void Ball::SetId(uint16_t id) noexcept
+	{
+		m_id = id;
 	}
 
 	void Ball::SetPosition(const Vector2& position)

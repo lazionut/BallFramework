@@ -4,20 +4,20 @@ namespace BallFramework
 {
 
 	Score::Score(const SDL_Color& color) :
-		m_scoreColor {color},
+		m_scoreColor{ color },
 		m_position{ Vector2::zero },
 		m_width{ 0 }, m_height{ 0 },
-		m_scoreText { nullptr }
+		m_scoreText{ nullptr }
 	{
 		m_points = 0;
 	}
 
-	void Score::AddPoints(uint16_t points)
+	void Score::AddPoints(int16_t points)
 	{
 		m_points += points;
 	}
 
-	uint16_t Score::GetScore() const
+	int16_t Score::GetScore() const
 	{
 		return m_points;
 	}
@@ -47,6 +47,11 @@ namespace BallFramework
 		{
 			m_scoreText = text;
 		}
+	}
+
+	void Score::SetScore(int16_t points)
+	{
+		m_points = points;
 	}
 
 	void Score::SetPosition(const Vector2& position)

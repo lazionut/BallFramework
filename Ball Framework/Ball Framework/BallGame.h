@@ -63,6 +63,7 @@ namespace BallFramework
 		PlayersStatistics m_playersStatistics;
 
 		SDL_Texture* m_ballImage;
+		std::vector<SDL_Texture*> m_ballImages;
 		SDL_Texture* m_pickUpImage;
 
 	private:

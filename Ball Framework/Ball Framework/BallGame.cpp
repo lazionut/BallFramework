@@ -97,7 +97,7 @@ namespace BallFramework
 		SDL_Rect aux;
 		decltype(auto) scale = GetScale();
 
-		uint16_t index = 0;
+		uint32_t index = 0;
 		for (const auto& player : m_players)
 		{
 			SDL_SetRenderDrawColor(renderer, m_paddleOutlines[index].r, m_paddleOutlines[index].g, m_paddleOutlines[index].b, m_paddleOutlines[index].a);
@@ -127,11 +127,12 @@ namespace BallFramework
 			scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
 			SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &aux);
 		}
-
+		uint32_t index = 0;
 		for (const auto& ball : m_balls)
 		{
 			scale.PointToPixel(aux, ball.GetPosition(), ball.GetSize(), ball.GetSize());
-			SDL_RenderCopy(renderer, m_ballImage, nullptr, &aux);
+			SDL_RenderCopy(renderer, m_ballImages[index], nullptr, &aux);
+			++index;
 		}
 	}
 

@@ -19,7 +19,9 @@ namespace BallFramework
 		const Vector2& GetDirection() const;
 		Vector2& GetDirection();
 		float GetSpeed() const;
+		uint16_t GetId() const noexcept;
 
+		void SetId(uint16_t id) noexcept;
 		void SetPosition(const Vector2& position);
 		void SetPosition(float x, float y);
 		void SetSize(float size);
@@ -42,6 +44,7 @@ namespace BallFramework
 	private:
 		Vector2 m_position, m_direction;
 		float m_size, m_speed;
+		uint16_t m_id;
 	};
 
 }
