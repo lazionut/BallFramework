@@ -168,6 +168,9 @@
     <ClCompile Include="BrickBreakerVs.cpp">
       <Filter>Source Files\BrickBreaker</Filter>
     </ClCompile>
+    <ClCompile Include="Statistics.cpp">
+      <Filter>Source Files\Framework\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="BrickBreakerVs.h">
       <Filter>Header Files\BrickBreaker</Filter>
+    </ClInclude>
+    <ClInclude Include="Statistics.h">
+      <Filter>Header Files\Framework\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

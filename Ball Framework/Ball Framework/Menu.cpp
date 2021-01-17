@@ -156,7 +156,8 @@ namespace BallFramework
 			break;
 
 		case 5:
-
+			Statistics * stat = new Statistics();
+			delete stat;
 			break;
 		}
 

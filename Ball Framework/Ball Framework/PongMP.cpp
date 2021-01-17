@@ -43,7 +43,7 @@ namespace BallFramework
 		m_player1Score{ Colors::white }, m_player2Score{ Colors::white }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKCOLUMNS };
-		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsPong.txt" };
+		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsPongMP.txt" };
 		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.4f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
 	}
 

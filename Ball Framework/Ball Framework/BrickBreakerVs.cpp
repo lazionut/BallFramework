@@ -57,7 +57,7 @@ namespace BallFramework
 		m_player1Name{ playersNames.front() }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKROWS };
-		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsBB.txt" };
+		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsBBVS.txt" };
 		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
 	}
 

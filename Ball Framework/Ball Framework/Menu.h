@@ -7,6 +7,7 @@
 #include "PongMP.h"
 #include "Button.h"
 #include "InfoWindow.h"
+#include "Statistics.h"
 #include <vector>
 #include <SDL_ttf.h>
 
