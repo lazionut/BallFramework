@@ -15,7 +15,6 @@
 
 namespace BallFramework
 {
-
 	class BallGame : public Game
 	{
 	public:
@@ -24,7 +23,7 @@ namespace BallFramework
 		void SetPlayers(const std::vector<std::string>& players);
 
 	protected:
-		void SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, float outlineSize);
+		void SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize);
 
 		void Pause();
 
@@ -45,16 +44,15 @@ namespace BallFramework
 		bool m_isPickCreated;
 		bool m_isPickActive;
 		bool m_isPaused;
+		std::vector<float> m_outlineSizes;
+		std::vector<SDL_Color> m_paddleColors;
+		std::vector<SDL_Color> m_paddleOutlines;
 
 	protected:
 		std::vector<Paddle> m_players;
 		std::vector<Ball> m_balls;
 		std::vector<std::vector<Brick>> m_bricks;
 		std::vector<Score> m_scores;
-
-		std::vector<float> m_outlineSize;
-		std::vector<SDL_Color> m_paddleColor;
-		std::vector<SDL_Color> m_paddleOutline;
 
 		PickUpGenerator m_pickUpGenerator;
 		PickUp m_pickUp;
@@ -74,5 +72,4 @@ namespace BallFramework
 		void MousePressed(const SDL_MouseButtonEvent& mouse) override final;
 		void MouseReleased(const SDL_MouseButtonEvent& mouse) override final;
 	};
-
 }

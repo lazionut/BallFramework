@@ -8,7 +8,7 @@ namespace BallFramework
 		m_ballImage{ nullptr }, m_pickUpImage{ nullptr },
 		m_isPickCreated{ false }, m_isPickActive{ false }, m_isPaused{ false },
 		m_buttonFont{ font },
-		m_outlineSize{ 0 }, m_paddleColor{ 0 }, m_paddleOutline{ 0 },
+		m_outlineSize{ 0.0f }, m_paddleColor{ 0, 0, 0, 0 }, m_paddleOutline{ 0,0,0,0 },
 		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" },
 		m_lastTimeScale{ Time::GetTimeScale() } {}
 
@@ -101,9 +101,9 @@ namespace BallFramework
 		uint16_t index = 0;
 		for (const auto& player : m_players)
 		{
-			SDL_SetRenderDrawColor(renderer, m_paddleOutline[index].r, m_paddleOutline[index].g, m_paddleOutline[index].b, m_paddleOutline[index].a);
+			SDL_SetRenderDrawColor(renderer, m_paddleOutlines[index].r, m_paddleOutlines[index].g, m_paddleOutlines[index].b, m_paddleOutlines[index].a);
 			scale.PointToPixel(aux, player.GetPosition(),
-				player.GetWidth() + m_outlineSize[index], player.GetHeight() + m_outlineSize[index]);
+				player.GetWidth() + m_outlineSizes[index], player.GetHeight() + m_outlineSizes[index]);
 			SDL_RenderFillRect(renderer, &aux);
 			++index;
 		}
@@ -111,7 +111,7 @@ namespace BallFramework
 		index = 0;
 		for (const auto& player : m_players)
 		{
-			SDL_SetRenderDrawColor(renderer, m_paddleColor[index].r, m_paddleColor[index].g, m_paddleColor[index].b, m_paddleColor[index].a);
+			SDL_SetRenderDrawColor(renderer, m_paddleColors[index].r, m_paddleColors[index].g, m_paddleColors[index].b, m_paddleColors[index].a);
 			scale.PointToPixel(aux, player.GetPosition(), player.GetWidth(), player.GetHeight());
 			SDL_RenderFillRect(renderer, &aux);
 			++index;
@@ -188,11 +188,11 @@ namespace BallFramework
 
 #pragma endregion
 
-	void BallGame::SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, float outlineSize)
+	void BallGame::SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize)
 	{
-		m_paddleColor.push_back(paddleColor);
-		m_paddleOutline.push_back(outlineColor);
-;		m_outlineSize.push_back(outlineSize);
+		m_paddleColor = paddleColor;
+		m_paddleOutline = outlineColor;
+		m_outlineSize = outlineSize;
 	}
 
 	void BallGame::Pause()

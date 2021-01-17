@@ -85,14 +85,6 @@ namespace BallFramework
 			return;
 		}
 
-		m_paddleColor.push_back(Colors::green);
-		m_paddleOutline.push_back(Colors::red);
-		m_outlineSize.push_back(0.05f);
-
-		m_paddleColor.push_back(Colors::green);
-		m_paddleOutline.push_back(Colors::red);
-		m_outlineSize.push_back(0.05f);
-
 		m_pickUpGenerator.SetDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
 	}
 
@@ -313,7 +305,6 @@ namespace BallFramework
 		scale.PointToPixel(aux, BALL.GetPosition(), BALL.GetSize(), BALL.GetSize());
 		SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &aux);
 
-		RenderPaddles(m_renderer);
 		RenderBricks(m_renderer);
 		RenderPlayersScore(m_renderer);
 		RenderButton(m_renderer);
