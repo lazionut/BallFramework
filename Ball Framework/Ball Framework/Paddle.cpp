@@ -51,14 +51,24 @@ namespace BallFramework
 		}
 	}
 
-	float Paddle::GetSpeed() const
+	void Paddle::SetDirection(Vector2 direction)
 	{
-		return m_speed;
+		m_direction = direction;
+	}
+
+	Vector2 Paddle::GetDirection()
+	{
+		return m_direction;
 	}
 
 	void Paddle::SetSpeed(float speed)
 	{
 		m_speed = speed;
+	}
+
+	float Paddle::GetSpeed() const
+	{
+		return m_speed;
 	}
 
 }

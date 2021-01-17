@@ -18,8 +18,11 @@ namespace BallFramework
 		void KeyPressed(const SDL_Keycode& key);
 		void KeyReleased(const SDL_Keycode& key);
 
-		float GetSpeed() const;
+		void SetDirection(Vector2 direction);
+		Vector2 GetDirection();
+
 		void SetSpeed(float speed);
+		float GetSpeed() const;
 
 	private:
 		Vector2 m_direction;
