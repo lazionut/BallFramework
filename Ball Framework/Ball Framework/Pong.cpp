@@ -19,11 +19,11 @@ namespace BallFramework
 #define BRICKLIMIT_Y -3
 #define BRICKSPACING 2
 
-#define PLAYER1  m_players[0] 
-#define AIPLAYER  m_players[1] 
-#define BALL     m_balls[0] 
+#define PLAYER          m_players[0] 
+#define AIPLAYER        m_players[1] 
+#define BALL            m_balls[0] 
 #define PLAYER1SCORE    m_scores[0]
-#define AISCORE    m_scores[1] 
+#define AISCORE         m_scores[1] 
 
 	constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
 	constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
@@ -35,20 +35,13 @@ namespace BallFramework
 #pragma endregion
 
 	Pong::Pong(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
-		: BallGame("Pong - Multiplayer", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
+		: BallGame("Pong", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 		m_renderer{ nullptr },
 		m_bricksNumber{ 0 },
-		m_player1Name{ playersNames[0] }, m_AIName{ playersNames[1] },
+		m_player1Name{ playersNames[0] }, m_AIName{ "A Certain Kind of Bot" },
 		m_player1Score{ Colors::white }, m_AIScore{ Colors::white }
 	{
-		m_lastTimeScale = Time::GetTimeScale();
-		m_buttonFont = font;
-		m_isPickCreated = false;
-		m_isPickActive = false;
-		m_isPaused = false;
-		m_pickUpImage = nullptr;
-		m_ballImage = nullptr;
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKCOLUMNS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsPong.txt" };
 		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.4f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
@@ -57,9 +50,6 @@ namespace BallFramework
 	void Pong::Start()
 	{
 		InitializeBricks();
-
-		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("ball"));
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
 
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED));
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDL_SCANCODE_LANG1, SDL_SCANCODE_LANG2, PADDLESPEED - 3.0f));
@@ -77,6 +67,10 @@ namespace BallFramework
 		m_AIScore.SetPosition(Vector2(-2, 4));
 		m_scores.push_back(m_AIScore);
 
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+
+		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("ball"));
+		m_ballImages.push_back(m_ballImage);
 		if (m_ballImage == nullptr)
 		{
 			LOGGING_ERROR("Pong -> ball image not found!");
@@ -91,6 +85,14 @@ namespace BallFramework
 			Stop();
 			return;
 		}
+
+		m_paddleColors.push_back(Colors::green);
+		m_paddleOutlines.push_back(Colors::dark_green);
+		m_outlineSizes.push_back(0.35f);
+
+		m_paddleColors.push_back(Colors::green);
+		m_paddleOutlines.push_back(Colors::dark_green);
+		m_outlineSizes.push_back(0.35f);
 
 		m_pickUpGenerator.SetDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
 	}
@@ -115,13 +117,13 @@ namespace BallFramework
 
 	void Pong::CheckPaddleWallCollision()
 	{
-		if (PLAYER1.GetPosition().GetY() < LOWERLIMIT + PLAYER1.GetHeight() / 2)
+		if (PLAYER.GetPosition().GetY() < LOWERLIMIT + PLAYER.GetHeight() / 2)
 		{
-			PLAYER1.SetPosition(WIDTHPADDLESPACING1, LOWERLIMIT + PLAYER1.GetHeight() / 2 + HEIGHTPADDLESPACING);
+			PLAYER.SetPosition(WIDTHPADDLESPACING1, LOWERLIMIT + PLAYER.GetHeight() / 2 + HEIGHTPADDLESPACING);
 		}
-		else if (PLAYER1.GetPosition().GetY() > UPPERLIMIT - PLAYER1.GetHeight() / 2)
+		else if (PLAYER.GetPosition().GetY() > UPPERLIMIT - PLAYER.GetHeight() / 2)
 		{
-			PLAYER1.SetPosition(WIDTHPADDLESPACING1, UPPERLIMIT - PLAYER1.GetHeight() / 2 - HEIGHTPADDLESPACING);
+			PLAYER.SetPosition(WIDTHPADDLESPACING1, UPPERLIMIT - PLAYER.GetHeight() / 2 - HEIGHTPADDLESPACING);
 		}
 		if (AIPLAYER.GetPosition().GetY() < LOWERLIMIT + AIPLAYER.GetHeight() / 2)
 		{
@@ -151,19 +153,19 @@ namespace BallFramework
 
 	void Pong::CheckBallPaddleCollision()
 	{
-		if (BALL.CheckCollision(PLAYER1))
+		if (BALL.CheckCollision(PLAYER))
 		{
-			if (BALL.GetPosition().GetX() < PLAYER1.GetPosition().GetX() - PLAYER1.GetHeight() / 2
-				&& BALL.GetPosition().GetX() > PLAYER1.GetPosition().GetX() + PLAYER1.GetHeight() / 2)
+			if (BALL.GetPosition().GetX() < PLAYER.GetPosition().GetX() - PLAYER.GetHeight() / 2
+				&& BALL.GetPosition().GetX() > PLAYER.GetPosition().GetX() + PLAYER.GetHeight() / 2)
 			{
-				if (BALL.GetPosition().GetY() > PLAYER1.GetPosition().GetY())
+				if (BALL.GetPosition().GetY() > PLAYER.GetPosition().GetY())
 					BALL.GetDirection().SetY(3);
 				else
 					BALL.GetDirection().SetY(-3);
 			}
 			else
 			{
-				float difference = BALL.GetPosition().GetY() - PLAYER1.GetPosition().GetY() / 2;
+				float difference = BALL.GetPosition().GetY() - PLAYER.GetPosition().GetY() / 2;
 				BALL.GetDirection().SetY(difference);
 				LOGGING_INFO("Pong -> ball-player1 paddle collision");
 			}
@@ -242,7 +244,7 @@ namespace BallFramework
 		{
 			if (m_pickUp.IsMoving())
 			{
-				if (m_pickUp.CheckCollision(PLAYER1) || m_pickUp.CheckCollision(AIPLAYER))
+				if (m_pickUp.CheckCollision(PLAYER) || m_pickUp.CheckCollision(AIPLAYER))
 				{
 					m_pickUp.InvokeAction();
 					m_isPickActive = false;
@@ -304,7 +306,7 @@ namespace BallFramework
 		decltype(auto) scale = GetScale();
 
 		SDL_SetRenderDrawColor(m_renderer, 0, 255, 0, 255);
-		scale.PointToPixel(aux, PLAYER1.GetPosition(), PLAYER1.GetWidth(), PLAYER1.GetHeight());
+		scale.PointToPixel(aux, PLAYER.GetPosition(), PLAYER.GetWidth(), PLAYER.GetHeight());
 		SDL_RenderFillRect(m_renderer, &aux);
 		scale.PointToPixel(aux, AIPLAYER.GetPosition(), AIPLAYER.GetWidth(), AIPLAYER.GetHeight());
 		SDL_RenderFillRect(m_renderer, &aux);
@@ -319,6 +321,7 @@ namespace BallFramework
 		scale.PointToPixel(aux, BALL.GetPosition(), BALL.GetSize(), BALL.GetSize());
 		SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &aux);
 
+		RenderPaddles(m_renderer);
 		RenderBricks(m_renderer);
 		RenderButton(m_renderer);
 		RenderScore(m_renderer);
@@ -374,13 +377,13 @@ namespace BallFramework
 				difference = 3;
 				if (randomPlayer)
 				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER1, difference);
-					m_pickUp.SetDirection(PLAYER1.GetPosition() - position);
+					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER, difference);
+					m_pickUp.SetDirection(PLAYER.GetPosition() - position);
 				}
 				else
 				{
 					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(AIPLAYER, difference);
-					m_pickUp.SetDirection(PLAYER1.GetPosition() - position);
+					m_pickUp.SetDirection(PLAYER.GetPosition() - position);
 				}
 				m_pickUp.StartMoving();
 				break;
@@ -388,13 +391,13 @@ namespace BallFramework
 				difference = 3;
 				if (randomPlayer)
 				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER1, difference);
-					m_pickUp.SetDirection(PLAYER1.GetPosition() - position);
+					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER, difference);
+					m_pickUp.SetDirection(PLAYER.GetPosition() - position);
 				}
 				else
 				{
 					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(AIPLAYER, difference);
-					m_pickUp.SetDirection(PLAYER1.GetPosition() - position);
+					m_pickUp.SetDirection(PLAYER.GetPosition() - position);
 				}
 				m_pickUp.StartMoving();
 				break;

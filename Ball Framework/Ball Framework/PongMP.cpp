@@ -42,13 +42,6 @@ namespace BallFramework
 		m_player1Name{ playersNames[0] }, m_player2Name{ playersNames[1] },
 		m_player1Score{ Colors::white }, m_player2Score{ Colors::white }
 	{
-		m_lastTimeScale = Time::GetTimeScale();
-		m_buttonFont = font;
-		m_isPickCreated = false;
-		m_isPickActive = false;
-		m_isPaused = false;
-		m_pickUpImage = nullptr;
-		m_ballImage = nullptr;
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKCOLUMNS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsPong.txt" };
 		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.4f, UPPERLIMIT - 0.5f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
@@ -57,9 +50,6 @@ namespace BallFramework
 	void PongMP::Start()
 	{
 		InitializeBricks();
-
-		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("ball"));
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
 
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED));
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED));
@@ -70,6 +60,10 @@ namespace BallFramework
 		m_scores.push_back(m_player1Score);
 		m_scores.push_back(m_player2Score);
 
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+
+		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("ball"));
+		m_ballImages.push_back(m_ballImage);
 		if (m_ballImage == nullptr)
 		{
 			LOGGING_ERROR("PongMP -> ball image not found!");
@@ -84,6 +78,14 @@ namespace BallFramework
 			Stop();
 			return;
 		}
+
+		m_paddleColors.push_back(Colors::green);
+		m_paddleOutlines.push_back(Colors::dark_green);
+		m_outlineSizes.push_back(0.35f);
+
+		m_paddleColors.push_back(Colors::green);
+		m_paddleOutlines.push_back(Colors::dark_green);
+		m_outlineSizes.push_back(0.35f);
 
 		m_pickUpGenerator.SetDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
 	}
@@ -305,6 +307,7 @@ namespace BallFramework
 		scale.PointToPixel(aux, BALL.GetPosition(), BALL.GetSize(), BALL.GetSize());
 		SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &aux);
 
+		RenderPaddles(m_renderer);
 		RenderBricks(m_renderer);
 		RenderPlayersScore(m_renderer);
 		RenderButton(m_renderer);

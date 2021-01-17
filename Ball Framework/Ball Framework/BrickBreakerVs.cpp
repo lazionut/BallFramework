@@ -38,12 +38,12 @@ namespace BallFramework
 
 #pragma region OUR_OBJECTS
 
-#define BALL1 m_balls[0] 
-#define BALL2 m_balls[1] 
-#define PLAYER1 m_players[0] 
-#define PLAYER2 m_players[1] 
-#define SCORE1 m_scores[0] 
-#define SCORE2 m_scores[1] 
+#define BALL1      m_balls[0] 
+#define BALL2      m_balls[1] 
+#define PLAYER1    m_players[0] 
+#define PLAYER2    m_players[1] 
+#define SCORE1     m_scores[0] 
+#define SCORE2     m_scores[1] 
 
 #pragma endregion
 
@@ -56,12 +56,6 @@ namespace BallFramework
 		m_score2{ Colors::white },
 		m_player1Name{ playersNames.front() }
 	{
-		m_lastTimeScale = Time::GetTimeScale();
-		m_buttonFont = font;
-		m_isPickCreated = false;
-		m_isPickActive = false;
-		m_isPaused = false;
-		m_pickUpImage = nullptr;
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKROWS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsBB.txt" };
 		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
@@ -590,4 +584,5 @@ namespace BallFramework
 			m_isPickCreated = false;
 		}
 	}
+
 }

@@ -1,4 +1,5 @@
 #include "BrickBreakerCoop.h"
+
 namespace BallFramework
 {
 
@@ -38,10 +39,10 @@ namespace BallFramework
 
 #pragma region OUR_OBJECTS
 
-#define OURBALL m_balls[0] 
-#define PLAYER1 m_players[0] 
-#define PLAYER2 m_players[1] 
-#define OURSCORE m_scores[0] 
+#define OURBALL    m_balls[0] 
+#define PLAYER1    m_players[0] 
+#define PLAYER2    m_players[1] 
+#define OURSCORE   m_scores[0] 
 
 #pragma endregion
 
@@ -52,13 +53,6 @@ namespace BallFramework
 		m_score{ Colors::white },
 		m_player1Name{ playersNames.front() }
 	{
-		m_lastTimeScale = Time::GetTimeScale();
-		m_buttonFont = font;
-		m_isPickCreated = false;
-		m_isPickActive = false;
-		m_isPaused = false;
-		m_pickUpImage = nullptr;
-		m_ballImage = nullptr;
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKROWS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsBB.txt" };
 		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
@@ -70,6 +64,7 @@ namespace BallFramework
 		InitializeHearts();
 
 		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("redBall"));
+		m_ballImages.push_back(m_ballImage);
 		m_heartImage = LoadGameImage(Paths::ReturnObjectPath("redHeart"));
 
 		m_balls.emplace_back(Ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
@@ -436,4 +431,5 @@ namespace BallFramework
 			m_isPickCreated = false;
 		}
 	}
+
 }

@@ -39,9 +39,9 @@ namespace BallFramework
 
 #pragma region OUR_OBJECTS
 
-#define OURBALL m_balls[0] 
-#define OURPLAYER m_players[0] 
-#define OURSCORE m_scores[0] 
+#define OURBALL     m_balls[0] 
+#define OURPLAYER   m_players[0] 
+#define OURSCORE    m_scores[0] 
 
 #pragma endregion
 
@@ -53,13 +53,6 @@ namespace BallFramework
 		m_score{ Colors::white },
 		m_playerName{ playersNames.front() }
 	{
-		m_lastTimeScale = Time::GetTimeScale();
-		m_buttonFont = font;
-		m_isPickCreated = false;
-		m_isPickActive = false;
-		m_isPaused = false;
-		m_pickUpImage = nullptr;
-		m_ballImage = nullptr;
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKROWS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsBB.txt" };
 		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
@@ -71,6 +64,7 @@ namespace BallFramework
 		InitializeHearts();
 
 		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("redBall"));
+		m_ballImages.push_back(m_ballImage);
 		m_heartImage = LoadGameImage(Paths::ReturnObjectPath("redHeart"));
 
 		m_players.emplace_back(Paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0)),
