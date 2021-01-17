@@ -40,14 +40,13 @@ namespace BallFramework
 	protected:
 		TTF_Font* m_buttonFont;
 
-		SDL_Color m_paddleColor;
-		SDL_Color m_paddleOutline;
-		float m_outlineSize;
-
 		float m_lastTimeScale;
 		bool m_isPickCreated;
 		bool m_isPickActive;
 		bool m_isPaused;
+		std::vector<float> m_outlineSizes;
+		std::vector<SDL_Color> m_paddleColors;
+		std::vector<SDL_Color> m_paddleOutlines;
 
 	protected:
 		std::vector<Paddle> m_players;

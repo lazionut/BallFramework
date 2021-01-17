@@ -110,6 +110,14 @@ namespace BallFramework
 		}
 
 		m_pickUpGenerator.SetDefaultProperties(Vector2::right, PICKUPSIZECHANGE, PICKUPSPEEDCHANGE, ACTIONTIME);
+
+		m_paddleColors.push_back(Colors::blue);
+		m_paddleOutlines.push_back(Colors::orange);
+		m_outlineSizes.push_back(0.05f);
+
+		m_paddleColors.push_back(Colors::green);
+		m_paddleOutlines.push_back(Colors::violet);
+		m_outlineSizes.push_back(0.05f);
 	}
 
 	void BrickBreakerCoop::OnClose()
@@ -136,14 +144,15 @@ namespace BallFramework
 		SDL_Rect rect;
 		decltype(auto) scale = GetScale();
 
-		scale.PointToPixel(rect, PLAYER1.GetPosition(), PLAYER1.GetWidth(), PLAYER1.GetHeight());
+		/*scale.PointToPixel(rect, PLAYER1.GetPosition(), PLAYER1.GetWidth(), PLAYER1.GetHeight());
 		SDL_SetRenderDrawColor(m_renderer, 0, 0, 255, 255);
 		SDL_RenderFillRect(m_renderer, &rect);
 
 		scale.PointToPixel(rect, PLAYER2.GetPosition(), PLAYER2.GetWidth(), PLAYER2.GetHeight());
 		SDL_SetRenderDrawColor(m_renderer, 0, 255, 0, 255);
-		SDL_RenderFillRect(m_renderer, &rect);
+		SDL_RenderFillRect(m_renderer, &rect);*/
 
+		RenderPaddles(m_renderer);
 		RenderBricks(m_renderer);
 		RenderScore(m_renderer);
 		RenderHearts(m_renderer);
