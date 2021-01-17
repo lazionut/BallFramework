@@ -148,19 +148,18 @@ namespace BallFramework
 	{
 		if (BALL.CheckCollision(PLAYER1))
 		{
-			if (BALL.GetPosition().GetX() < PLAYER1.GetPosition().GetX() - PLAYER1.GetHeight() / 2
-				&& BALL.GetPosition().GetX() > PLAYER1.GetPosition().GetX() + PLAYER1.GetHeight() / 2)
+			if (BALL.GetPosition().GetX() > PLAYER1.GetPosition().GetX() + PLAYER1.GetWidth() / 2)
 			{
-				if (BALL.GetPosition().GetY() > PLAYER1.GetPosition().GetY())
-					BALL.GetDirection().SetY(2);
-				else
-					BALL.GetDirection().SetY(-2);
+				float difference = (BALL.GetPosition().GetY() - PLAYER1.GetPosition().GetY()) / 2;
+				BALL.GetDirection().SetY(difference);
+				LOGGING_INFO("Pong -> ball-player1 paddle collision");
 			}
 			else
 			{
-				float difference = BALL.GetPosition().GetY() - PLAYER1.GetPosition().GetY() / 2;
-				BALL.GetDirection().SetY(difference);
-				LOGGING_INFO("Pong -> ball-player1 paddle collision");
+				if (BALL.GetPosition().GetY() > PLAYER1.GetPosition().GetY())
+					BALL.GetDirection().SetY(3);
+				else
+					BALL.GetDirection().SetY(-3);
 			}
 			BALL.GetDirection().GetX() *= -1;
 			BALL.AddSpeed(0.25f);
@@ -168,19 +167,18 @@ namespace BallFramework
 		}
 		else if (BALL.CheckCollision(PLAYER2))
 		{
-			if (BALL.GetPosition().GetX() < PLAYER2.GetPosition().GetX() - PLAYER2.GetHeight() / 2
-				&& BALL.GetPosition().GetX() > PLAYER2.GetPosition().GetX() + PLAYER2.GetHeight() / 2)
+			if ( BALL.GetPosition().GetX() < PLAYER2.GetPosition().GetX() - PLAYER2.GetWidth() / 2)
 			{
-				if (BALL.GetPosition().GetY() > PLAYER2.GetPosition().GetY())
-					BALL.GetDirection().SetY(2);
-				else
-					BALL.GetDirection().SetY(-2);
+				float difference =( BALL.GetPosition().GetY() - PLAYER2.GetPosition().GetY()) / 2;
+				BALL.GetDirection().SetY(difference);
+				LOGGING_INFO("Pong -> ball-player1 paddle collision");
 			}
 			else
 			{
-				float difference = BALL.GetPosition().GetY() - PLAYER2.GetPosition().GetY() / 2;
-				BALL.GetDirection().SetY(difference);
-				LOGGING_INFO("Pong -> ball-player1 paddle collision");
+				if (BALL.GetPosition().GetY() > PLAYER2.GetPosition().GetY())
+					BALL.GetDirection().SetY(3);
+				else
+					BALL.GetDirection().SetY(-3);
 			}
 			BALL.GetDirection().GetX() *= -1;
 			BALL.AddSpeed(0.25f);

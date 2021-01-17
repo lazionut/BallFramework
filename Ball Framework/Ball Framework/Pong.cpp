@@ -155,52 +155,52 @@ namespace BallFramework
 	{
 		if (BALL.CheckCollision(PLAYER))
 		{
-			if (BALL.GetPosition().GetX() < PLAYER.GetPosition().GetX() - PLAYER.GetHeight() / 2
-				&& BALL.GetPosition().GetX() > PLAYER.GetPosition().GetX() + PLAYER.GetHeight() / 2)
+			if ( BALL.GetPosition().GetX() > PLAYER.GetPosition().GetX() + PLAYER.GetWidth() / 2)
+			{
+				float difference = (BALL.GetPosition().GetY() - PLAYER.GetPosition().GetY()) / 2;
+				BALL.GetDirection().SetY(difference);
+				LOGGING_INFO("Pong -> ball-player1 paddle collision");
+			}
+			else
 			{
 				if (BALL.GetPosition().GetY() > PLAYER.GetPosition().GetY())
 					BALL.GetDirection().SetY(3);
 				else
 					BALL.GetDirection().SetY(-3);
 			}
-			else
-			{
-				float difference = BALL.GetPosition().GetY() - PLAYER.GetPosition().GetY() / 2;
-				BALL.GetDirection().SetY(difference);
-				LOGGING_INFO("Pong -> ball-player1 paddle collision");
-			}
 			BALL.GetDirection().GetX() *= -1;
 			BALL.AddSpeed(0.25f);
 			BALL.GetDirection().Normalize();
 		}
+
 		if (BALL.GetDirection().GetX() > 0 && BALL.GetPosition().GetX() > 1)
 		{
-			if (BALL.GetPosition().GetY() > AIPLAYER.GetPosition().GetY() + AIPLAYER.GetHeight() / 2)
+			if (BALL.GetPosition().GetY() > AIPLAYER.GetPosition().GetY() + AIPLAYER.GetWidth() / 2)
 			{
 				AIPLAYER.SetDirection(Vector2::up);
 				AIPLAYER.Move();
 			}
-			if (BALL.GetPosition().GetY() < AIPLAYER.GetPosition().GetY() - AIPLAYER.GetHeight() / 2)
+			if (BALL.GetPosition().GetY() < AIPLAYER.GetPosition().GetY() - AIPLAYER.GetWidth() / 2)
 			{
 				AIPLAYER.SetDirection(Vector2::down);
 				AIPLAYER.Move();
 			}
 		}
+
 		if (BALL.CheckCollision(AIPLAYER))
 		{
-			if (BALL.GetPosition().GetX() < AIPLAYER.GetPosition().GetX() - AIPLAYER.GetHeight() / 2
-				&& BALL.GetPosition().GetX() > AIPLAYER.GetPosition().GetX() + AIPLAYER.GetHeight() / 2)
+			if (BALL.GetPosition().GetX() < AIPLAYER.GetPosition().GetX() - AIPLAYER.GetWidth() / 2)
+			{
+				float difference = BALL.GetPosition().GetY() - AIPLAYER.GetPosition().GetY() / 2;
+				BALL.GetDirection().SetY(difference);
+				LOGGING_INFO("Pong -> ball-player1 paddle collision");
+			}
+			else
 			{
 				if (BALL.GetPosition().GetY() > AIPLAYER.GetPosition().GetY())
 					BALL.GetDirection().SetY(3);
 				else
 					BALL.GetDirection().SetY(-3);
-			}
-			else
-			{
-				float difference = BALL.GetPosition().GetY() - AIPLAYER.GetPosition().GetY() / 2;
-				BALL.GetDirection().SetY(difference);
-				LOGGING_INFO("Pong -> ball-player1 paddle collision");
 			}
 			BALL.GetDirection().GetX() *= -1;
 			BALL.AddSpeed(0.25f);
