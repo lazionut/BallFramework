@@ -19,18 +19,22 @@ namespace BallFramework
 #define BRICKLIMIT_Y -3
 #define BRICKSPACING 2
 
+#define ACTIONTIME 5.0f
+#define PICKUPSIZE 0.5f
+#define PICKUPSPEEDCHANGE 2.0f
+
 #define PLAYER          m_players[0] 
 #define AIPLAYER        m_players[1] 
 #define BALL            m_balls[0] 
 #define PLAYER1SCORE    m_scores[0]
 #define AISCORE         m_scores[1] 
 
-	constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
-	constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
-	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
+constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
+constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
@@ -53,7 +57,9 @@ namespace BallFramework
 
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED));
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDL_SCANCODE_LANG1, SDL_SCANCODE_LANG2, PADDLESPEED - 3.0f));
+
 		m_balls.emplace_back(Ball(Vector2::zero, 0.5f, Vector2(pow(-1, (rand() % 2)), 0), 10.0f));
+		std::cout << m_balls.size() << "\n";
 
 		m_player1Score.SetText(MakeText(std::to_string(m_player1Score.GetScore()), Colors::white, m_buttonFont));
 		m_player1Score.SetWidth(0.5f);
@@ -94,7 +100,7 @@ namespace BallFramework
 		m_paddleOutlines.push_back(Colors::dark_green);
 		m_outlineSizes.push_back(0.1f);
 
-		m_pickUpGenerator.SetDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
+		m_pickUpGenerator.SetDefaultProperties(Vector2::up, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
 	}
 
 	void Pong::OnClose()
@@ -107,11 +113,11 @@ namespace BallFramework
 
 	void Pong::CheckCollision()
 	{
+		CheckPickUpCollision();
 		CheckPaddleWallCollision();
 		CheckBallWallCollision();
 		CheckBallPaddleCollision();
 		CheckBallBrickCollision();
-		CheckPickUpCollision();
 		CheckScoreCondition();
 	}
 
@@ -253,6 +259,7 @@ namespace BallFramework
 			}
 			else
 			{
+				LOGGING_ERROR("non moving pickup collisin checked!");
 				if (m_pickUp.CheckCollision(BALL))
 				{
 					m_pickUp.InvokeAction();
@@ -358,64 +365,37 @@ namespace BallFramework
 	{
 		using Generator = PickUpGenerator::Actions;
 
-		if (rand() % 100 > 60)
+		if ((rand() % 100) > 20)
 		{
 			m_isPickCreated = true;
-			auto randomPlayer = rand() % 2;
-			auto difference = 0.0f;
 
 			auto type = m_pickUpGenerator.GetPickUpType();
-			LOGGING_INFO("Pong -> pick-up type is: {0}", static_cast<int>(type));
+			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(type));
 
 			switch (type)
 			{
 			case Generator::SPEEDCHANGE:
 				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
-				m_pickUp.StartMoving();
 				break;
 			case Generator::PADDLESIZECHANGE:
-				difference = 3;
-				if (randomPlayer)
-				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER, difference);
-					m_pickUp.SetDirection(PLAYER.GetPosition() - position);
-				}
-				else
-				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(AIPLAYER, difference);
-					m_pickUp.SetDirection(PLAYER.GetPosition() - position);
-				}
+				m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER, 1);
+				m_pickUp.SetDirection(Vector2::left);
 				m_pickUp.StartMoving();
 				break;
 			case Generator::PADDLESPEEDCHANGE:
-				difference = 3;
-				if (randomPlayer)
-				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER, difference);
-					m_pickUp.SetDirection(PLAYER.GetPosition() - position);
-				}
-				else
-				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(AIPLAYER, difference);
-					m_pickUp.SetDirection(PLAYER.GetPosition() - position);
-				}
+				m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER, 10);
+				m_pickUp.SetDirection(Vector2::left);
 				m_pickUp.StartMoving();
 				break;
 			case Generator::BALLSIZECHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(BALL, 2);
+				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(BALL, 1);
 				break;
 			case Generator::BALLSPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL, 2);
-				break;
-			case Generator::BONUSPOINTS:
-				m_isPickActive = false;
-				break;
-			case Generator::REMOVEPOINTS:
-				m_isPickActive = false;
+				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL, 5);
 				break;
 			default:
 				m_isPickCreated = false;
-				break;
+				return;
 			}
 
 			m_pickUp.SetPosition(position);

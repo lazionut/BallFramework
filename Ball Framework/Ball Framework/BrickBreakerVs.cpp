@@ -23,7 +23,7 @@ namespace BallFramework
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
 #define ACTIONTIME 5.0f
-#define PICKUPSIZECHANGE 0.25f
+#define PICKUPSIZE 0.25f
 #define PICKUPSPEEDCHANGE 2.0f
 
 #define PADDLESIZEDIFFERENCE 1.0f
@@ -123,7 +123,7 @@ namespace BallFramework
 			return;
 		}
 
-		m_pickUpGenerator.SetDefaultProperties(Vector2::right, PICKUPSIZECHANGE, PICKUPSPEEDCHANGE, ACTIONTIME);
+		m_pickUpGenerator.SetDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
 
 		m_paddleColors.push_back(Colors::red);
 		m_paddleOutlines.push_back(Colors::yellow);
