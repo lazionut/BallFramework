@@ -4,10 +4,10 @@
 
 namespace BallFramework
 {
+
 	class Brick : public Rectangle
 	{
 	public:
-
 		Brick();
 		Brick(const Vector2& position, const float width, const float height);
 		Brick(const Vector2& position, const float width, const float height, uint16_t m_id, SDL_Color color);
@@ -23,5 +23,5 @@ namespace BallFramework
 		SDL_Color m_color;
 		uint16_t m_id;
 	};
-}
 
+}

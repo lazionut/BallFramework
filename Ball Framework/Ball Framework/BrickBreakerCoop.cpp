@@ -63,6 +63,7 @@ namespace BallFramework
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsBB.txt" };
 		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
 	}
+
 	void BrickBreakerCoop::Start()
 	{
 		InitializeBricks();
@@ -110,6 +111,7 @@ namespace BallFramework
 
 		m_pickUpGenerator.SetDefaultProperties(Vector2::right, PICKUPSIZECHANGE, PICKUPSPEEDCHANGE, ACTIONTIME);
 	}
+
 	void BrickBreakerCoop::OnClose()
 	{
 		SDL_DestroyTexture(m_ballImage);
@@ -118,6 +120,7 @@ namespace BallFramework
 		m_bricks.erase(m_bricks.begin(), m_bricks.end());
 		Time::SetTimeScale(1.0f);
 	}
+
 	void BrickBreakerCoop::CheckCollision()
 	{
 		CheckPaddleWallCollision();
@@ -126,6 +129,7 @@ namespace BallFramework
 		CheckBallBrickCollision();
 		CheckPickUpCollision();
 	}
+
 	void BrickBreakerCoop::Render(SDL_Renderer* renderer)
 	{
 		m_renderer = renderer;
@@ -154,11 +158,13 @@ namespace BallFramework
 			SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &rect);
 		}
 	}
+
 	void BrickBreakerCoop::ResetBall()
 	{
 		OURBALL.SetDirection(pow(-1, rand() % 2), 1);
 		OURBALL.SetPosition(0, 0);
 	}
+
 	void BrickBreakerCoop::CheckPaddleWallCollision()
 	{
 		if (PLAYER1.GetPosition().GetX() < LEFTLIMIT + PLAYER1.GetWidth() / 2)
@@ -179,6 +185,7 @@ namespace BallFramework
 			PLAYER2.SetPosition(RIGHTLIMIT - PLAYER2.GetWidth() / 2, PLAYER2.GetPosition().GetY());
 		}
 	}
+
 	void BrickBreakerCoop::CheckBallPaddleCollision()
 	{
 		if (OURBALL.CheckCollision(PLAYER1) || OURBALL.CheckCollision(PLAYER2))
@@ -228,6 +235,7 @@ namespace BallFramework
 			}
 		}
 	}
+
 	void BrickBreakerCoop::CheckBallWallCollision()
 	{
 		const Vector2& ballPosition = OURBALL.GetPosition();
@@ -268,6 +276,7 @@ namespace BallFramework
 			ResetBall();
 		}
 	}
+
 	void BrickBreakerCoop::CheckBallBrickCollision()
 	{
 		for (auto& row : m_bricks)
@@ -303,6 +312,7 @@ namespace BallFramework
 			Stop();
 		}
 	}
+
 	void BrickBreakerCoop::CheckPickUpCollision()
 	{
 		if (m_isPickActive)
@@ -327,6 +337,7 @@ namespace BallFramework
 			}
 		}
 	}
+
 	void BrickBreakerCoop::InitializeBricks()
 	{
 		float offset = 0.5f;
@@ -347,6 +358,7 @@ namespace BallFramework
 			y -= offset;
 		}
 	}
+
 	void BrickBreakerCoop::InitializeHearts()
 	{
 		float offset = 0.25f;
@@ -361,6 +373,7 @@ namespace BallFramework
 			x += offset + HEARTSIZE;
 		}
 	}
+
 	void BrickBreakerCoop::RenderHearts(SDL_Renderer* renderer)
 	{
 		SDL_Rect rect;
@@ -372,6 +385,7 @@ namespace BallFramework
 			SDL_RenderCopy(renderer, m_heartImage, nullptr, &rect);
 		}
 	}
+
 	void BrickBreakerCoop::CreatePickUp(const Vector2& position)
 	{
 		using Generator = PickUpGenerator::Actions;
@@ -418,7 +432,7 @@ namespace BallFramework
 				break;
 			default:
 				m_isPickCreated = false;
-				return;
+				break;
 			}
 
 			m_pickUp.SetPosition(position);

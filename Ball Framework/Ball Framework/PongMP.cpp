@@ -19,9 +19,9 @@ namespace BallFramework
 #define BRICKLIMIT_Y -3
 #define BRICKSPACING 2
 
-#define PLAYER1  m_players[0] 
-#define PLAYER2  m_players[1] 
-#define BALL     m_balls[0] 
+#define PLAYER1         m_players[0] 
+#define PLAYER2         m_players[1] 
+#define BALL            m_balls[0] 
 #define PLAYER1SCORE    m_scores[0]
 #define PLAYER2SCORE    m_scores[1] 
 
@@ -130,9 +130,6 @@ namespace BallFramework
 	{
 		if (BALL.GetPosition().GetY() + BALL.GetSize() / 2 > UPPERLIMIT)
 		{
-			//BALL.SetDirection(BALL.GetDirection().GetX(), -BALL.GetDirection().GetY());
-			//BALL.GetDirection().SetY(-BALL.GetDirection().GetY());
-
 			BALL.GetPosition().SetY(UPPERLIMIT - BALL.GetSize() / 2);
 			BALL.GetDirection().GetY() *= -1;
 			LOGGING_INFO("PongMP -> ball-upper wall collision");
@@ -149,21 +146,43 @@ namespace BallFramework
 	{
 		if (BALL.CheckCollision(PLAYER1))
 		{
-			float difference = BALL.GetPosition().GetY() - PLAYER1.GetPosition().GetY() / 2;
+			if (BALL.GetPosition().GetX() < PLAYER1.GetPosition().GetX() - PLAYER1.GetHeight() / 2
+				&& BALL.GetPosition().GetX() > PLAYER1.GetPosition().GetX() + PLAYER1.GetHeight() / 2)
+			{
+				if (BALL.GetPosition().GetY() > PLAYER1.GetPosition().GetY())
+					BALL.GetDirection().SetY(2);
+				else
+					BALL.GetDirection().SetY(-2);
+			}
+			else
+			{
+				float difference = BALL.GetPosition().GetY() - PLAYER1.GetPosition().GetY() / 2;
+				BALL.GetDirection().SetY(difference);
+				LOGGING_INFO("Pong -> ball-player1 paddle collision");
+			}
 			BALL.GetDirection().GetX() *= -1;
-			BALL.GetDirection().SetY(difference);
 			BALL.AddSpeed(0.25f);
 			BALL.GetDirection().Normalize();
-			LOGGING_INFO("Pong -> ball-player1 paddle collision");
 		}
 		else if (BALL.CheckCollision(PLAYER2))
 		{
-			float difference = BALL.GetPosition().GetY() - PLAYER2.GetPosition().GetY() / 2;
+			if (BALL.GetPosition().GetX() < PLAYER2.GetPosition().GetX() - PLAYER2.GetHeight() / 2
+				&& BALL.GetPosition().GetX() > PLAYER2.GetPosition().GetX() + PLAYER2.GetHeight() / 2)
+			{
+				if (BALL.GetPosition().GetY() > PLAYER2.GetPosition().GetY())
+					BALL.GetDirection().SetY(2);
+				else
+					BALL.GetDirection().SetY(-2);
+			}
+			else
+			{
+				float difference = BALL.GetPosition().GetY() - PLAYER2.GetPosition().GetY() / 2;
+				BALL.GetDirection().SetY(difference);
+				LOGGING_INFO("Pong -> ball-player1 paddle collision");
+			}
 			BALL.GetDirection().GetX() *= -1;
-			BALL.GetDirection().SetY(difference);
 			BALL.AddSpeed(0.25f);
 			BALL.GetDirection().Normalize();
-			LOGGING_INFO("Pong -> ball-player2 paddle collision");
 		}
 	}
 
@@ -322,7 +341,7 @@ namespace BallFramework
 	{
 		using Generator = PickUpGenerator::Actions;
 
-		if (rand() % 100 > 80)
+		if (rand() % 100 > 60)
 		{
 			m_isPickCreated = true;
 			auto random = rand() % 2;

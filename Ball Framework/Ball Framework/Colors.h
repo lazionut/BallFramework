@@ -9,7 +9,6 @@ namespace BallFramework
 	class Colors
 	{
 	public:
-
 		// basic color members
 		const static SDL_Color white;
 		const static SDL_Color black;

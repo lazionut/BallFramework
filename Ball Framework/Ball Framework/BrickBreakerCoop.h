@@ -14,6 +14,7 @@
 
 namespace BallFramework
 {
+
 	class BrickBreakerCoop : public BallGame
 	{
 	public:
@@ -24,6 +25,7 @@ namespace BallFramework
 		void OnClose() override;
 		void CheckCollision() override;
 		void Render(SDL_Renderer* renderer) override;
+
 	private: //class methods
 		void ResetBall();
 
@@ -55,6 +57,5 @@ namespace BallFramework
 		uint16_t m_brickCounter;
 		bool m_lastPaddleHit;
 	};
+
 }
-
-

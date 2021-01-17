@@ -23,7 +23,6 @@ namespace BallFramework
 		void SetPlayers(const std::vector<std::string>& players);
 
 	protected:
-
 		void SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize);
 
 		void Pause();
@@ -37,6 +36,18 @@ namespace BallFramework
 		void RenderScore(SDL_Renderer* renderer);
 
 		virtual void CreatePickUp(const Vector2& position) = 0;
+
+	protected:
+		TTF_Font* m_buttonFont;
+
+		SDL_Color m_paddleColor;
+		SDL_Color m_paddleOutline;
+		float m_outlineSize;
+
+		float m_lastTimeScale;
+		bool m_isPickCreated;
+		bool m_isPickActive;
+		bool m_isPaused;
 
 	protected:
 		std::vector<Paddle> m_players;
@@ -61,17 +72,5 @@ namespace BallFramework
 		void KeyReleased(const SDL_Keycode& key) override final;
 		void MousePressed(const SDL_MouseButtonEvent& mouse) override final;
 		void MouseReleased(const SDL_MouseButtonEvent& mouse) override final;
-
-	protected:
-		TTF_Font* m_buttonFont;
-
-		SDL_Color m_paddleColor;
-		SDL_Color m_paddleOutline;
-		float m_outlineSize;
-
-		float m_lastTimeScale;
-		bool m_isPickCreated;
-		bool m_isPickActive;
-		bool m_isPaused;
 	};
 }

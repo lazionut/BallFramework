@@ -162,6 +162,9 @@
     <ClCompile Include="PongMP.cpp">
       <Filter>Source Files\Pong</Filter>
     </ClCompile>
+    <ClCompile Include="BrickBreakerCoop.cpp">
+      <Filter>Source Files\BrickBreaker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="PongMP.h">
       <Filter>Header Files\Pong</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickBreakerCoop.h">
+      <Filter>Header Files\BrickBreaker</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
