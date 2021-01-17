@@ -171,7 +171,7 @@ namespace BallFramework
 		SDL_Texture* scoreTexture;
 		decltype(auto) scale = GetScale();
 
-		for (const auto& score : m_scores)
+		for (auto& score : m_scores)
 		{
 			scoreTexture = score.GetText();
 
@@ -180,7 +180,9 @@ namespace BallFramework
 				LOGGING_ERROR("Null score texture");
 				continue;
 			}
-
+			if (score.GetScore() > 9 && score.GetWidth() < 1.0f) {
+				score.SetWidth(score.GetWidth() * 2);
+			}
 			scale.PointToPixel(aux, score.GetPosition(), score.GetWidth(), score.GetHeight());
 			SDL_RenderCopy(renderer, scoreTexture, nullptr, &aux);
 		}

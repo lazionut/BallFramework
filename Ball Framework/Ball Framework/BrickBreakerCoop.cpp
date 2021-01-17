@@ -76,7 +76,7 @@ namespace BallFramework
 
 		m_score.SetText(MakeText(std::to_string(m_score.GetScore()), Colors::white, m_buttonFont));
 		m_score.SetHeight(1.0f);
-		m_score.SetWidth(1.0f);
+		m_score.SetWidth(0.5f);
 		m_score.SetPosition(Vector2(0, UPPERLIMIT + 0.1f));
 		m_scores.push_back(m_score);
 

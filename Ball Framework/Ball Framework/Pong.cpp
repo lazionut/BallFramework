@@ -88,11 +88,11 @@ namespace BallFramework
 
 		m_paddleColors.push_back(Colors::green);
 		m_paddleOutlines.push_back(Colors::dark_green);
-		m_outlineSizes.push_back(0.35f);
+		m_outlineSizes.push_back(0.1f);
 
 		m_paddleColors.push_back(Colors::green);
 		m_paddleOutlines.push_back(Colors::dark_green);
-		m_outlineSizes.push_back(0.35f);
+		m_outlineSizes.push_back(0.1f);
 
 		m_pickUpGenerator.SetDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
 	}

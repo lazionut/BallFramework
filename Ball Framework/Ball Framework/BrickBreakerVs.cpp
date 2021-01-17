@@ -82,13 +82,13 @@ namespace BallFramework
 
 		m_score1.SetText(MakeText(std::to_string(m_score1.GetScore()), Colors::red, m_buttonFont));
 		m_score1.SetHeight(1.0f);
-		m_score1.SetWidth(1.0f);
+		m_score1.SetWidth(0.5f);
 		m_score1.SetPosition(Vector2(LEFTLIMIT + 2.0f, UPPERLIMIT + 0.1f));
 		m_scores.push_back(m_score1);
 
 		m_score2.SetText(MakeText(std::to_string(m_score2.GetScore()), Colors::white, m_buttonFont));
 		m_score2.SetHeight(1.0f);
-		m_score2.SetWidth(1.0f);
+		m_score2.SetWidth(0.5f);
 		m_score2.SetPosition(Vector2(RIGHTLIMIT - 2.0f, UPPERLIMIT + 0.1f));
 		m_scores.push_back(m_score2);
 
@@ -310,7 +310,7 @@ namespace BallFramework
 
 				m_playersStatistics.UpdateStatistics(m_player1Name, false);
 				m_playersStatistics.UpdateStatistics(m_player2Name, true);
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player2 wins!", nullptr);
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", m_player2Name.append(" wins!").c_str(), nullptr);
 				Stop();
 			}
 			ResetBall();
@@ -326,7 +326,7 @@ namespace BallFramework
 
 				m_playersStatistics.UpdateStatistics(m_player1Name, true);
 				m_playersStatistics.UpdateStatistics(m_player2Name, false);
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player1 wins!", nullptr);
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", m_player1Name.append(" wins!").c_str(), nullptr);
 				Stop();
 			}
 			ResetBall2();
