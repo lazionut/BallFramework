@@ -15,11 +15,10 @@ namespace BallFramework
 	{
 		std::ofstream out(m_finalPath);
 		out << "---Games Statistics---" << std::endl;
-		out << std::setiosflags(std::ios::fixed | std::ios::showpoint | std::ios::right) <<
-			"Format: Player Name" << std::setw(10) <<
-			"Games Played" << std::setw(10) <<
-			"Games Won" << std::setw(10) <<
-			"Games Lost" << std::setw(10) << std::endl << std::endl;
+		out << "Format:  Player Name " << 
+			" Games Played " << 
+			" Games Won " << 
+			" Games Lost " <<  std::endl << std::endl;
 		uint8_t gameNum = 0;
 		for (auto& stat : m_stats) {
 			switch (gameNum) {

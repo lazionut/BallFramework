@@ -1,5 +1,5 @@
 ---Games Statistics---
-Format: Player NameGames Played Games WonGames Lost
+Format:  Player Name  Games Played  Games Won  Games Lost 
 
 Pong Singleplayer
 play1 2 2 0
