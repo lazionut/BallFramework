@@ -190,6 +190,37 @@ namespace BallFramework
 
 #pragma endregion
 
+	void BallGame::CheckPickUpCollision()
+	{
+		if (m_isPickActive)
+		{
+			if (m_pickUp.IsMoving())
+			{
+				for (const auto& paddle : m_players)
+				{
+					if (m_pickUp.CheckCollision(paddle))
+					{
+						m_pickUp.InvokeAction();
+						m_isPickActive = false;
+						LOGGING_INFO("BrickBreaker -> player paddle-pick-up collision");
+					}
+				}
+			}
+			else
+			{
+				for (const auto& ball : m_balls)
+				{
+					if (m_pickUp.CheckCollision(ball))
+					{
+						m_pickUp.InvokeAction();
+						m_isPickActive = false;
+						LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
+					}
+				}
+			}
+		}
+	}
+
 	void BallGame::Pause()
 	{
 		m_pauseButton.ChangeFontColor();

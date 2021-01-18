@@ -35,6 +35,8 @@ namespace BallFramework
 		void RenderBricks(SDL_Renderer* renderer);
 		void RenderScore(SDL_Renderer* renderer);
 
+		void CheckPickUpCollision();
+
 		virtual void CreatePickUp(const Vector2& position) = 0;
 
 	protected:

@@ -33,7 +33,6 @@ namespace BallFramework
 		void CheckBallPaddleCollision();
 		void CheckBallWallCollision();
 		void CheckBallBrickCollision();
-		void CheckPickUpCollision();
 
 		void InitializeBricks();
 

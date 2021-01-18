@@ -13,13 +13,13 @@ namespace BallFramework
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
 
-	constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
-	constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
-	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
-	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-	constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
+constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
+constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
+constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
@@ -58,6 +58,7 @@ namespace BallFramework
 		m_pauseButton = Button{ Vector2(LEFTLIMIT + 0.5f, UPPERLIMIT + 0.1f), 0.7f, 0.7f, Colors::black, Colors::white, "||" };
 	}
 
+#pragma region Initialize Methods
 	void BrickBreakerCoop::Start()
 	{
 		InitializeBricks();
@@ -115,24 +116,44 @@ namespace BallFramework
 		m_outlineSizes.push_back(0.05f);
 	}
 
-	void BrickBreakerCoop::OnClose()
+	void BrickBreakerCoop::InitializeBricks()
 	{
-		SDL_DestroyTexture(m_ballImage);
-		SDL_DestroyTexture(m_heartImage);
-		SDL_DestroyTexture(m_pickUpImage);
-		m_bricks.erase(m_bricks.begin(), m_bricks.end());
-		Time::SetTimeScale(1.0f);
+		float offset = 0.5f;
+		float x = BRICKLIMIT_X, y = BRICKLIMIT_Y;
+
+		for (auto&& row : m_bricks)
+		{
+			row.resize(BRICKPERROW); //MODIFY
+
+			for (auto&& brick : row)
+			{
+				brick.Set(Vector2(x, y), BRICKW, BRICKH);
+				brick.SetColor(Colors::white);
+				x = x + SPACING + BRICKW;
+			}
+
+			x = BRICKLIMIT_X;
+			y -= offset;
+		}
 	}
 
-	void BrickBreakerCoop::CheckCollision()
+	void BrickBreakerCoop::InitializeHearts()
 	{
-		CheckPaddleWallCollision();
-		CheckBallWallCollision();
-		CheckBallPaddleCollision();
-		CheckBallBrickCollision();
-		CheckPickUpCollision();
-	}
+		float offset = 0.25f;
+		float x = LEFTLIMIT + 0.5f;
+		float y = LOWERLIMIT + 0.1f;
 
+		m_hearts.resize(m_heartCounter);
+
+		for (auto&& heart : m_hearts)
+		{
+			heart.Set(Vector2(x, y), HEARTSIZE, HEARTSIZE);
+			x += offset + HEARTSIZE;
+		}
+	}
+#pragma endregion
+
+#pragma region Redering Methods
 	void BrickBreakerCoop::Render(SDL_Renderer* renderer)
 	{
 		m_renderer = renderer;
@@ -147,10 +168,27 @@ namespace BallFramework
 		RenderGameObjects(m_renderer);
 	}
 
-	void BrickBreakerCoop::ResetBall()
+	void BrickBreakerCoop::RenderHearts(SDL_Renderer* renderer)
 	{
-		OURBALL.SetDirection(pow(-1, rand() % 2), 1);
-		OURBALL.SetPosition(0, 0);
+		SDL_Rect rect;
+		decltype(auto) scale = GetScale();
+
+		for (const auto& iter : m_hearts)
+		{
+			scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
+			SDL_RenderCopy(renderer, m_heartImage, nullptr, &rect);
+		}
+	}
+#pragma endregion
+
+#pragma region Collision Methods
+	void BrickBreakerCoop::CheckCollision()
+	{
+		CheckPaddleWallCollision();
+		CheckBallWallCollision();
+		CheckBallPaddleCollision();
+		CheckBallBrickCollision();
+		CheckPickUpCollision();
 	}
 
 	void BrickBreakerCoop::CheckPaddleWallCollision()
@@ -300,80 +338,23 @@ namespace BallFramework
 			Stop();
 		}
 	}
+#pragma endregion
 
-	void BrickBreakerCoop::CheckPickUpCollision()
+	void BrickBreakerCoop::OnClose()
 	{
-		if (m_isPickActive)
-		{
-			if (m_pickUp.IsMoving())
-			{
-				if (m_pickUp.CheckCollision(PLAYER1) || m_pickUp.CheckCollision(PLAYER2))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-					LOGGING_INFO("BrickBreaker -> player paddle-pick-up collision");
-				}
-			}
-			else
-			{
-				if (m_pickUp.CheckCollision(OURBALL))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-					LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
-				}
-			}
-		}
+		SDL_DestroyTexture(m_ballImage);
+		SDL_DestroyTexture(m_heartImage);
+		SDL_DestroyTexture(m_pickUpImage);
+		m_bricks.erase(m_bricks.begin(), m_bricks.end());
+		Time::SetTimeScale(1.0f);
 	}
 
-	void BrickBreakerCoop::InitializeBricks()
+	void BrickBreakerCoop::ResetBall()
 	{
-		float offset = 0.5f;
-		float x = BRICKLIMIT_X, y = BRICKLIMIT_Y;
-
-		for (auto&& row : m_bricks)
-		{
-			row.resize(BRICKPERROW); //MODIFY
-
-			for (auto&& brick : row)
-			{
-				brick.Set(Vector2(x, y), BRICKW, BRICKH);
-				brick.SetColor(Colors::white);
-				x = x + SPACING + BRICKW;
-			}
-
-			x = BRICKLIMIT_X;
-			y -= offset;
-		}
+		OURBALL.SetDirection(pow(-1, rand() % 2), 1);
+		OURBALL.SetPosition(0, 0);
 	}
-
-	void BrickBreakerCoop::InitializeHearts()
-	{
-		float offset = 0.25f;
-		float x = LEFTLIMIT + 0.5f;
-		float y = LOWERLIMIT + 0.1f;
-
-		m_hearts.resize(m_heartCounter);
-
-		for (auto&& heart : m_hearts)
-		{
-			heart.Set(Vector2(x, y), HEARTSIZE, HEARTSIZE);
-			x += offset + HEARTSIZE;
-		}
-	}
-
-	void BrickBreakerCoop::RenderHearts(SDL_Renderer* renderer)
-	{
-		SDL_Rect rect;
-		decltype(auto) scale = GetScale();
-
-		for (const auto& iter : m_hearts)
-		{
-			scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
-			SDL_RenderCopy(renderer, m_heartImage, nullptr, &rect);
-		}
-	}
-
+	
 	void BrickBreakerCoop::CreatePickUp(const Vector2& position)
 	{
 		using Generator = PickUpGenerator::Actions;
@@ -431,5 +412,4 @@ namespace BallFramework
 			m_isPickCreated = false;
 		}
 	}
-
 }

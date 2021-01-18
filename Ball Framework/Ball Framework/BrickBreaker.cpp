@@ -13,13 +13,13 @@ namespace BallFramework
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
 
-	constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
-	constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
-	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
-	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-	constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
+constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
+constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
+constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
@@ -243,31 +243,6 @@ namespace BallFramework
 			m_playersStatistics.UpdateStatistics(m_playerName, true);
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "You won! Congratulations!", nullptr);
 			Stop();
-		}
-	}
-
-	void BrickBreaker::CheckPickUpCollision()
-	{
-		if (m_isPickActive)
-		{
-			if (m_pickUp.IsMoving())
-			{
-				if (m_pickUp.CheckCollision(OURPLAYER))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-					LOGGING_INFO("BrickBreaker -> player paddle-pick-up collision");
-				}
-			}
-			else
-			{
-				if (m_pickUp.CheckCollision(OURBALL))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-					LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
-				}
-			}
 		}
 	}
 

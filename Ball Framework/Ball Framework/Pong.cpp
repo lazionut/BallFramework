@@ -2,7 +2,6 @@
 
 namespace BallFramework
 {
-
 #pragma region CONSTANTS
 
 #define WIDTHUNITS 20
@@ -111,6 +110,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		Time::SetTimeScale(1.0f);
 	}
 
+#pragma region Collision Methods
 	void Pong::CheckCollision()
 	{
 		CheckPickUpCollision();
@@ -161,7 +161,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 	{
 		if (BALL.CheckCollision(PLAYER))
 		{
-			if ( BALL.GetPosition().GetX() > PLAYER.GetPosition().GetX() + PLAYER.GetWidth() / 2)
+			if (BALL.GetPosition().GetX() > PLAYER.GetPosition().GetX() + PLAYER.GetWidth() / 2)
 			{
 				float difference = (BALL.GetPosition().GetY() - PLAYER.GetPosition().GetY()) / 2;
 				BALL.GetDirection().SetY(difference);
@@ -244,32 +244,6 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		}
 	}
 
-	void Pong::CheckPickUpCollision()
-	{
-		if (m_isPickActive)
-		{
-			if (m_pickUp.IsMoving())
-			{
-				if (m_pickUp.CheckCollision(PLAYER) || m_pickUp.CheckCollision(AIPLAYER))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-					LOGGING_INFO("Pong -> player paddle-pick-up collision");
-				}
-			}
-			else
-			{
-				LOGGING_ERROR("non moving pickup collisin checked!");
-				if (m_pickUp.CheckCollision(BALL))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-					LOGGING_INFO("Pong -> ball-pick-up collision");
-				}
-			}
-		}
-	}
-
 	void Pong::CheckScoreCondition()
 	{
 		if (BALL.GetPosition().GetX() < LEFTLIMIT)
@@ -305,7 +279,8 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 			BALL.SetSpeed(10);
 		}
 	}
-
+#pragma endregion
+	
 	void Pong::Render(SDL_Renderer* renderer)
 	{
 		m_renderer = renderer;
@@ -406,5 +381,4 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 			m_isPickCreated = false;
 		}
 	}
-
 }

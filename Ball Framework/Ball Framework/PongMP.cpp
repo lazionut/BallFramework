@@ -2,7 +2,6 @@
 
 namespace BallFramework
 {
-
 #pragma region CONSTANTS
 
 #define WIDTHUNITS 20
@@ -25,12 +24,12 @@ namespace BallFramework
 #define PLAYER1SCORE    m_scores[0]
 #define PLAYER2SCORE    m_scores[1] 
 
-	constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
-	constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
-	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
+constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
+constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
@@ -98,6 +97,7 @@ namespace BallFramework
 		Time::SetTimeScale(1.0f);
 	}
 
+#pragma region Collision Methods
 	void PongMP::CheckCollision()
 	{
 		CheckPaddleWallCollision();
@@ -167,9 +167,9 @@ namespace BallFramework
 		}
 		else if (BALL.CheckCollision(PLAYER2))
 		{
-			if ( BALL.GetPosition().GetX() < PLAYER2.GetPosition().GetX() - PLAYER2.GetWidth() / 2)
+			if (BALL.GetPosition().GetX() < PLAYER2.GetPosition().GetX() - PLAYER2.GetWidth() / 2)
 			{
-				float difference =( BALL.GetPosition().GetY() - PLAYER2.GetPosition().GetY()) / 2;
+				float difference = (BALL.GetPosition().GetY() - PLAYER2.GetPosition().GetY()) / 2;
 				BALL.GetDirection().SetY(difference);
 				LOGGING_INFO("Pong -> ball-player1 paddle collision");
 			}
@@ -216,37 +216,6 @@ namespace BallFramework
 		}
 	}
 
-	void PongMP::CheckPickUpCollision()
-	{
-		if (m_isPickActive)
-		{
-			if (m_pickUp.IsMoving())
-			{
-				if (m_pickUp.CheckCollision(PLAYER1))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-					LOGGING_INFO("PongMP -> player1 paddle-pick-up collision");
-				}
-				else if (m_pickUp.CheckCollision(PLAYER2))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-					LOGGING_INFO("PongMP -> player2 paddle-pick-up collision");
-				}
-			}
-			else
-			{
-				if (m_pickUp.CheckCollision(BALL))
-				{
-					m_pickUp.InvokeAction();
-					m_isPickActive = false;
-					LOGGING_INFO("PongMP -> ball-pick-up collision");
-				}
-			}
-		}
-	}
-
 	void PongMP::CheckScoreCondition()
 	{
 		if (BALL.GetPosition().GetX() < LEFTLIMIT)
@@ -282,7 +251,9 @@ namespace BallFramework
 			BALL.SetSpeed(10);
 		}
 	}
-
+#pragma endregion
+	
+#pragma region Rendering Methods
 	void PongMP::Render(SDL_Renderer* renderer)
 	{
 		m_renderer = renderer;
@@ -316,6 +287,26 @@ namespace BallFramework
 			SDL_RenderCopy(m_renderer, m_pickUpImage, nullptr, &aux);
 		}
 	}
+
+	void PongMP::RenderPlayersScore(SDL_Renderer* renderer)
+	{
+		SDL_Rect aux1, aux2;
+		decltype(auto) scale = GetScale();
+
+		scale.PointToPixel(aux1, 2, 4, 0.5f, 0.5f);
+		scale.PointToPixel(aux2, -2, 4, 0.5f, 0.5f);
+
+		if (PLAYER1SCORE.GetText() != nullptr && PLAYER2SCORE.GetText() != nullptr)
+		{
+			SDL_RenderCopy(renderer, PLAYER1SCORE.GetText(), nullptr, &aux1);
+			SDL_RenderCopy(renderer, PLAYER2SCORE.GetText(), nullptr, &aux2);
+		}
+		else
+		{
+			LOGGING_ERROR("PongMP -> font not found!");
+		}
+	}
+#pragma endregion
 
 	void PongMP::InitializeBricks()
 	{
@@ -410,24 +401,4 @@ namespace BallFramework
 			m_isPickCreated = false;
 		}
 	}
-
-	void PongMP::RenderPlayersScore(SDL_Renderer* renderer)
-	{
-		SDL_Rect aux1, aux2;
-		decltype(auto) scale = GetScale();
-
-		scale.PointToPixel(aux1, 2, 4, 0.5f, 0.5f);
-		scale.PointToPixel(aux2, -2, 4, 0.5f, 0.5f);
-
-		if (PLAYER1SCORE.GetText() != nullptr && PLAYER2SCORE.GetText() != nullptr)
-		{
-			SDL_RenderCopy(renderer, PLAYER1SCORE.GetText(), nullptr, &aux1);
-			SDL_RenderCopy(renderer, PLAYER2SCORE.GetText(), nullptr, &aux2);
-		}
-		else
-		{
-			LOGGING_ERROR("PongMP -> font not found!");
-		}
-	}
-
 }
