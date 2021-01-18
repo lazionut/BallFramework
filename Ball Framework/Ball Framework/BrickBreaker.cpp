@@ -48,7 +48,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
 		: BallGame("BrickBreaker", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
-		m_renderer{ nullptr }, m_heartImage{ nullptr },
+		m_heartImage{ nullptr },
 		m_heartCounter{ 3 }, m_brickCounter{ BRICKCOUNTER },
 		m_score{ Colors::white },
 		m_playerName{ playersNames.front() }
@@ -252,27 +252,12 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreaker::Render(SDL_Renderer* renderer)
 	{
-		m_renderer = renderer;
-		SDL_Rect rect;
-		decltype(auto) scale = GetScale();
-
-		scale.PointToPixel(rect, OURPLAYER.GetPosition(), OURPLAYER.GetWidth(), OURPLAYER.GetHeight());
-		SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
-		SDL_RenderFillRect(m_renderer, &rect);
-
-		RenderBricks(m_renderer);
-		RenderScore(m_renderer);
-		RenderHearts(m_renderer);
-		RenderButton(m_renderer);
-
-		scale.PointToPixel(rect, OURBALL.GetPosition(), OURBALL.GetSize(), OURBALL.GetSize());
-		SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &rect);
-
-		if (m_isPickActive)
-		{
-			scale.PointToPixel(rect, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
-			SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &rect);
-		}
+		RenderPaddles(renderer);
+		RenderBricks(renderer);
+		RenderScore(renderer);
+		RenderHearts(renderer);
+		RenderButton(renderer);
+		RenderGameObjects(renderer);
 	}
 
 	void BrickBreaker::RenderHearts(SDL_Renderer* renderer)

@@ -2,7 +2,6 @@
 #include <SDL_ttf.h>
 
 #include "Game.h"
-#include "ScreenScale.h"
 #include "Paddle.h"
 #include "Ball.h"
 #include "PickUpGenerator.h"
@@ -23,7 +22,7 @@ namespace BallFramework
 		void SetPlayers(const std::vector<std::string>& players);
 
 	protected:
-		void SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize);
+		//void SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize);
 
 		void Pause();
 

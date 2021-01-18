@@ -46,9 +46,9 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 #pragma endregion
 
-	BallFramework::BrickBreakerCoop::BrickBreakerCoop(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS) :
+	BrickBreakerCoop::BrickBreakerCoop(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS) :
 		BallGame("BrickBreakerCoop", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-		m_renderer{ nullptr }, m_heartImage{ nullptr },
+		m_heartImage{ nullptr },
 		m_heartCounter{ 3 }, m_brickCounter{ BRICKCOUNTER },
 		m_score{ Colors::white },
 		m_player1Name{ playersNames.front() }
@@ -156,16 +156,12 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 #pragma region Redering Methods
 	void BrickBreakerCoop::Render(SDL_Renderer* renderer)
 	{
-		m_renderer = renderer;
-		SDL_Rect rect;
-		decltype(auto) scale = GetScale();
-
-		RenderPaddles(m_renderer);
-		RenderBricks(m_renderer);
-		RenderScore(m_renderer);
-		RenderHearts(m_renderer);
-		RenderButton(m_renderer);
-		RenderGameObjects(m_renderer);
+		RenderPaddles(renderer);
+		RenderBricks(renderer);
+		RenderScore(renderer);
+		RenderHearts(renderer);
+		RenderButton(renderer);
+		RenderGameObjects(renderer);
 	}
 
 	void BrickBreakerCoop::RenderHearts(SDL_Renderer* renderer)

@@ -1,7 +1,6 @@
 #include "BrickBreakerVS.h"
 namespace BallFramework
 {
-
 #pragma region CONSTANTS
 #define WIDTHUNITS 10
 #define HEIGHTUNITS 13
@@ -49,7 +48,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	BallFramework::BrickBreakerVS::BrickBreakerVS(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS) :
 		BallGame("BrickBreakerVS", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-		m_renderer{ nullptr }, m_heartImage{ nullptr },
+		m_heartImage{ nullptr },
 		m_heartCounter1{ 3 }, m_brickCounter1{ BRICKCOUNTER },
 		m_heartCounter2{ 3 }, m_brickCounter2{ BRICKCOUNTER },
 		m_score1{ Colors::red },
@@ -143,27 +142,14 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		Time::SetTimeScale(1.0f);
 	}
 
-	void BrickBreakerVS::CheckCollision()
-	{
-		CheckPaddleWallCollision();
-		CheckBallWallCollision();
-		CheckBallPaddleCollision();
-		CheckBallBrickCollision();
-		CheckPickUpCollision();
-	}
-
 	void BrickBreakerVS::Render(SDL_Renderer* renderer)
 	{
-		m_renderer = renderer;
-		SDL_Rect rect;
-		decltype(auto) scale = GetScale();
-
-		RenderPaddles(m_renderer);
-		RenderBricks(m_renderer);
-		RenderScore(m_renderer);
-		RenderHearts(m_renderer);
-		RenderButton(m_renderer);
-		RenderGameObjects(m_renderer);
+		RenderPaddles(renderer);
+		RenderBricks(renderer);
+		RenderScore(renderer);
+		RenderHearts(renderer);
+		RenderButton(renderer);
+		RenderGameObjects(renderer);
 	}
 
 	void BrickBreakerVS::ResetBall()
@@ -176,6 +162,16 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 	{
 		BALL2.SetDirection(Vector2::up);
 		BALL2.SetPosition(RIGHTLIMIT - 2.0f, LOWERLIMIT + 5.0f);
+	}
+
+#pragma region Collision Methods
+	void BrickBreakerVS::CheckCollision()
+	{
+		CheckPaddleWallCollision();
+		CheckBallWallCollision();
+		CheckBallPaddleCollision();
+		CheckBallBrickCollision();
+		CheckPickUpCollision();
 	}
 
 	void BrickBreakerVS::CheckPaddleWallCollision()
@@ -442,7 +438,8 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			}
 		}
 	}
-
+#pragma endregion
+	
 	void BrickBreakerVS::InitializeBricks()
 	{
 		float offset = 0.5f;

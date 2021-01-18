@@ -41,11 +41,9 @@ namespace BallFramework
 
 		void CreatePickUp(const Vector2& position) override;
 
-	private: //SDL objects
-		SDL_Renderer* m_renderer;
+	private:
 		SDL_Texture* m_heartImage;
 
-	private: //objects
 		Score m_score;
 		std::string m_playerName;
 

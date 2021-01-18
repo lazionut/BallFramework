@@ -35,17 +35,15 @@ namespace BallFramework
 		void CheckBallBrickCollision();
 
 		void InitializeBricks();
-
 		void InitializeHearts();
+
 		void RenderHearts(SDL_Renderer* renderer);
 
 		void CreatePickUp(const Vector2& position) override;
 
-	private: //SDL objects
-		SDL_Renderer* m_renderer;
+	private:
 		SDL_Texture* m_heartImage;
 
-	private: //objects
 		Score m_score;
 
 		std::string m_player1Name;

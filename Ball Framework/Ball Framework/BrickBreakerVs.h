@@ -14,7 +14,6 @@
 
 namespace BallFramework
 {
-
 	class BrickBreakerVS : public BallGame
 	{
 	public:
@@ -43,12 +42,9 @@ namespace BallFramework
 
 		void CreatePickUp(const Vector2& position) override;
 
-	private: //SDL objects
-		SDL_Renderer* m_renderer;
+	private:
 		SDL_Texture* m_heartImage;
-		//SDL_Texture* m_ballImage2;
 
-	private: //objects
 		Score m_score1;
 		Score m_score2;
 

@@ -100,7 +100,8 @@ namespace BallFramework
 		uint32_t index = 0;
 		for (const auto& player : m_players)
 		{
-			SDL_SetRenderDrawColor(renderer, m_paddleOutlines[index].r, m_paddleOutlines[index].g, m_paddleOutlines[index].b, m_paddleOutlines[index].a);
+			auto [r, g, b, a] = m_paddleOutlines[index];
+			SDL_SetRenderDrawColor(renderer, r, g, b, a);
 			scale.PointToPixel(aux, player.GetPosition(),
 				player.GetWidth() + m_outlineSizes[index], player.GetHeight() + m_outlineSizes[index]);
 			SDL_RenderFillRect(renderer, &aux);
