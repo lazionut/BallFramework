@@ -18,6 +18,8 @@ namespace BallFramework
 #define BRICKLIMIT_Y -3
 #define BRICKSPACING 2
 
+#define PICKUPSPAWNCHANCE 70
+
 #define PLAYER1         m_players[0] 
 #define PLAYER2         m_players[1] 
 #define BALL            m_balls[0] 
@@ -52,7 +54,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED));
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED));
-		m_balls.emplace_back(Ball(Vector2::zero, 0.5f, Vector2(pow(-1, (rand() % 2)), 0), 10));
+		m_balls.emplace_back(Ball(Vector2::zero, 0.5f, Vector2(pow(-1, Random::Range(2)), 0), 10));
 
 		m_player1Score.SetText(MakeText(std::to_string(m_player1Score.GetScore()), Colors::white, m_buttonFont));
 		m_player2Score.SetText(MakeText(std::to_string(m_player2Score.GetScore()), Colors::white, m_buttonFont));
@@ -333,10 +335,10 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 	{
 		using Generator = PickUpGenerator::Actions;
 
-		if (rand() % 100 > 60)
+		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
 			m_isPickCreated = true;
-			auto random = rand() % 2;
+			auto random = Random::CoinFlip();
 			auto difference = 0.0f;
 
 			auto type = m_pickUpGenerator.GetPickUpType();
@@ -382,15 +384,9 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 			case Generator::BALLSPEEDCHANGE:
 				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL, 2);
 				break;
-			case Generator::BONUSPOINTS:
-				m_isPickActive = false;
-				break;
-			case Generator::REMOVEPOINTS:
-				m_isPickActive = false;
-				break;
 			default:
 				m_isPickCreated = false;
-				break;
+				return;
 			}
 
 			m_pickUp.SetPosition(position);

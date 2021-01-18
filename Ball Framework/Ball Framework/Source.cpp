@@ -37,6 +37,8 @@ int main(int argc, char** argv)
 
 	srand(time(nullptr));
 
+	Random::SetRandomSeed();
+
 	if (initializeSDL())
 	{
 		std::unique_ptr<Game> menu { new Menu(500, 700, SDL_WINDOW_RESIZABLE, 60) };

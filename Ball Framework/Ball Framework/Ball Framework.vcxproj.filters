@@ -171,6 +171,9 @@
     <ClCompile Include="Statistics.cpp">
       <Filter>Source Files\Framework\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -259,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="Statistics.h">
       <Filter>Header Files\Framework\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

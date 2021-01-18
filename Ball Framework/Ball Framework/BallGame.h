@@ -11,6 +11,7 @@
 #include "Paths.h"
 #include "Colors.h"
 #include "Brick.h"
+#include "Random.h"
 
 namespace BallFramework
 {

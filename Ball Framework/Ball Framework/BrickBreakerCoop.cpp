@@ -13,13 +13,13 @@ namespace BallFramework
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
 
-constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
-constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
-constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
-constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
+	constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
+	constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
+	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+	constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
@@ -347,15 +347,15 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreakerCoop::ResetBall()
 	{
-		OURBALL.SetDirection(pow(-1, rand() % 2), 1);
+		OURBALL.SetDirection(pow(-1, Random::Range(2)), 1);
 		OURBALL.SetPosition(0, 0);
 	}
-	
+
 	void BrickBreakerCoop::CreatePickUp(const Vector2& position)
 	{
 		using Generator = PickUpGenerator::Actions;
 
-		if ((rand() % 100) > PICKUPSPAWNCHANCE)
+		if ((Random::Range(100)) > PICKUPSPAWNCHANCE)
 		{
 			m_isPickCreated = true;
 
@@ -390,10 +390,10 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(OURBALL, BALLSPEEDDIFFERENCE);
 				break;
 			case Generator::BONUSPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(OURSCORE, rand() % MAXSCOREDIFFERENCE + 1);
+				m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
 				break;
 			case Generator::REMOVEPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(OURSCORE, rand() % MAXSCOREDIFFERENCE + 1);
+				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
 				break;
 			default:
 				m_isPickCreated = false;

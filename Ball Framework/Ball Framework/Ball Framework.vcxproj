@@ -169,6 +169,7 @@
     <ClCompile Include="PlayersStatistics.cpp" />
     <ClCompile Include="Pong.cpp" />
     <ClCompile Include="PongMP.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Score.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="PlayersStatistics.h" />
     <ClInclude Include="Pong.h" />
     <ClInclude Include="PongMP.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Score.h" />

@@ -18,6 +18,7 @@ namespace BallFramework
 #define BRICKLIMIT_Y -3
 #define BRICKSPACING 2
 
+#define PICKUPSPAWNCHANCE 70
 #define ACTIONTIME 5.0f
 #define PICKUPSIZE 0.5f
 #define PICKUPSPEEDCHANGE 2.0f
@@ -57,7 +58,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED));
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDL_SCANCODE_LANG1, SDL_SCANCODE_LANG2, PADDLESPEED - 3.0f));
 
-		m_balls.emplace_back(Ball(Vector2::zero, 0.5f, Vector2(pow(-1, (rand() % 2)), 0), 10.0f));
+		m_balls.emplace_back(Ball(Vector2::zero, 0.5f, Vector2(pow(-1, Random::Range(2)), 0), 10.0f));
 		std::cout << m_balls.size() << "\n";
 
 		m_player1Score.SetText(MakeText(std::to_string(m_player1Score.GetScore()), Colors::white, m_buttonFont));
@@ -340,7 +341,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 	{
 		using Generator = PickUpGenerator::Actions;
 
-		if ((rand() % 100) > 20)
+		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
 			m_isPickCreated = true;
 

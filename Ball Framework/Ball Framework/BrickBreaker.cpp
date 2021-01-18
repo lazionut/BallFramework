@@ -318,7 +318,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 	{
 		using Generator = PickUpGenerator::Actions;
 
-		if ((rand() % 100) > PICKUPSPAWNCHANCE)
+		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
 			m_isPickCreated = true;
 
@@ -347,10 +347,10 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(OURBALL, BALLSPEEDDIFFERENCE);
 				break;
 			case Generator::BONUSPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(OURSCORE, rand() % MAXSCOREDIFFERENCE + 1);
+				m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
 				break;
 			case Generator::REMOVEPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(OURSCORE, rand() % MAXSCOREDIFFERENCE + 1);
+				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
 				break;
 			default:
 				m_isPickCreated = false;

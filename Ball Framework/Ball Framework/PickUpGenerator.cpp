@@ -5,7 +5,7 @@ namespace BallFramework
 
 	PickUpGenerator::Actions PickUpGenerator::GetPickUpType()
 	{
-		return static_cast<Actions>(rand() % static_cast<int>(Actions::ACTIONSNUMBER));
+		return static_cast<Actions>(Random::Range(static_cast<int>(Actions::ACTIONSNUMBER)));
 	}
 
 	const PickUp& PickUpGenerator::CreateSpeedPickUp()
