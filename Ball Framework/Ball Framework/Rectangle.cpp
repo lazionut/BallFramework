@@ -3,13 +3,16 @@
 namespace BallFramework
 {
 
-	Rectangle::Rectangle() :
-		m_position{ Vector2::Vector2(0.0f,0.0f) }, m_width{ 0.0f }, m_height{ 0.0f } {}
+	Rectangle::Rectangle() noexcept
+		: GameObject() {}
 
-	Rectangle::Rectangle(const Vector2& position, const float width, const float height) :
-		m_position{ position }, m_width(width), m_height{ height } {}
+	Rectangle::Rectangle(const Vector2& position, const Vector2& size) noexcept
+		: GameObject(position, size) {}
 
-	Rectangle::Rectangle(const Rectangle& other)
+	Rectangle::Rectangle(const Vector2& position, const float width, const float height) noexcept
+		: GameObject(position, Vector2(width, height)) {}
+
+	Rectangle::Rectangle(const Rectangle& other) noexcept
 	{
 		*this = other;
 	}
@@ -19,38 +22,42 @@ namespace BallFramework
 		*this = std::move(other);
 	}
 
-	void Rectangle::Set(const Vector2& position, float width, float height)
+	void Rectangle::Set(const Vector2& position, const Vector2& size) noexcept
 	{
 		m_position = position;
-		m_width = width;
-		m_height = height;
+		m_size = size;
 	}
 
-	void Rectangle::Set(float x, float y, float width, float height)
+	void Rectangle::Set(const Vector2& position, float width, float height) noexcept
+	{
+		m_position = position;
+		m_size.Set(width, height);
+	}
+
+	void Rectangle::Set(float x, float y, float width, float height) noexcept
 	{
 		m_position.Set(x, y);
-		m_width = width;
-		m_height = height;
+		m_size.Set(width, height);
 	}
 
 	void Rectangle::SetWidth(float width)
 	{
-		m_width = width;
+		m_size.SetX(width);
 	}
 
 	float Rectangle::GetWidth() const
 	{
-		return m_width;
+		return m_size.GetX();
 	}
 
 	void Rectangle::SetHeight(float height)
 	{
-		m_height = height;
+		m_size.SetY(height);
 	}
 
 	float Rectangle::GetHeight() const
 	{
-		return m_height;
+		return m_size.GetY();
 	}
 
 	void Rectangle::SetPosition(const Vector2& position)
@@ -70,41 +77,35 @@ namespace BallFramework
 
 	void Rectangle::SetSize(float width, float height)
 	{
-		m_width = width;
-		m_height = height;
+		m_size.Set(width, height);
 	}
 
 	void Rectangle::SetSize(const Vector2& size)
 	{
-		m_width = size.GetX();
-		m_height = size.GetY();
+		m_size = size;
 	}
 
 	void Rectangle::AddSize(const Vector2& size)
 	{
-		m_width += size.GetX();
-		m_height += size.GetY();
+		m_size += size;
 	}
 
 	void Rectangle::DecreaseSize(const Vector2& size)
 	{
-		m_width -= size.GetX();
-		m_height -= size.GetY();
+		m_size -= size;
 	}
 
 	Rectangle& Rectangle::operator=(const Rectangle& other)
 	{
 		m_position = other.m_position;
-		m_width = other.m_width;
-		m_height = other.m_height;
+		m_size = other.m_size;
 		return *this;
 	}
 
 	Rectangle& Rectangle::operator=(Rectangle&& other) noexcept
 	{
 		m_position = other.m_position;
-		m_width = other.m_width;
-		m_height = other.m_height;
+		m_size = other.m_size;
 		new(&other) Rectangle;
 		return *this;
 	}
@@ -112,17 +113,15 @@ namespace BallFramework
 	std::istream& operator>>(std::istream& in, Rectangle& other)
 	{
 		in >> other.m_position;
-		in >> other.m_width;
-		in >> other.m_height;
+		in >> other.m_size;
 		return in;
-
 	}
 
 	std::ostream& operator<<(std::ostream& out, Rectangle& other)
 	{
 		out << "Position" << other.m_position;
-		out << " Width: " << other.m_width;
-		out << " Height: " << other.m_height;
+		out << " Width: " << other.m_size.GetX();
+		out << " Height: " << other.m_size.GetY();
 		return out;
 	}
 

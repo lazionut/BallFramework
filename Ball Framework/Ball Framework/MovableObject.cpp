@@ -5,6 +5,9 @@ namespace BallFramework
 	MovableObject::MovableObject() noexcept
 		: GameObject(), m_direction{ Vector2::zero }, m_speed{ 0.0f } {}
 
+	MovableObject::MovableObject(const Vector2& position, const Vector2& size, SDL_Texture* image) noexcept
+		:GameObject(position, size, image), m_direction{ Vector2::zero }, m_speed{ 0.0f } {}
+
 	MovableObject::MovableObject(const Vector2& position, const Vector2& size, const Vector2& direction, const float speed, SDL_Texture* image) noexcept
 		: GameObject(position, size, image), m_direction{ direction }, m_speed{ speed } {}
 
@@ -39,5 +42,10 @@ namespace BallFramework
 	void MovableObject::DecreaseSize(const Vector2& size) noexcept
 	{
 		m_size -= size;
+	}
+
+	void MovableObject::Move() noexcept
+	{
+		m_position += m_direction * m_speed * Time::GetDeltaTime();
 	}
 }

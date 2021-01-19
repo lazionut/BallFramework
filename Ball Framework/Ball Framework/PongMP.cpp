@@ -27,12 +27,12 @@ namespace BallFramework
 #define PLAYER1SCORE    m_scores[0]
 #define PLAYER2SCORE    m_scores[1] 
 
-	constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
-	constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
-	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
+constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
+constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
@@ -293,6 +293,7 @@ namespace BallFramework
 					++m_bricksNumber;
 					LOGGING_INFO("Brick created");
 				}
+
 				y += BRICKSPACING;
 			}
 

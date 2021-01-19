@@ -33,9 +33,9 @@ namespace BallFramework
 
 		void Move();
 
-		void ChangeDirection(const Rectangle& rect);
+		void ChangeDirection(const GameObject& rect);
 
-		bool CheckCollision(const Rectangle& rect);
+		bool CheckCollision(const GameObject& rect);
 		bool CheckCollision(const Ball& ball);
 
 		Ball& operator=(const Ball& other);

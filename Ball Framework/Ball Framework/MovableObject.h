@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Time.h"
 
 namespace BallFramework
 {
@@ -8,6 +9,7 @@ namespace BallFramework
     public:
 
         MovableObject() noexcept;
+        MovableObject(const Vector2& position, const Vector2& size, SDL_Texture* image = nullptr) noexcept;
         MovableObject(const Vector2& position, const Vector2& size, const Vector2& direction, const float speed, SDL_Texture* image = nullptr) noexcept;
         MovableObject(const Vector2& position, const Vector2& size, const Vector2& direction, const float speed, const uint16_t id, SDL_Texture* image = nullptr) noexcept;
 
@@ -19,6 +21,8 @@ namespace BallFramework
 
         void AddSize(const Vector2& size) noexcept;
         void DecreaseSize(const Vector2& size) noexcept;
+
+        void Move() noexcept;
 
     protected:
         Vector2 m_direction;

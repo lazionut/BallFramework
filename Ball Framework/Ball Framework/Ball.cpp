@@ -98,7 +98,7 @@ namespace BallFramework
 		m_position += (m_direction * m_speed * Time::GetDeltaTime());
 	}
 
-	bool Ball::CheckCollision(const Rectangle& rect)
+	bool Ball::CheckCollision(const GameObject& rect)
 	{
 		float x, y;
 		const auto& rectPos = rect.GetPosition();
@@ -186,7 +186,7 @@ namespace BallFramework
 		return false;
 	}
 
-	void Ball::ChangeDirection(const Rectangle& rect)
+	void Ball::ChangeDirection(const GameObject& rect)
 	{
 		auto xRect = rect.GetPosition().GetX();
 		auto yRect = rect.GetPosition().GetY();

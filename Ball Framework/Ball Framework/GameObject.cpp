@@ -2,7 +2,6 @@
 
 namespace BallFramework
 {
-
 	GameObject::GameObject() noexcept
 		: m_position{ Vector2::zero }, m_size{ Vector2::one },
 		m_id{ 0 }, m_image{ nullptr } {}
@@ -23,9 +22,29 @@ namespace BallFramework
 		return m_position;
 	}
 
+	float GameObject::GetX() const noexcept
+	{
+		return m_position.GetX();
+	}
+
+	float GameObject::GetY() const noexcept
+	{
+		return m_position.GetY();
+	}
+
 	const Vector2& GameObject::GetSize() const noexcept
 	{
 		return m_size;
+	}
+
+	float GameObject::GetWidth() const noexcept
+	{
+		return m_size.GetX();
+	}
+
+	float GameObject::GetHeight() const noexcept
+	{
+		return m_size.GetY();
 	}
 
 	SDL_Texture* GameObject::GetImage() const noexcept
@@ -41,6 +60,11 @@ namespace BallFramework
 	void GameObject::SetPosition(const Vector2& position) noexcept
 	{
 		m_position = position;
+	}
+
+	void GameObject::SetPosition(const float x, const float y) noexcept
+	{
+		m_position.Set(x, y);
 	}
 
 	void GameObject::SetSize(const Vector2& size) noexcept

@@ -14,11 +14,16 @@ namespace BallFramework
 
 		uint16_t GetId() const noexcept;
 		const Vector2& GetPosition() const noexcept;
+		float GetX() const noexcept;
+		float GetY() const noexcept;
 		const Vector2& GetSize() const noexcept;
+		float GetWidth() const noexcept;
+		float GetHeight() const noexcept;
 		SDL_Texture* GetImage() const noexcept;
 
 		void SetId(const uint16_t id) noexcept;
 		void SetPosition(const Vector2& position) noexcept;
+		void SetPosition(const float x, const float y) noexcept;
 		void SetSize(const Vector2& size) noexcept;
 		void SetImage(SDL_Texture* image) noexcept;
 
