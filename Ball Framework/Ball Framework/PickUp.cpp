@@ -2,7 +2,6 @@
 
 namespace BallFramework
 {
-
 	void PickUp::InvokeAction()
 	{
 		m_isMoving = false;
@@ -55,6 +54,11 @@ namespace BallFramework
 		return m_isActionActive;
 	}
 
+	void PickUp::SetActionType(uint8_t action) noexcept
+	{
+		m_actionType = action;
+	}
+
 	void PickUp::SetStartAction(std::function<void()> action)
 	{
 		m_startAction = action;
@@ -71,5 +75,4 @@ namespace BallFramework
 		m_startAction = startAction;
 		m_StopAction = stopAction;
 	}
-
 }

@@ -99,7 +99,7 @@ namespace BallFramework
 		m_paddleOutlines.push_back(Colors::dark_green);
 		m_outlineSizes.push_back(0.1f);
 
-		m_pickUpGenerator.SetDefaultProperties(Vector2::up, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
+		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::up, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
 	}
 
 	void Pong::OnClose()

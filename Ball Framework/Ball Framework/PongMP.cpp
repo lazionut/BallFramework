@@ -88,7 +88,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		m_paddleOutlines.push_back(Colors::dark_green);
 		m_outlineSizes.push_back(0.1f);
 
-		m_pickUpGenerator.SetDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
+		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
 	}
 
 	void PongMP::OnClose()

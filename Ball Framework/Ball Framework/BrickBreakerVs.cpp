@@ -122,7 +122,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			return;
 		}
 
-		m_pickUpGenerator.SetDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
+		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
 
 		m_paddleColors.push_back(Colors::red);
 		m_paddleOutlines.push_back(Colors::yellow);

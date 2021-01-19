@@ -25,12 +25,12 @@ namespace BallFramework
 
 	void PickUpActions::FasterPaddle(Paddle& paddle, float speed)
 	{
-		paddle.SetSpeed(paddle.GetSpeed() + speed);
+		paddle.AddSpeed(speed);
 	}
 
 	void PickUpActions::SlowerPaddle(Paddle& paddle, float speed)
 	{
-		paddle.SetSpeed(paddle.GetSpeed() - speed);
+		paddle.DecreaseSpeed(speed);
 	}
 
 	void PickUpActions::BiggerBall(Ball& ball, float x)
@@ -50,7 +50,7 @@ namespace BallFramework
 
 	void PickUpActions::SlowerBall(Ball& ball, float speed)
 	{
-		ball.AddSpeed(-speed);
+		ball.DecreaseSpeed(speed);
 	}
 
 	void PickUpActions::BonusPoints(Score& score, int points)

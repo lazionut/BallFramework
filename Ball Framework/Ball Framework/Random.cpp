@@ -1,23 +1,26 @@
 #include "Random.h"
 
-std::mt19937 Random::s_generator{};
-
-int Random::Range(int lower, int upper)
+namespace BallFramework
 {
-	return s_generator() % (upper - lower) + lower;
-}
+	std::mt19937 Random::s_generator{};
 
-int Random::Range(int upper) 
-{
-	return s_generator() % upper;
-}
+	int Random::Range(int lower, int upper)
+	{
+		return s_generator() % (upper - lower) + lower;
+	}
 
-bool Random::CoinFlip() noexcept
-{
-	return static_cast<bool>(s_generator() % 2);
-}
+	int Random::Range(int upper)
+	{
+		return s_generator() % upper;
+	}
 
-void Random::SetRandomSeed()
-{
-	s_generator.seed(static_cast<unsigned int>(time(nullptr)));
+	bool Random::CoinFlip() noexcept
+	{
+		return static_cast<bool>(s_generator() % 2);
+	}
+
+	void Random::SetRandomSeed()
+	{
+		s_generator.seed(static_cast<unsigned int>(time(nullptr)));
+	}
 }

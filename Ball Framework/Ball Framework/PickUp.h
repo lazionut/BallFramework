@@ -6,10 +6,11 @@
 
 namespace BallFramework
 {
-
 	class PickUp : public Ball
 	{
 	public:
+		friend class PickUpGenerator;
+
 		PickUp() noexcept;
 		PickUp(std::function<void()> startAction, const Vector2& position, const float size, const Vector2& direction, float speed) noexcept;
 		PickUp(std::function<void()> startAction, std::function<void()> stopAction) noexcept;
@@ -17,6 +18,7 @@ namespace BallFramework
 		bool IsMoving() const noexcept;
 		bool IsActionActive() const noexcept;
 
+		void SetActionType(uint8_t action) noexcept;
 		void SetStartAction(std::function<void()> action);
 		void SetStopAction(std::function<void()> action);
 		void SetActions(std::function<void()> startAction, std::function<void()> stopAction, float time = 0.0f);
@@ -34,6 +36,8 @@ namespace BallFramework
 
 		bool m_isActionActive;
 		bool m_isMoving;
+
+		uint8_t m_actionType;
 	};
 
 }

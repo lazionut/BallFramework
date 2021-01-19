@@ -13,13 +13,13 @@ namespace BallFramework
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
 
-constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
-constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
-constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
-constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
+	constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
+	constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
+	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+	constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
@@ -97,7 +97,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			return;
 		}
 
-		m_pickUpGenerator.SetDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
+		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
 	}
 
 	void BrickBreaker::ResetBall()
