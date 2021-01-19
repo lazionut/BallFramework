@@ -18,6 +18,11 @@ namespace BallFramework
 		return m_position;
 	}
 
+	const Vector2& Ball::GetPosition() const noexcept
+	{
+		return m_position;
+	}
+
 	Vector2& Ball::GetDirection()
 	{
 		return m_direction;

@@ -14,9 +14,9 @@ namespace BallFramework
 
 		uint16_t GetId() const noexcept;
 		const Vector2& GetPosition() const noexcept;
+		const Vector2& GetSize() const noexcept;
 		float GetX() const noexcept;
 		float GetY() const noexcept;
-		const Vector2& GetSize() const noexcept;
 		float GetWidth() const noexcept;
 		float GetHeight() const noexcept;
 		SDL_Texture* GetImage() const noexcept;
@@ -26,6 +26,8 @@ namespace BallFramework
 		void SetPosition(const float x, const float y) noexcept;
 		void SetSize(const Vector2& size) noexcept;
 		void SetSize(const float width, const float height) noexcept;
+		void SetWidth(const float width) noexcept;
+		void SetHeight(const float height) noexcept;
 		void SetImage(SDL_Texture* image) noexcept;
 
 	protected:

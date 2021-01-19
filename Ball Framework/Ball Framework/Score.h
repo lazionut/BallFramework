@@ -3,12 +3,12 @@
 #include <string>
 #include <SDL_ttf.h>
 #include <iostream>
-#include "Vector2.h"
+#include "GameObject.h"
 
 namespace BallFramework
 {
 
-	class Score
+	class Score : public GameObject
 	{
 	public:
 		Score(const SDL_Color& color);
@@ -22,20 +22,11 @@ namespace BallFramework
 		void SetText(SDL_Texture* text);
 
 		void SetScore(int16_t points);
-		void SetPosition(const Vector2& position);
-		void SetWidth(float width);
-		void SetHeight(float height);
-
-		const Vector2& GetPosition() const;
-		float GetWidth() const;
-		float GetHeight() const;
 
 	private:
 		int16_t m_points;
-		Vector2 m_position;
 		SDL_Texture* m_scoreText;
 		SDL_Color m_scoreColor;
-		float m_width, m_height;
 	};
 
 }

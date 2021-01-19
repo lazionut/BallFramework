@@ -1,8 +1,6 @@
 #pragma once
 #include <functional>
 #include <thread>
-#include "Vector2.h"
-#include "Time.h"
 #include "Paddle.h"
 #include "Ball.h"
 
@@ -12,12 +10,12 @@ namespace BallFramework
 	class PickUp : public Ball
 	{
 	public:
-		PickUp();
-		PickUp(std::function<void()> startAction, const Vector2& position, const float size, const Vector2& direction, float speed);
-		PickUp(std::function<void()> startAction, std::function<void()> stopAction);
+		PickUp() noexcept;
+		PickUp(std::function<void()> startAction, const Vector2& position, const float size, const Vector2& direction, float speed) noexcept;
+		PickUp(std::function<void()> startAction, std::function<void()> stopAction) noexcept;
 
-		bool IsMoving() const;
-		bool IsActionActive() const;
+		bool IsMoving() const noexcept;
+		bool IsActionActive() const noexcept;
 
 		void SetStartAction(std::function<void()> action);
 		void SetStopAction(std::function<void()> action);

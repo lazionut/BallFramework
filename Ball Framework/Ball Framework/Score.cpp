@@ -3,14 +3,8 @@
 namespace BallFramework
 {
 
-	Score::Score(const SDL_Color& color) :
-		m_scoreColor{ color },
-		m_position{ Vector2::zero },
-		m_width{ 0 }, m_height{ 0 },
-		m_scoreText{ nullptr }
-	{
-		m_points = 0;
-	}
+	Score::Score(const SDL_Color& color) 
+		: GameObject(), m_scoreColor{ color }, m_scoreText{ nullptr }, m_points{ 0 } {}
 
 	void Score::AddPoints(int16_t points)
 	{
@@ -53,35 +47,4 @@ namespace BallFramework
 	{
 		m_points = points;
 	}
-
-	void Score::SetPosition(const Vector2& position)
-	{
-		m_position = position;
-	}
-
-	void Score::SetWidth(float width)
-	{
-		m_width = width;
-	}
-
-	void Score::SetHeight(float height)
-	{
-		m_height = height;
-	}
-
-	const Vector2& Score::GetPosition() const
-	{
-		return m_position;
-	}
-
-	float Score::GetWidth() const
-	{
-		return m_width;
-	}
-
-	float Score::GetHeight() const
-	{
-		return m_height;
-	}
-
 }

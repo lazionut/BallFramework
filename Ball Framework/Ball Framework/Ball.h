@@ -13,6 +13,7 @@ namespace BallFramework
 		Ball(const Ball& other);
 
 		Vector2& GetPosition();
+		const Vector2& GetPosition() const noexcept;
 		Vector2& GetDirection();
 
 		float GetSize() const noexcept;

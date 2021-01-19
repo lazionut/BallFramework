@@ -132,7 +132,7 @@ namespace BallFramework
 		uint32_t index = 0;
 		for (const auto& ball : m_balls)
 		{
-			scale.PointToPixel(aux, ball.GameObject::GetPosition(), ball.GetSize(), ball.GetSize());
+			scale.PointToPixel(aux, ball.GetPosition(), ball.GetSize(), ball.GetSize());
 			SDL_RenderCopy(renderer, m_ballImages[index], nullptr, &aux);
 			++index;
 		}
