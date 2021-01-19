@@ -5,10 +5,10 @@
 
 namespace BallFramework
 {
-
 	class PickUpActions
 	{
 	public:
+
 		static void SpeedUp();
 		static void SlowDown();
 

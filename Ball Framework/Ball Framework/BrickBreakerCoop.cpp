@@ -353,8 +353,6 @@ namespace BallFramework
 
 	void BrickBreakerCoop::CreatePickUp(const Vector2& position)
 	{
-		using Generator = PickUpGenerator::Actions;
-
 		if ((Random::Range(100)) > PICKUPSPAWNCHANCE)
 		{
 			m_isPickCreated = true;
@@ -364,10 +362,10 @@ namespace BallFramework
 
 			switch (m_pickUpGenerator.GetPickUpType())
 			{
-			case Generator::SPEEDCHANGE:
+			case Actions::SPEEDCHANGE:
 				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
 				break;
-			case Generator::PADDLESIZECHANGE:
+			case Actions::PADDLESIZECHANGE:
 				if (m_lastPaddleHit)
 					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER1, PADDLESIZEDIFFERENCE);
 				else
@@ -375,7 +373,7 @@ namespace BallFramework
 				m_pickUp.SetDirection(Vector2::down);
 				m_pickUp.StartMoving();
 				break;
-			case Generator::PADDLESPEEDCHANGE:
+			case Actions::PADDLESPEEDCHANGE:
 				if (m_lastPaddleHit)
 					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER1, PADDLESPEEDDIFFERENCE);
 				else
@@ -383,16 +381,16 @@ namespace BallFramework
 				m_pickUp.SetDirection(Vector2::down);
 				m_pickUp.StartMoving();
 				break;
-			case Generator::BALLSIZECHANGE:
+			case Actions::BALLSIZECHANGE:
 				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(OURBALL, BALLSIZEDIFFERENCE);
 				break;
-			case Generator::BALLSPEEDCHANGE:
+			case Actions::BALLSPEEDCHANGE:
 				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(OURBALL, BALLSPEEDDIFFERENCE);
 				break;
-			case Generator::BONUSPOINTS:
+			case Actions::BONUSPOINTS:
 				m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
 				break;
-			case Generator::REMOVEPOINTS:
+			case Actions::REMOVEPOINTS:
 				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
 				break;
 			default:

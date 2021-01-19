@@ -180,6 +180,9 @@
     <ClCompile Include="MovableObject.cpp">
       <Filter>Source Files\Framework\Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Actions.cpp">
+      <Filter>Source Files\Framework\PickUp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickBreaker.h">
@@ -277,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="MovableObject.h">
       <Filter>Header Files\Framework\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions.h">
+      <Filter>Header Files\Framework\PickUp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

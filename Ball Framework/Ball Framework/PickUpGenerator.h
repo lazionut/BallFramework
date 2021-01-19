@@ -1,6 +1,6 @@
 #pragma once
-#include "PickUp.h"
 #include "PickUpActions.h"
+#include "PickUp.h"
 #include "Random.h"
 
 namespace BallFramework
@@ -8,23 +8,6 @@ namespace BallFramework
 	class PickUpGenerator
 	{
 	public:
-		enum class Actions : uint8_t
-		{
-			SPEEDCHANGE,
-
-			PADDLESIZECHANGE,
-			PADDLESPEEDCHANGE,
-
-			BALLSIZECHANGE,
-			BALLSPEEDCHANGE,
-
-			BONUSPOINTS,
-			REMOVEPOINTS,
-
-			//numarul de actiuni
-			ACTIONSNUMBER
-		};
-
 		PickUpGenerator();
 		PickUpGenerator(const Vector2& paddleSize, const float ballSize, const float speed, const float time);
 

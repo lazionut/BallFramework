@@ -16,7 +16,7 @@ namespace BallFramework
 		return PickUp();
 	}
 
-	PickUpGenerator::Actions PickUpGenerator::GetPickUpType()
+	Actions PickUpGenerator::GetPickUpType()
 	{
 		return static_cast<Actions>(Random::Range(static_cast<int>(Actions::ACTIONSNUMBER)));
 	}

@@ -304,8 +304,6 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 	void PongMP::CreatePickUp(const Vector2& position)
 	{
-		using Generator = PickUpGenerator::Actions;
-
 		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
 			m_isPickCreated = true;
@@ -317,11 +315,11 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 			switch (type)
 			{
-			case Generator::SPEEDCHANGE:
+			case Actions::SPEEDCHANGE:
 				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
 				m_pickUp.StartMoving();
 				break;
-			case Generator::PADDLESIZECHANGE:
+			case Actions::PADDLESIZECHANGE:
 				difference = 3;
 				if (random)
 				{
@@ -335,7 +333,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 				}
 				m_pickUp.StartMoving();
 				break;
-			case Generator::PADDLESPEEDCHANGE:
+			case Actions::PADDLESPEEDCHANGE:
 				difference = 3;
 				if (random)
 				{
@@ -349,10 +347,10 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 				}
 				m_pickUp.StartMoving();
 				break;
-			case Generator::BALLSIZECHANGE:
+			case Actions::BALLSIZECHANGE:
 				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(BALL, 2);
 				break;
-			case Generator::BALLSPEEDCHANGE:
+			case Actions::BALLSPEEDCHANGE:
 				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL, 2);
 				break;
 			default:

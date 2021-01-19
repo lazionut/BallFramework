@@ -54,7 +54,7 @@ namespace BallFramework
 		return m_isActionActive;
 	}
 
-	void PickUp::SetActionType(uint8_t action) noexcept
+	void PickUp::SetActionType(Actions action) noexcept
 	{
 		m_actionType = action;
 	}

@@ -333,8 +333,6 @@ namespace BallFramework
 
 	void Pong::CreatePickUp(const Vector2& position)
 	{
-		using Generator = PickUpGenerator::Actions;
-
 		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
 			m_isPickCreated = true;
@@ -344,23 +342,23 @@ namespace BallFramework
 
 			switch (type)
 			{
-			case Generator::SPEEDCHANGE:
+			case Actions::SPEEDCHANGE:
 				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
 				break;
-			case Generator::PADDLESIZECHANGE:
+			case Actions::PADDLESIZECHANGE:
 				m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER, 1);
 				m_pickUp.SetDirection(Vector2::left);
 				m_pickUp.StartMoving();
 				break;
-			case Generator::PADDLESPEEDCHANGE:
+			case Actions::PADDLESPEEDCHANGE:
 				m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER, 10);
 				m_pickUp.SetDirection(Vector2::left);
 				m_pickUp.StartMoving();
 				break;
-			case Generator::BALLSIZECHANGE:
+			case Actions::BALLSIZECHANGE:
 				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(BALL, 1);
 				break;
-			case Generator::BALLSPEEDCHANGE:
+			case Actions::BALLSPEEDCHANGE:
 				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL, 5);
 				break;
 			default:
