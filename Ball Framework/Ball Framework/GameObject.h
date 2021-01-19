@@ -12,6 +12,8 @@ namespace BallFramework
 		GameObject(const Vector2& position, const Vector2& size, SDL_Texture* image = nullptr) noexcept;
 		GameObject(const Vector2& position, const Vector2& size, const uint16_t id, SDL_Texture* image = nullptr) noexcept;
 
+		virtual ~GameObject();
+
 		uint16_t GetId() const noexcept;
 		const Vector2& GetPosition() const noexcept;
 		const Vector2& GetSize() const noexcept;

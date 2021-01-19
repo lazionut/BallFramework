@@ -12,6 +12,10 @@ namespace BallFramework
 	GameObject::GameObject(const Vector2& position, const Vector2& size, const uint16_t id, SDL_Texture* image) noexcept
 		: m_position{ position }, m_size{ size }, m_image{ image }, m_id{ id } {}
 
+	GameObject::~GameObject()
+	{
+	}
+
 	uint16_t GameObject::GetId() const noexcept
 	{
 		return m_id;

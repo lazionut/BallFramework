@@ -18,7 +18,7 @@ namespace BallFramework
 
 		void SetSpeedActions(PickUp& pickUp);
 		void SetPaddleSizeChangeActions(PickUp& pickUp, Paddle& paddle);
-		void SetPaddleSpeedChangePickUp(PickUp& pickUp, Paddle& paddle);
+		void SetPaddleSpeedChangeActions(PickUp& pickUp, Paddle& paddle);
 		void SetBallSizeChangeActions(PickUp& pickUp, Ball& ball);
 		void SetBallSpeedChangeActions(PickUp& pickUp, Ball& ball);
 		void SetBonusPointsActions(PickUp& pickUp);

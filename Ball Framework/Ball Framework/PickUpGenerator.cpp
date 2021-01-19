@@ -38,21 +38,40 @@ namespace BallFramework
 
 	void PickUpGenerator::SetActions(PickUp& pickUp, GameObject* object)
 	{
-		switch (static_cast<Actions>(pickUp.m_actionType))
+		switch (pickUp.m_actionType)
 		{
 		case Actions::SPEEDCHANGE:
+			SetSpeedActions(pickUp);
 			break;
 		case Actions::PADDLESIZECHANGE:
+			if (auto paddle = dynamic_cast<Paddle*>(object); paddle != nullptr)
+			{
+				SetPaddleSizeChangeActions(pickUp, *paddle);
+			}
 			break;
 		case Actions::PADDLESPEEDCHANGE:
+			if (auto paddle = dynamic_cast<Paddle*>(object); paddle != nullptr)
+			{
+				SetPaddleSpeedChangeActions(pickUp, *paddle);
+			}
 			break;
 		case Actions::BALLSIZECHANGE:
+			if (auto ball = dynamic_cast<Ball*>(object); ball != nullptr)
+			{
+				SetBallSizeChangeActions(pickUp, *ball);
+			}
 			break;
 		case Actions::BALLSPEEDCHANGE:
+			if (auto ball = dynamic_cast<Ball*>(object); ball != nullptr)
+			{
+				SetBallSizeChangeActions(pickUp, *ball);
+			}
 			break;
 		case Actions::BONUSPOINTS:
+			SetBonusPointsActions(pickUp);
 			break;
 		case Actions::REMOVEPOINTS:
+			SetRemovePointsActions(pickUp);
 			break;
 		default:
 			break;
@@ -82,7 +101,7 @@ namespace BallFramework
 		);
 	}
 
-	void PickUpGenerator::SetPaddleSpeedChangePickUp(PickUp& pickUp, Paddle& paddle)
+	void PickUpGenerator::SetPaddleSpeedChangeActions(PickUp& pickUp, Paddle& paddle)
 	{
 		pickUp.SetActions
 		(
