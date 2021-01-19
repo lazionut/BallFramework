@@ -1,17 +1,7 @@
 #pragma once
 #include <SDL_ttf.h>
-#include "Game.h"
+
 #include "BallGame.h"
-#include "Brick.h"
-#include "Game.h"
-#include "ScreenScale.h"
-#include "Paddle.h"
-#include "Ball.h"
-#include "PickUpGenerator.h"
-#include "Score.h"
-#include "Button.h"
-#include "Paths.h"
-#include "PlayersStatistics.h"
 
 namespace BallFramework
 {
@@ -36,15 +26,10 @@ namespace BallFramework
 
 		void InitializeBricks();
 
-		void CreatePickUp(const Vector2& position);
-
-		void RenderPlayersScore(SDL_Renderer* renderer);
-
-	private: //SDL objects
-		SDL_Renderer* m_renderer;
+		void CreatePickUp(const Vector2& position) override;
 
 	private: //objects
-		uint16_t m_bricksNumber;
+		uint8_t m_bricksNumber;
 
 		std::string m_player1Name;
 		std::string m_player2Name;

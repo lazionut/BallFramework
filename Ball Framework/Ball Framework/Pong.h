@@ -1,17 +1,7 @@
 #pragma once
 #include <SDL_ttf.h>
-#include "Game.h"
+
 #include "BallGame.h"
-#include "Brick.h"
-#include "Game.h"
-#include "ScreenScale.h"
-#include "Paddle.h"
-#include "Ball.h"
-#include "PickUpGenerator.h"
-#include "Score.h"
-#include "Button.h"
-#include "Paths.h"
-#include "PlayersStatistics.h"
 
 namespace BallFramework
 {
@@ -34,23 +24,22 @@ namespace BallFramework
 		void CheckBallBrickCollision();
 		void CheckScoreCondition();
 
+		void CheckBotMovement();
+
 		void InitializeBricks();
 
-		void CreatePickUp(const Vector2& position);
-
-	private: //SDL objects
-		SDL_Renderer* m_renderer;
+		void CreatePickUp(const Vector2& position) ;
 
 	private: //objects
-		uint16_t m_bricksNumber;
+		uint8_t m_bricksNumber;
 
-		std::string m_player1Name;
-		std::string m_AIName;
+		std::string m_playerName;
+		std::string m_botName;
 
-		Paddle m_AIPlayer;
+		Paddle m_botPlayer;
 
-		Score m_player1Score;
-		Score m_AIScore;
+		Score m_playerScore;
+		Score m_botScore;
 	};
 
 }

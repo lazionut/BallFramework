@@ -2,6 +2,7 @@
 
 namespace BallFramework
 {
+
 #pragma region CONSTANTS
 
 #define WIDTHUNITS 20
@@ -11,7 +12,6 @@ namespace BallFramework
 #define HEIGHTPADDLESPACING 0.010f
 #define PADDLESPEED 6.0f
 #define BRICKCOLUMNS 4
-#define BRICKSPERCOLUMN 4
 #define BRICKWIDTH 0.81f
 #define BRICKHEIGHT 0.35f
 #define BRICKLIMIT_X -1.5f
@@ -26,19 +26,18 @@ namespace BallFramework
 #define PLAYER1SCORE    m_scores[0]
 #define PLAYER2SCORE    m_scores[1] 
 
-constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
-constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
-constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+	constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
+	constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
+	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
 	PongMP::PongMP(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
 		: BallGame("Pong - Multiplayer", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
-		m_renderer{ nullptr },
 		m_bricksNumber{ 0 },
 		m_player1Name{ playersNames[0] }, m_player2Name{ playersNames[1] },
 		m_player1Score{ Colors::white }, m_player2Score{ Colors::white }
@@ -208,7 +207,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 					if (m_bricksNumber < 1)
 					{
-						m_bricks.resize(BRICKCOLUMNS);
+						m_bricks.resize(rand() % 7);
 						InitializeBricks();
 					}
 
@@ -254,60 +253,25 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		}
 	}
 #pragma endregion
-	
+
 #pragma region Rendering Methods
 	void PongMP::Render(SDL_Renderer* renderer)
 	{
-		m_renderer = renderer;
-		SDL_Rect aux;
-		decltype(auto) scale = GetScale();
-
-		SDL_SetRenderDrawColor(m_renderer, 0, 255, 0, 255);
-		scale.PointToPixel(aux, PLAYER1.GetPosition(), PLAYER1.GetWidth(), PLAYER1.GetHeight());
-		SDL_RenderFillRect(m_renderer, &aux);
-		scale.PointToPixel(aux, PLAYER2.GetPosition(), PLAYER2.GetWidth(), PLAYER2.GetHeight());
-		SDL_RenderFillRect(m_renderer, &aux);
-
-		uint16_t screenHeight = scale.GetScreenHeight();
-		uint16_t screenCenter = scale.GetScreenWidth() / 2;
+		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+		uint16_t screenHeight = GetScale().GetScreenHeight();
+		uint16_t screenCenter = GetScale().GetScreenWidth() / 2;
 		for (int index = 0; index < screenHeight; index += 3)
 		{
-			SDL_RenderDrawPoint(m_renderer, screenCenter, index);
+			SDL_RenderDrawPoint(renderer, screenCenter, index);
 		}
 
-		scale.PointToPixel(aux, BALL.GetPosition(), BALL.GetSize(), BALL.GetSize());
-		SDL_RenderCopy(m_renderer, m_ballImage, nullptr, &aux);
-
-		RenderPaddles(m_renderer);
-		RenderBricks(m_renderer);
-		RenderPlayersScore(m_renderer);
-		RenderButton(m_renderer);
-
-		if (m_isPickActive)
-		{
-			scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
-			SDL_RenderCopy(m_renderer, m_pickUpImage, nullptr, &aux);
-		}
+		RenderGameObjects(renderer);
+		RenderPaddles(renderer);
+		RenderBricks(renderer);
+		RenderButton(renderer);
+		RenderScore(renderer);
 	}
 
-	void PongMP::RenderPlayersScore(SDL_Renderer* renderer)
-	{
-		SDL_Rect aux1, aux2;
-		decltype(auto) scale = GetScale();
-
-		scale.PointToPixel(aux1, 2, 4, 0.5f, 0.5f);
-		scale.PointToPixel(aux2, -2, 4, 0.5f, 0.5f);
-
-		if (PLAYER1SCORE.GetText() != nullptr && PLAYER2SCORE.GetText() != nullptr)
-		{
-			SDL_RenderCopy(renderer, PLAYER1SCORE.GetText(), nullptr, &aux1);
-			SDL_RenderCopy(renderer, PLAYER2SCORE.GetText(), nullptr, &aux2);
-		}
-		else
-		{
-			LOGGING_ERROR("PongMP -> font not found!");
-		}
-	}
 #pragma endregion
 
 	void PongMP::InitializeBricks()
@@ -324,6 +288,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 				brick.SetColor(Colors::green);
 				++m_bricksNumber;
 				y += BRICKSPACING;
+				LOGGING_INFO("Brick created");
 			}
 
 			++x;
@@ -397,4 +362,5 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 			m_isPickCreated = false;
 		}
 	}
+
 }
