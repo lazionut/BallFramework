@@ -17,6 +17,7 @@ namespace BallFramework
 #define BRICKLIMIT_X -1.5f
 #define BRICKLIMIT_Y -3
 #define BRICKSPACING 2
+#define MAXBRICKSONROW 4
 
 #define PICKUPSPAWNCHANCE 70
 
@@ -277,18 +278,22 @@ namespace BallFramework
 	void PongMP::InitializeBricks()
 	{
 		float x = BRICKLIMIT_X, y = BRICKLIMIT_Y;
+		Brick temp;
 
 		for (auto&& row : m_bricks)
 		{
-			row.resize(rand() % 5);
-
-			for (auto&& brick : row)
+			for (int i = 0; i < MAXBRICKSONROW; ++i)
 			{
-				brick.Set(Vector2(x, y), BRICKHEIGHT, BRICKWIDTH);
-				brick.SetColor(Colors::green);
-				++m_bricksNumber;
+				if (Random::CoinFlip())
+				{
+					temp.Set(Vector2(x, y), BRICKHEIGHT, BRICKWIDTH);
+					temp.SetColor(Colors::green);
+					row.push_back(temp);
+
+					++m_bricksNumber;
+					LOGGING_INFO("Brick created");
+				}
 				y += BRICKSPACING;
-				LOGGING_INFO("Brick created");
 			}
 
 			++x;
