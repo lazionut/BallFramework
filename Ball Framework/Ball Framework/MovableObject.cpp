@@ -29,6 +29,11 @@ namespace BallFramework
 		m_direction = direction;
 	}
 
+	void MovableObject::SetDirection(const float x, const float y) noexcept
+	{
+		m_direction.Set(x, y);
+	}
+
 	void MovableObject::SetSpeed(const float speed) noexcept
 	{
 		m_speed = speed;
@@ -42,6 +47,16 @@ namespace BallFramework
 	void MovableObject::DecreaseSize(const Vector2& size) noexcept
 	{
 		m_size -= size;
+	}
+
+	void MovableObject::AddSpeed(const float difference) noexcept
+	{
+		m_speed += difference;
+	}
+
+	void MovableObject::DecreaseSpeed(const float difference) noexcept
+	{
+		m_speed -= difference;
 	}
 
 	void MovableObject::Move() noexcept

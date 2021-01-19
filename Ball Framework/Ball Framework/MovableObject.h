@@ -17,10 +17,14 @@ namespace BallFramework
         const float GetSpeed() const noexcept;
 
         void SetDirection(const Vector2& direction) noexcept;
+        void SetDirection(const float x, const float y) noexcept;
         void SetSpeed(const float speed) noexcept;
 
         void AddSize(const Vector2& size) noexcept;
         void DecreaseSize(const Vector2& size) noexcept;
+
+        void AddSpeed(const float difference) noexcept;
+        void DecreaseSpeed(const float difference) noexcept;
 
         void Move() noexcept;
 

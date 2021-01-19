@@ -25,6 +25,7 @@ namespace BallFramework
 		void SetPosition(const Vector2& position) noexcept;
 		void SetPosition(const float x, const float y) noexcept;
 		void SetSize(const Vector2& size) noexcept;
+		void SetSize(const float width, const float height) noexcept;
 		void SetImage(SDL_Texture* image) noexcept;
 
 	protected:

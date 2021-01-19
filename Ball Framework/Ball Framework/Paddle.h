@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL.h>
-#include "Rectangle.h"
+#include "MovableObject.h"
 
 namespace BallFramework
 {

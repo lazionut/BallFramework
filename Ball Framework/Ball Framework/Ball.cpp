@@ -3,24 +3,14 @@
 namespace BallFramework
 {
 
-	Ball::Ball()
-		: m_position{ Vector2::Vector2(0.0f, 0.0f) }, m_size{ 0.0f }, m_direction(), m_speed(0)
-	{
-	}
+	Ball::Ball() : MovableObject() {}
 
 	Ball::Ball(const Vector2& position, float size, const Vector2& direction, float speed)
-		: m_position(position), m_size(size), m_direction(direction), m_speed(speed)
-	{
-	}
+		: MovableObject(position, Vector2(size, size), direction, speed) {}
 
 	Ball::Ball(const Ball& other)
 	{
 		*this = other;
-	}
-
-	const Vector2& Ball::GetPosition() const
-	{
-		return m_position;
 	}
 
 	Vector2& Ball::GetPosition()
@@ -28,74 +18,19 @@ namespace BallFramework
 		return m_position;
 	}
 
-	float Ball::GetSize() const
-	{
-		return m_size;
-	}
-
-	const Vector2& Ball::GetDirection() const
-	{
-		return m_direction;
-	}
-
 	Vector2& Ball::GetDirection()
 	{
 		return m_direction;
 	}
 
-	float Ball::GetSpeed() const
+	float Ball::GetSize() const noexcept
 	{
-		return m_speed;
-	}
-
-	uint16_t Ball::GetId() const noexcept
-	{
-		return m_id;
-	}
-
-	void Ball::SetId(uint16_t id) noexcept
-	{
-		m_id = id;
-	}
-
-	void Ball::SetPosition(const Vector2& position)
-	{
-		m_position = position;
-	}
-
-	void Ball::SetPosition(float x, float y)
-	{
-		m_position.Set(x, y);
+		return m_size.GetX();
 	}
 
 	void Ball::SetSize(float size)
 	{
-		m_size = size;
-	}
-
-	void Ball::SetDirection(const Vector2& direction)
-	{
-		m_direction = direction;
-	}
-
-	void Ball::SetDirection(float x, float y)
-	{
-		m_direction.Set(x, y);
-	}
-
-	void Ball::SetSpeed(float speed)
-	{
-		m_speed = speed;
-	}
-
-	void Ball::AddSpeed(float difference)
-	{
-		m_speed += difference;
-	}
-
-	void Ball::Move()
-	{
-		m_position += (m_direction * m_speed * Time::GetDeltaTime());
+		m_size.Set(size, size);
 	}
 
 	bool Ball::CheckCollision(const GameObject& rect)
@@ -107,6 +42,7 @@ namespace BallFramework
 		float rectHeight = rect.GetHeight();
 		float rectx = rectPos.GetX() - rectWidth / 2;
 		float recty = rectPos.GetY() - rectHeight / 2;
+		float size = GetSize();
 
 		//find the closest x between ball and rectangle
 		if (ballx < rectx)
@@ -139,13 +75,13 @@ namespace BallFramework
 		float deltaX = x - ballx;
 		float deltaY = y - bally;
 
-		if (deltaX * deltaX + deltaY * deltaY < (m_size * m_size / 4)) //collision was found
+		if (deltaX * deltaX + deltaY * deltaY < (size * size / 4)) //collision was found
 		{
 			if (x == ballx && y == bally) //ball closest point coordonates are the ball coordonates
 			{
 				if (m_position == rectPos) //ball has the same coordonates with the rectangle
 				{
-					m_position += Vector2::up * (rectHeight / 2 + m_size / 2);
+					m_position += Vector2::up * (rectHeight / 2 + size / 2);
 					return true;
 				}
 
@@ -159,7 +95,7 @@ namespace BallFramework
 
 			Vector2 difference{ deltaX, deltaY };
 			difference.Normalize();
-			difference *= m_size / 2;
+			difference *= size / 2;
 
 			m_position = Vector2(x, y) - difference;
 
@@ -171,7 +107,8 @@ namespace BallFramework
 
 	bool Ball::CheckCollision(const Ball& ball)
 	{
-		float addedRadius = (m_size + ball.m_size) / 2;
+
+		float addedRadius = (GetSize() + ball.GetSize()) / 2;
 
 		float x = ball.m_position.GetX() - m_position.GetX();
 		float y = ball.m_position.GetY() - m_position.GetY();
@@ -195,13 +132,13 @@ namespace BallFramework
 		{
 			if (m_position.GetX() < xRect && m_direction.GetX() < 0)
 			{
-				m_position.SetX(m_position.GetX() - m_size);
+				m_position.SetX(m_position.GetX() - GetSize());
 			}
 			else
 			{
 				if (m_position.GetX() > xRect && m_direction.GetX() > 0)
 				{
-					m_position.SetX(m_position.GetX() + m_size);
+					m_position.SetX(m_position.GetX() + GetSize());
 				}
 				else
 				{
@@ -215,13 +152,13 @@ namespace BallFramework
 			{
 				if (m_position.GetY() < yRect && m_direction.GetY() < 0)
 				{
-					m_position.SetY(m_position.GetY() - m_size);
+					m_position.SetY(m_position.GetY() - GetSize());
 				}
 				else
 				{
 					if (m_position.GetY() > yRect && m_direction.GetY() > 0)
 					{
-						m_position.SetY(m_position.GetY() + m_size);
+						m_position.SetY(m_position.GetY() + GetSize());
 					}
 					else
 					{

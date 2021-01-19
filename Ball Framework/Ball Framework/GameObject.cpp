@@ -72,6 +72,11 @@ namespace BallFramework
 		m_size = size;
 	}
 
+	void GameObject::SetSize(const float width, const float height) noexcept
+	{
+		m_size.Set(width, height);
+	}
+
 	void GameObject::SetImage(SDL_Texture* image) noexcept
 	{
 		m_image = image;

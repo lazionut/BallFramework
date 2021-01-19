@@ -1,5 +1,5 @@
 #pragma once
-#include "MovableObject.h"
+#include "GameObject.h"
 
 namespace BallFramework
 {
