@@ -196,8 +196,10 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 			{
 				if (BALL.CheckCollision(*element))
 				{
-					if (m_isPickCreated == false)
+					if (!m_pickUp.IsActive())
+					{
 						CreatePickUp(element->GetPosition());
+					}
 
 					BALL.ChangeDirection(*element);
 					row.erase(element);
@@ -306,7 +308,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 	{
 		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
-			m_isPickCreated = true;
+			m_pickUp.SetActive(true);
 			auto random = Random::CoinFlip();
 			auto difference = 0.0f;
 
@@ -354,16 +356,16 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL, 2);
 				break;
 			default:
-				m_isPickCreated = false;
+				m_pickUp.SetActive(false);
 				return;
 			}
 
 			m_pickUp.SetPosition(position);
-			m_isPickActive = true;
+			m_pickUp.SetVisible(true);
 		}
 		else
 		{
-			m_isPickCreated = false;
+			m_pickUp.SetActive(false);
 		}
 	}
 

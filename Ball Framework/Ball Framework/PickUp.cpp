@@ -34,15 +34,27 @@ namespace BallFramework
 		m_isMoving = true;
 	}
 
-	PickUp::PickUp() noexcept : m_time{ 0 }, m_StopTime{ 0 }, m_isActionActive{ false }, m_isMoving{ false } {}
+	PickUp::PickUp() noexcept
+		: m_time{ 0 }, m_StopTime{ 0 }, m_actionType{ Actions::NONE },
+		m_isActionActive{ false }, m_isMoving{ false }
+	{
+		m_isActive = false;
+	}
 
 	PickUp::PickUp(std::function<void()> startAction, const Vector2& position, const float size, const Vector2& direction, float speed) noexcept
 		: Ball(position, size, direction, speed),
-		m_startAction{ startAction }, m_time{ 0 }, m_StopTime{ 0 }, m_isActionActive{ false }, m_isMoving{ false } {}
+		m_startAction{ startAction }, m_time{ 0 }, m_StopTime{ 0 },
+		m_isActionActive{ false }, m_isMoving{ false }, m_actionType{ Actions::NONE }
+	{
+		m_isActive = false;
+	}
 
 	PickUp::PickUp(std::function<void()> startAction, std::function<void()> stopAction) noexcept
-		: m_startAction{ startAction }, m_StopAction{ stopAction }, m_time{ 0 },
-		m_StopTime{ 0 }, m_isActionActive{ false }, m_isMoving{ false } {}
+		: m_startAction{ startAction }, m_StopAction{ stopAction }, m_time{ 0 }, m_StopTime{ 0 },
+		m_isActionActive{ false }, m_isMoving{ false }, m_actionType{ Actions::NONE }
+	{
+		m_isActive;
+	}
 
 	bool PickUp::IsMoving() const noexcept
 	{

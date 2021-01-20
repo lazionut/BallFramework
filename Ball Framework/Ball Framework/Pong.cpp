@@ -210,8 +210,10 @@ namespace BallFramework
 			{
 				if (BALL.CheckCollision(*element))
 				{
-					if (m_isPickCreated == false)
+					if (!m_pickUp.IsActive())
+					{
 						CreatePickUp(element->GetPosition());
+					}
 
 					BALL.ChangeDirection(*element);
 					row.erase(element);
@@ -335,7 +337,7 @@ namespace BallFramework
 	{
 		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
-			m_isPickCreated = true;
+			m_pickUp.SetActive(true);
 
 			auto type = m_pickUpGenerator.GetPickUpType();
 			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(type));
@@ -362,16 +364,16 @@ namespace BallFramework
 				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL, 5);
 				break;
 			default:
-				m_isPickCreated = false;
+				m_pickUp.SetActive(false);
 				return;
 			}
 
 			m_pickUp.SetPosition(position);
-			m_isPickActive = true;
+			m_pickUp.SetVisible(true);
 		}
 		else
 		{
-			m_isPickCreated = false;
+			m_pickUp.SetActive(false);
 		}
 	}
 

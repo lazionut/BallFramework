@@ -341,11 +341,11 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 					if (element->GetId() == BALL1.GetId())
 					{
-						if (m_isPickCreated == false)
+						if (!m_pickUp.IsActive())
 						{
 							CreatePickUp(element->GetPosition());
-
 						}
+
 						row.erase(element);
 						--m_brickCounter1;
 						SCORE1.AddPoints(1);
@@ -361,7 +361,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 					BALL2.ChangeDirection(*element);
 					if (element->GetId() == BALL2.GetId())
 					{
-						if (m_isPickCreated == false)
+						if (!m_pickUp.IsActive())
 						{
 							CreatePickUp(element->GetPosition());
 						}
@@ -400,21 +400,21 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreakerVS::CheckPickUpCollision()
 	{
-		if (m_isPickActive)
+		if (m_pickUp.IsVisible())
 		{
 			if (m_pickUp.IsMoving())
 			{
 				if (m_pickUp.CheckCollision(PLAYER1))
 				{
 					m_pickUp.InvokeAction();
-					m_isPickActive = false;
+					m_pickUp.SetVisible(false);
 					LOGGING_INFO("BrickBreaker -> player paddle-pick-up collision");
 					m_lastPaddleHit = true;
 				}
 				if (m_pickUp.CheckCollision(PLAYER2))
 				{
 					m_pickUp.InvokeAction();
-					m_isPickActive = false;
+					m_pickUp.SetVisible(false);
 					LOGGING_INFO("BrickBreaker -> player paddle-pick-up collision");
 					m_lastPaddleHit = false;
 				}
@@ -424,14 +424,14 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 				if (m_pickUp.CheckCollision(BALL1)) // TO DO 
 				{
 					m_pickUp.InvokeAction();
-					m_isPickActive = false;
+					m_pickUp.SetVisible(false);
 					LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
 					m_switchBall = true;
 				}
 				if (m_pickUp.CheckCollision(BALL2)) // TO DO 
 				{
 					m_pickUp.InvokeAction();
-					m_isPickActive = false;
+					m_pickUp.SetVisible(false);
 					LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
 					m_switchBall = false;
 				}
@@ -516,7 +516,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 	{
 		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
-			m_isPickCreated = true;
+			m_pickUp.SetActive(true);
 
 			auto type = m_pickUpGenerator.GetPickUpType();
 			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(type));
@@ -567,16 +567,16 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 					m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(SCORE2, Random::Range(1, MAXSCOREDIFFERENCE));
 				break;
 			default:
-				m_isPickCreated = false;
+				m_pickUp.SetActive(false);
 				break;
 			}
 
 			m_pickUp.SetPosition(position);
-			m_isPickActive = true;
+			m_pickUp.SetVisible(true);
 		}
 		else
 		{
-			m_isPickCreated = false;
+			m_pickUp.SetActive(false);
 		}
 	}
 

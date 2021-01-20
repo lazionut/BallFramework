@@ -43,8 +43,6 @@ namespace BallFramework
 		TTF_Font* m_buttonFont;
 
 		float m_lastTimeScale;
-		bool m_isPickCreated;
-		bool m_isPickActive;
 		bool m_isPaused;
 		std::vector<float> m_outlineSizes;
 		std::vector<SDL_Color> m_paddleColors;

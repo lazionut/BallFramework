@@ -13,13 +13,13 @@ namespace BallFramework
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
 
-	constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
-	constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
-	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
-	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-	constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
+constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
+constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
+constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
@@ -307,7 +307,7 @@ namespace BallFramework
 			{
 				if (OURBALL.CheckCollision(*element))
 				{
-					if (m_isPickCreated == false)
+					if (!m_pickUp.IsActive())
 					{
 						CreatePickUp(element->GetPosition());
 					}
@@ -355,7 +355,7 @@ namespace BallFramework
 	{
 		if ((Random::Range(100)) > PICKUPSPAWNCHANCE)
 		{
-			m_isPickCreated = true;
+			m_pickUp.SetActive(true);
 
 			auto type = m_pickUpGenerator.GetPickUpType();
 			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(type));
@@ -394,16 +394,16 @@ namespace BallFramework
 				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
 				break;
 			default:
-				m_isPickCreated = false;
+				m_pickUp.SetActive(false);
 				break;
 			}
 
 			m_pickUp.SetPosition(position);
-			m_isPickActive = true;
+			m_pickUp.SetVisible(true);
 		}
 		else
 		{
-			m_isPickCreated = false;
+			m_pickUp.SetActive(false);
 		}
 	}
 }

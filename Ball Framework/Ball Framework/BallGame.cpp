@@ -5,8 +5,7 @@ namespace BallFramework
 
 	BallGame::BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit) :
 		Game(title, width, height, flags, maxFPS, widthUnit, heightUnit),
-		m_ballImage{ nullptr }, m_pickUpImage{ nullptr },
-		m_isPickCreated{ false }, m_isPickActive{ false }, m_isPaused{ false },
+		m_ballImage{ nullptr }, m_pickUpImage{ nullptr }, m_isPaused{ false },
 		m_buttonFont{ font },
 		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" },
 		m_lastTimeScale{ Time::GetTimeScale() } {}
@@ -28,13 +27,13 @@ namespace BallFramework
 			ball.Move();
 		}
 
-		if (m_isPickCreated)
+		if(m_pickUp.IsActive())
 		{
 			if (m_pickUp.IsActionActive())
 			{
 				if (m_pickUp.ContinueAction())
 				{
-					m_isPickCreated = false;
+					m_pickUp.SetActive(false);
 					return;
 				}
 			}
@@ -123,7 +122,8 @@ namespace BallFramework
 		SDL_Rect aux;
 		decltype(auto) scale = GetScale();
 
-		if (m_isPickActive)
+		//if (m_isPickActive)
+		if(m_pickUp.IsVisible())
 		{
 			scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
 			SDL_RenderCopy(renderer, m_pickUpImage, nullptr, &aux);
@@ -194,7 +194,7 @@ namespace BallFramework
 
 	void BallGame::CheckPickUpCollision()
 	{
-		if (m_isPickActive)
+		if(m_pickUp.IsVisible())
 		{
 			if (m_pickUp.IsMoving())
 			{
@@ -203,7 +203,7 @@ namespace BallFramework
 					if (m_pickUp.CheckCollision(paddle))
 					{
 						m_pickUp.InvokeAction();
-						m_isPickActive = false;
+						m_pickUp.SetVisible(false);
 						LOGGING_INFO("BrickBreaker -> player paddle-pick-up collision");
 					}
 				}
@@ -215,7 +215,7 @@ namespace BallFramework
 					if (m_pickUp.CheckCollision(ball))
 					{
 						m_pickUp.InvokeAction();
-						m_isPickActive = false;
+						m_pickUp.SetVisible(false);
 						LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
 					}
 				}

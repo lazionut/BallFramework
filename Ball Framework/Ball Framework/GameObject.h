@@ -15,6 +15,8 @@ namespace BallFramework
 		virtual ~GameObject();
 
 		uint16_t GetId() const noexcept;
+		bool IsActive() const noexcept;
+		bool IsVisible() const noexcept;
 		const Vector2& GetPosition() const noexcept;
 		const Vector2& GetSize() const noexcept;
 		float GetX() const noexcept;
@@ -23,6 +25,8 @@ namespace BallFramework
 		float GetHeight() const noexcept;
 		SDL_Texture* GetImage() const noexcept;
 
+		void SetActive(bool active) noexcept;
+		void SetVisible(bool visible) noexcept;
 		void SetId(const uint16_t id) noexcept;
 		void SetPosition(const Vector2& position) noexcept;
 		void SetPosition(const float x, const float y) noexcept;
@@ -33,6 +37,8 @@ namespace BallFramework
 		void SetImage(SDL_Texture* image) noexcept;
 
 	protected:
+		bool m_isActive;
+		bool m_isVisible;
 		uint16_t m_id;
 		Vector2 m_position;
 		Vector2 m_size;

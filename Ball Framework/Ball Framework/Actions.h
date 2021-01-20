@@ -5,6 +5,8 @@ namespace BallFramework
 {
 	enum class Actions : uint8_t
 	{
+		NONE,
+
 		SPEEDCHANGE,
 
 		PADDLESIZECHANGE,
