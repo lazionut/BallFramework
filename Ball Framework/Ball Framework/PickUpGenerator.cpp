@@ -57,7 +57,7 @@ namespace BallFramework
 		case Actions::BALLSPEEDCHANGE:
 			if (auto ball = dynamic_cast<Ball*>(object); ball != nullptr)
 			{
-				SetBallSizeChangeActions(pickUp, *ball);
+				SetBallSpeedChangeActions(pickUp, *ball);
 			}
 			break;
 		case Actions::BONUSPOINTS:

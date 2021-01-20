@@ -15,7 +15,7 @@ namespace BallFramework
 	void TestGame::Start()
 	{
 		m_ballImage = LoadGameImage("../Assets/ball.png");
-
+		m_ballImages.push_back(m_ballImage);
 		if (m_ballImage == nullptr)
 		{
 			LOGGING_ERROR("Test ball image not found!");
@@ -23,61 +23,33 @@ namespace BallFramework
 			return;
 		}
 
-		//SetPaddlesColors({ 255, 255, 255, 255 }, { 255, 0, 0, 255 }, 0.2); nu mai exista setterul
+		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
 
-		//nu trebuie neaparat nu emplace back, se poate folosi si push_back
-		m_players.emplace_back(Vector2::down, 0.5f, 0.5f, Vector2::zero, Vector2::zero, 0, 0, 0);
-		m_balls.emplace_back(Vector2::zero, 1, Vector2::up, 1);
+		m_pickUp.SetActive(true);
+		m_pickUp.SetVisible(true);
 
+		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::right, 1, 5, 5);
+		m_pickUpGenerator.SetGeneratorData(GeneratorData(2.0f, 5.0f, 1.0f, 5.0f, 2.0f, 5));
 
-		m_bricks.resize(1);
-		SDL_Color color = { 0, 0, 255, 255 };
-		for (int i = 0; i < 3; ++i)
-		{
-			m_bricks[0].emplace_back(Vector2::left * i, 0.5, 0.5, i, color);
-		}
+		m_pickUp = m_pickUpGenerator.CreateEmptyPickUp(Vector2::zero);
+
+		m_balls.emplace_back(Ball(Vector2::up, 2, Vector2::up, 0));
+		m_pickUp.SetActionType(Actions::BALLSPEEDCHANGE);
+		m_pickUpGenerator.SetActions(m_pickUp, &m_balls[0]);
+
+		m_pickUp.InvokeAction();
 	}
 
 	void TestGame::OnClose()
 	{
 		SDL_DestroyTexture(m_ballImage);
+		SDL_DestroyTexture(m_pickUpImage);
 	}
 
 	void TestGame::CheckCollision()
 	{
 		//collision
 	}
-
-	/*void TestGame::Update()
-	{
-		ball.Move();
-	}
-
-	void TestGame::KeyPressed(const SDL_Keycode& key)
-	{
-		switch (key)
-		{
-		case SDLK_a:
-			ball.GetDirection().Set(-1, 0);
-			break;
-		case SDLK_d:
-			ball.GetDirection().Set(1, 0);
-			break;
-		case SDLK_w:
-			ball.GetDirection().Set(0, 1);
-			break;
-		case SDLK_s:
-			ball.GetDirection().Set(0, -1);
-			break;
-		default:
-			break;
-		}
-	}
-
-	void TestGame::KeyReleased(const SDL_Keycode& key)
-	{
-		ball.SetDirection(Vector2::zero);
-	}*/
 
 	void TestGame::Render(SDL_Renderer* renderer)
 	{

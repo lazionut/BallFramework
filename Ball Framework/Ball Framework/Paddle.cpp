@@ -21,13 +21,11 @@ namespace BallFramework
 	{
 		if (key == m_leftKey && !m_leftPressed)
 		{
-			std::cout << "Key pressed! speed: " << m_speed;
 			m_leftPressed = true;
 			m_direction += m_leftDirection;
 		}
 		else if (key == m_rightKey && !m_rightPressed)
 		{
-			std::cout << "Key pressed! speed: " << m_speed;
 			m_rightPressed = true;
 			m_direction += m_rightDirection;
 			std::cout << m_direction << "\n";
