@@ -68,7 +68,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		m_heartImage = LoadGameImage(Paths::ReturnObjectPath("redHeart"));
 
 		m_players.emplace_back(Paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0)),
-		m_balls.emplace_back(Ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
+			m_balls.emplace_back(Ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
 		m_score.SetText(MakeText(std::to_string(m_score.GetScore()), Colors::white, m_buttonFont));
 		m_scores.push_back(m_score);

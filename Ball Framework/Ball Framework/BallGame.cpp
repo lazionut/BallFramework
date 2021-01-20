@@ -8,7 +8,7 @@ namespace BallFramework
 		m_ballImage{ nullptr }, m_pickUpImage{ nullptr }, m_isPaused{ false },
 		m_buttonFont{ font },
 		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" },
-		m_lastTimeScale{ Time::GetTimeScale() } {}
+		m_lastTimeScale{ Time::GetTimeScale() }, m_pickUpGenerator{ m_scores } {}
 
 	void BallGame::SetPlayers(const std::vector<std::string>& players)
 	{

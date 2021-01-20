@@ -2,18 +2,13 @@
 
 namespace BallFramework
 {
-	PickUpGenerator::PickUpGenerator()
+	PickUpGenerator::PickUpGenerator(std::vector<Score>& scoreList) noexcept
 		: m_pickUp{}, m_actionTime{ 0.0f }, m_paddleAxis{ Vector2::zero },
-		m_timeChange{ 0.0f }, m_maxPointsDif{ 0 } {}
-
-	PickUpGenerator::PickUpGenerator(const Vector2& paddleSize, const float ballSize, const float speed, const float time)
-	{
-		SetPickUpDefaultProperties(paddleSize, ballSize, speed, time);
-	}
+		m_scoreList{ scoreList } {}
 
 	PickUp PickUpGenerator::CreateEmptyPickUp(const Vector2& postion) const noexcept
 	{
-		return PickUp();
+		return PickUp(m_pickUp);
 	}
 
 	Actions PickUpGenerator::GetPickUpType()
@@ -29,11 +24,9 @@ namespace BallFramework
 		m_paddleAxis = paddleSize;
 	}
 
-	void PickUpGenerator::SetModifiersDefaultProperties(const float speedChange, const float timeChange, const float paddleSizeDifference, const int maxPointsDif) noexcept
+	void PickUpGenerator::SetGeneratorData(const GeneratorData& data) noexcept
 	{
-		//m_speedChange = speedChange;
-		m_timeChange = timeChange;
-		m_maxPointsDif = maxPointsDif;
+		m_data = data;
 	}
 
 	void PickUpGenerator::SetActions(PickUp& pickUp, GameObject* object)
@@ -91,7 +84,7 @@ namespace BallFramework
 
 	void PickUpGenerator::SetPaddleSizeChangeActions(PickUp& pickUp, Paddle& paddle)
 	{
-		Vector2 sizeDifference = m_paddleAxis * m_paddleSizeChange;
+		Vector2 sizeDifference = m_paddleAxis * m_data.paddleSizeChange;
 
 		pickUp.SetActions
 		(
@@ -105,8 +98,8 @@ namespace BallFramework
 	{
 		pickUp.SetActions
 		(
-			[&paddle, this]() -> void { PickUpActions::FasterPaddle(paddle, m_paddleSpeedChange); },
-			[&paddle, this]() -> void { PickUpActions::SlowerPaddle(paddle, m_paddleSpeedChange); },
+			[&paddle, this]() -> void { PickUpActions::FasterPaddle(paddle, m_data.paddleSpeedChange); },
+			[&paddle, this]() -> void { PickUpActions::SlowerPaddle(paddle, m_data.paddleSpeedChange); },
 			m_actionTime
 		);
 	}
@@ -115,8 +108,8 @@ namespace BallFramework
 	{
 		pickUp.SetActions
 		(
-			[&ball, this]() -> void { PickUpActions::BiggerBall(ball, m_ballSizeChange); },
-			[&ball, this]() -> void { PickUpActions::SmallerBall(ball, m_ballSizeChange); },
+			[&ball, this]() -> void { PickUpActions::BiggerBall(ball, m_data.ballSizeChange); },
+			[&ball, this]() -> void { PickUpActions::SmallerBall(ball, m_data.ballSizeChange); },
 			m_actionTime
 		);
 	}
@@ -125,34 +118,28 @@ namespace BallFramework
 	{
 		pickUp.SetActions
 		(
-			[&ball, this]() -> void { PickUpActions::FasterBall(ball, m_ballSpeedChange); },
-			[&ball, this]() -> void { PickUpActions::SlowerBall(ball, m_ballSpeedChange); },
+			[&ball, this]() -> void { PickUpActions::FasterBall(ball, m_data.ballSpeedChange); },
+			[&ball, this]() -> void { PickUpActions::SlowerBall(ball, m_data.ballSpeedChange); },
 			m_actionTime
 		);
 	}
 
 	void PickUpGenerator::SetBonusPointsActions(PickUp& pickUp)
 	{
-		if (score != nullptr)
-		{
-			pickUp.SetActions
-			(
-				[this]() -> void { PickUpActions::BonusPoints(*score, m_maxPointsDif); },
-				nullptr
-			);
-		}
+		pickUp.SetActions
+		(
+			[this]() -> void { PickUpActions::BonusPoints(m_scoreList[Random::Range(m_scoreList.size())], m_data.maxPointsDif); },
+			nullptr
+		);
 	}
 
 	void PickUpGenerator::SetRemovePointsActions(PickUp& pickUp)
 	{
-		if (score != nullptr)
-		{
-			pickUp.SetActions
-			(
-				[this]() -> void { PickUpActions::RemovePoints(*score, m_maxPointsDif); },
-				nullptr
-			);
-		}
+		pickUp.SetActions
+		(
+			[this]() -> void { PickUpActions::RemovePoints(m_scoreList[Random::Range(m_scoreList.size())], m_data.maxPointsDif); },
+			nullptr
+		);
 	}
 #pragma endregion
 
