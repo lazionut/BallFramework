@@ -1,6 +1,8 @@
-5
+7
 play1 2 2 0
 anon 1 1 0
+achi 1 1 0
 play2 1 0 1
 play2 1 0 1
 mariu 1 0 1
+A Certain Kind of Bot 1 0 1

@@ -242,4 +242,24 @@ namespace BallFramework
 	}
 #pragma endregion
 
+#pragma region GeneratorData
+	GeneratorData::GeneratorData() noexcept
+		: GeneratorData(0, 0, 0, 0, 0, 0) {}
+
+	GeneratorData::GeneratorData(float paddleSizeChange, float paddleSpeedChange, float ballSizeChange,
+		float ballSpeedChange, float timeChange, int maxPointsDif) noexcept
+		: paddleSizeChange{ paddleSizeChange }, paddleSpeedChange{ paddleSpeedChange }, ballSizeChange{ ballSizeChange },
+		ballSpeedChange{ ballSpeedChange }, timeChange{ timeChange }, maxPointsDif{ maxPointsDif } {}
+
+	void GeneratorData::Set(float paddleSizeChange, float paddleSpeedChange, float ballSizeChange,
+		float ballSpeedChange, float timeChange, int maxPointsDif) noexcept
+	{
+		this->paddleSizeChange = paddleSizeChange;
+		this->paddleSpeedChange = paddleSpeedChange;
+		this->ballSizeChange = ballSizeChange;
+		this->ballSpeedChange = ballSpeedChange;
+		this->timeChange = timeChange;
+		this->maxPointsDif = maxPointsDif;
+	}
+#pragma endregion
 }

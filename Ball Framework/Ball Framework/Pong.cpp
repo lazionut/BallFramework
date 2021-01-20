@@ -43,8 +43,7 @@ namespace BallFramework
 		: BallGame("Pong", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 		m_bricksNumber{ 0 },
-		m_playerName{ playersNames[0] }, m_botName{ "A Certain Kind of Bot" },
-		m_playerScore{ Colors::white }, m_botScore{ Colors::white }
+		m_playerName{ playersNames[0] }, m_botName{ "A Certain Kind of Bot" }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKCOLUMNS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsPong.txt" };
@@ -53,24 +52,15 @@ namespace BallFramework
 
 	void Pong::Start()
 	{
+		SetBackgroundColor({ 7, 62, 95, 255 });
+
 		InitializeBricks();
 
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED));
 		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDL_SCANCODE_LANG1, SDL_SCANCODE_LANG2, PADDLESPEED - 3.0f));
-
 		m_balls.emplace_back(Ball(Vector2::zero, 0.5f, Vector2(pow(-1, Random::Range(2)), 0), 10.0f));
 
-		m_playerScore.SetText(MakeText(std::to_string(m_playerScore.GetScore()), Colors::white, m_buttonFont));
-		m_playerScore.SetWidth(0.5f);
-		m_playerScore.SetHeight(0.5f);
-		m_playerScore.SetPosition(Vector2(2.0f, 4.0f));
-		m_scores.push_back(m_playerScore);
-
-		m_botScore.SetText(MakeText(std::to_string(m_botScore.GetScore()), Colors::white, m_buttonFont));
-		m_botScore.SetWidth(0.5f);
-		m_botScore.SetHeight(0.5f);
-		m_botScore.SetPosition(Vector2(-2, 4));
-		m_scores.push_back(m_botScore);
+		InitializeScore();
 
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
 
@@ -161,31 +151,31 @@ namespace BallFramework
 
 	void Pong::CheckBallPaddleCollision()
 	{
-		if (BALL.CheckCollision(PLAYER))
+		if (BALL.GetDirection().GetX() < 0 && BALL.CheckCollision(PLAYER))
 		{
 			if (BALL.GetPosition().GetX() > PLAYER.GetPosition().GetX() + PLAYER.GetWidth() / 2)
 			{
-				float difference = (BALL.GetPosition().GetY() - PLAYER.GetPosition().GetY()) / 2;
+				float difference = (BALL.GetPosition().GetY() - PLAYER.GetPosition().GetY()) / 3;
 				BALL.GetDirection().SetY(difference);
 				LOGGING_INFO("Pong -> ball-player1 paddle collision");
 			}
 			else
 			{
 				if (BALL.GetPosition().GetY() > PLAYER.GetPosition().GetY())
-					BALL.GetDirection().SetY(3);
+					BALL.GetDirection().SetY(1);
 				else
-					BALL.GetDirection().SetY(-3);
+					BALL.GetDirection().SetY(-1);
 			}
 			BALL.GetDirection().GetX() *= -1;
 			BALL.AddSpeed(0.25f);
 			BALL.GetDirection().Normalize();
 		}
 
-		if (BALL.CheckCollision(AIPLAYER))
+		if (BALL.GetDirection().GetX() > 0 && BALL.CheckCollision(AIPLAYER))
 		{
 			if (BALL.GetPosition().GetX() < AIPLAYER.GetPosition().GetX() - AIPLAYER.GetWidth() / 2)
 			{
-				float difference = BALL.GetPosition().GetY() - AIPLAYER.GetPosition().GetY() / 2;
+				float difference = BALL.GetPosition().GetY() - AIPLAYER.GetPosition().GetY() / 3;
 				BALL.GetDirection().SetY(difference);
 				LOGGING_INFO("Pong -> ball-player1 paddle collision");
 			}
@@ -269,19 +259,18 @@ namespace BallFramework
 			BALL.SetSpeed(10);
 		}
 	}
-
 #pragma endregion
 
 	void Pong::CheckBotMovement()
 	{
-		if (BALL.GetDirection().GetX() > 0 && BALL.GetPosition().GetX() > 1)
+		if (BALL.GetDirection().GetX() > 0 && BALL.GetX() > 1)
 		{
-			if (BALL.GetPosition().GetY() > AIPLAYER.GetPosition().GetY() + AIPLAYER.GetWidth() / 2)
+			if (BALL.GetY() > AIPLAYER.GetY() + AIPLAYER.GetWidth() / 2)
 			{
 				AIPLAYER.SetDirection(Vector2::up);
 				AIPLAYER.Move();
 			}
-			if (BALL.GetPosition().GetY() < AIPLAYER.GetPosition().GetY() - AIPLAYER.GetWidth() / 2)
+			if (BALL.GetY() < AIPLAYER.GetY() - AIPLAYER.GetWidth() / 2)
 			{
 				AIPLAYER.SetDirection(Vector2::down);
 				AIPLAYER.Move();
@@ -331,6 +320,26 @@ namespace BallFramework
 			++x;
 			y = BRICKLIMIT_Y;
 		}
+
+		if (!m_bricksNumber)
+		{
+			InitializeBricks();
+		}
+	}
+
+	void Pong::InitializeScore()
+	{
+		Score score{ Colors::white };
+
+		score.SetSize(0.5f, 0.5f);
+		score.SetPosition(Vector2(2.0f, 4.0f));
+		m_scores.push_back(score);
+		m_scores.back().SetText(MakeText(score.ConvertToString(), Colors::white, m_buttonFont));
+
+		score.SetSize(0.5f, 0.5f);
+		score.SetPosition(Vector2(-2.0f, 4.0f));
+		m_scores.push_back(score);
+		m_scores.back().SetText(MakeText(score.ConvertToString(), Colors::white, m_buttonFont));
 	}
 
 	void Pong::CreatePickUp(const Vector2& position)

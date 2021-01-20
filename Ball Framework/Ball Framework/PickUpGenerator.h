@@ -5,6 +5,23 @@
 
 namespace BallFramework
 {
+	struct GeneratorData
+	{
+		float paddleSizeChange;
+		float paddleSpeedChange;
+		float ballSizeChange;
+		float ballSpeedChange;
+		float timeChange;
+		int maxPointsDif;
+
+		GeneratorData() noexcept;
+		GeneratorData(float paddleSizeChange, float paddleSpeedChange, float ballSizeChange, 
+			float ballSpeedChange, float timeChange, int maxPointsDif) noexcept;
+
+		void Set(float paddleSizeChange, float paddleSpeedChange, float ballSizeChange, 
+			float ballSpeedChange, float timeChange, int maxPointsDif) noexcept;
+	};
+
 	class PickUpGenerator
 	{
 	public:

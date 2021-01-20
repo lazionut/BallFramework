@@ -27,6 +27,7 @@ namespace BallFramework
 		void CheckBotMovement();
 
 		void InitializeBricks();
+		void InitializeScore();
 
 		void CreatePickUp(const Vector2& position) ;
 
@@ -37,9 +38,6 @@ namespace BallFramework
 		std::string m_botName;
 
 		Paddle m_botPlayer;
-
-		Score m_playerScore;
-		Score m_botScore;
 	};
 
 }
