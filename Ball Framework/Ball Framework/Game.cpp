@@ -58,6 +58,11 @@ namespace BallFramework
 		return m_renderer.GetScale();
 	}
 
+	void Game::SetBackgroundImage(SDL_Texture* backgroundImage)
+	{
+		m_renderer.SetBackgroundImage(backgroundImage);
+	}
+
 	void Game::SetBackgroundColor(const SDL_Color& color)
 	{
 		m_renderer.SetBackgroundColor(color);
@@ -76,6 +81,14 @@ namespace BallFramework
 
 		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 		SDL_RenderClear(renderer);
+
+		if (SDL_Texture* image = m_renderer.GetBackgroundImage(); image != nullptr)
+		{
+			SDL_Rect rect;
+			m_renderer.GetScale().FillScreen(rect);
+			SDL_RenderCopy(renderer, image, nullptr, &rect);
+		}
+
 		Render(renderer);
 		SDL_RenderPresent(renderer);
 	}

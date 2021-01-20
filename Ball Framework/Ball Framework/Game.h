@@ -35,6 +35,7 @@ namespace BallFramework
 		SDL_Texture* MakeText(const std::string& text, const SDL_Color& fontColor, TTF_Font* font) const;
 
 		const ScreenScale& GetScale() const;
+		void SetBackgroundImage(SDL_Texture* backgroundImage);
 		void SetBackgroundColor(const SDL_Color& color);
 		void SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
 

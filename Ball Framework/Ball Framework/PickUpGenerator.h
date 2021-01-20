@@ -35,14 +35,6 @@ namespace BallFramework
 		void SetPickUpDefaultProperties(const Vector2& paddleAxis, const float ballSize, const float speed, const float time) noexcept;
 		void SetGeneratorData(const GeneratorData& data) noexcept;
 
-		void SetSpeedActions(PickUp& pickUp);
-		void SetPaddleSizeChangeActions(PickUp& pickUp, Paddle& paddle);
-		void SetPaddleSpeedChangeActions(PickUp& pickUp, Paddle& paddle);
-		void SetBallSizeChangeActions(PickUp& pickUp, Ball& ball);
-		void SetBallSpeedChangeActions(PickUp& pickUp, Ball& ball);
-		void SetBonusPointsActions(PickUp& pickUp);
-		void SetRemovePointsActions(PickUp& pickUp);
-
 		const PickUp& CreateSpeedPickUp();
 		const PickUp& CreatePaddleSizeChangePickUp(Paddle& paddle, float difference);
 		const PickUp& CreatePaddleSpeedChangePickUp(Paddle& paddle, float speed);
@@ -52,6 +44,14 @@ namespace BallFramework
 		const PickUp& CreateRemovePointsPickUp(Score& score, uint16_t points);
 
 	private:
+		void SetSpeedActions(PickUp& pickUp);
+		void SetPaddleSizeChangeActions(PickUp& pickUp, Paddle& paddle);
+		void SetPaddleSpeedChangeActions(PickUp& pickUp, Paddle& paddle);
+		void SetBallSizeChangeActions(PickUp& pickUp, Ball& ball);
+		void SetBallSpeedChangeActions(PickUp& pickUp, Ball& ball);
+		void SetBonusPointsActions(PickUp& pickUp);
+		void SetRemovePointsActions(PickUp& pickUp);
+
 		PickUp m_pickUp;
 		float m_actionTime;
 		Vector2 m_paddleAxis;
