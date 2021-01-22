@@ -16,11 +16,16 @@ namespace BallFramework
 
 	bool Random::CoinFlip() noexcept
 	{
-		return static_cast<bool>(s_generator() % 2);
+		return (s_generator() % 100) >= 50;
 	}
 
 	void Random::SetRandomSeed()
 	{
 		s_generator.seed(static_cast<unsigned int>(time(nullptr)));
+
+		std::seed_seq seed_seq{ s_generator(), s_generator(), 
+			s_generator(), s_generator(), s_generator(), s_generator() };
+
+		s_generator.seed(seed_seq);
 	}
 }

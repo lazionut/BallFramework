@@ -14,9 +14,7 @@ namespace BallFramework
 		: m_position{ position }, m_size{ size }, m_image{ image }, 
 		m_id{ id }, m_isActive{ true }, m_isVisible{ true } {}
 
-	GameObject::~GameObject()
-	{
-	}
+	GameObject::~GameObject() {}
 
 	uint16_t GameObject::GetId() const noexcept
 	{
@@ -111,6 +109,18 @@ namespace BallFramework
 	void GameObject::SetHeight(const float height) noexcept
 	{
 		m_size.SetY(height);
+	}
+
+	void GameObject::SetTransform(const Vector2& position, const Vector2& size) noexcept
+	{
+		m_position = position;
+		m_size = size;
+	}
+
+	void GameObject::SetTransform(const float x, const float y, const float width, const float height) noexcept
+	{
+		m_position.Set(x, y);
+		m_size.Set(width, height);
 	}
 
 	void GameObject::SetImage(SDL_Texture* image) noexcept

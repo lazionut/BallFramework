@@ -22,6 +22,8 @@ namespace BallFramework
 
 		void SetPlayers(const std::vector<std::string>& players);
 
+		const inline static GeneratorData defaultGeneratorData{ 2.0f, 5.0f, 1.0f, 5.0f, 2.0f, 5 };
+
 	protected:
 		//void SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize);
 

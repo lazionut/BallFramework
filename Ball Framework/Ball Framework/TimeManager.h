@@ -4,7 +4,6 @@
 
 namespace BallFramework
 {
-
 	using namespace std::chrono;
 
 	class TimeManager
@@ -24,5 +23,4 @@ namespace BallFramework
 
 		double GetRealDelta();
 	};
-
 }

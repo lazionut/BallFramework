@@ -2,7 +2,6 @@
 
 namespace BallFramework
 {
-
 	Renderer::Renderer(uint16_t widthUnits, uint16_t heightUnit) noexcept
 		: m_renderer{ nullptr }, m_window{ nullptr }, m_backgroundImage{ nullptr },
 		m_scale{ widthUnits, heightUnit,1 ,1 }, m_backgroundColor{ 15, 15, 15, 255 } {}
@@ -30,11 +29,6 @@ namespace BallFramework
 	SDL_Renderer* Renderer::GetRenderer() const noexcept
 	{
 		return m_renderer;
-	}
-
-	SDL_Texture* Renderer::GetBackgroundImage() const noexcept
-	{
-		return m_backgroundImage;
 	}
 
 	const ScreenScale& Renderer::GetScale() const noexcept
@@ -72,6 +66,20 @@ namespace BallFramework
 		return  sdlText;
 	}
 
+	void Renderer::ResetRenderer()
+	{
+		SDL_SetRenderDrawColor(m_renderer, m_backgroundColor.r, m_backgroundColor.g, 
+			m_backgroundColor.b, m_backgroundColor.a);
+		SDL_RenderClear(m_renderer);
+
+		if (SDL_Texture* image = m_backgroundImage; image != nullptr)
+		{
+			SDL_Rect rect;
+			m_scale.FillScreen(rect);
+			SDL_RenderCopy(m_renderer, image, nullptr, &rect);
+		}
+	}
+
 	void Renderer::SetBackgroundColor(const SDL_Color& color) noexcept
 	{
 		m_backgroundColor = color;
@@ -79,6 +87,10 @@ namespace BallFramework
 
 	void Renderer::SetBackgroundImage(SDL_Texture* backgroundImage) noexcept
 	{
+		if (m_backgroundImage != nullptr)
+		{
+			SDL_DestroyTexture(m_backgroundImage);
+		}
 		m_backgroundImage = backgroundImage;
 	}
 
@@ -99,5 +111,4 @@ namespace BallFramework
 		SDL_DestroyRenderer(m_renderer);
 		SDL_DestroyTexture(m_backgroundImage);
 	}
-
 }

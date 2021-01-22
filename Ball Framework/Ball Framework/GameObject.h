@@ -34,6 +34,8 @@ namespace BallFramework
 		void SetSize(const float width, const float height) noexcept;
 		void SetWidth(const float width) noexcept;
 		void SetHeight(const float height) noexcept;
+		void SetTransform(const Vector2& position, const Vector2& size) noexcept;
+		void SetTransform(const float x, const float y, const float width, const float height) noexcept;
 		void SetImage(SDL_Texture* image) noexcept;
 
 	protected:

@@ -76,18 +76,8 @@ namespace BallFramework
 
 	void Game::Repaint()
 	{
+		m_renderer.ResetRenderer();
 		SDL_Renderer* renderer = m_renderer.GetRenderer();
-		const SDL_Color color = m_renderer.GetBackgroundColor();
-
-		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-		SDL_RenderClear(renderer);
-
-		if (SDL_Texture* image = m_renderer.GetBackgroundImage(); image != nullptr)
-		{
-			SDL_Rect rect;
-			m_renderer.GetScale().FillScreen(rect);
-			SDL_RenderCopy(renderer, image, nullptr, &rect);
-		}
 
 		Render(renderer);
 		SDL_RenderPresent(renderer);
