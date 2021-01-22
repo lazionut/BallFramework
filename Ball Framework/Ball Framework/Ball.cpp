@@ -1,5 +1,5 @@
 #include "Ball.h"
-#include <SDL_ttf.h>
+
 namespace BallFramework
 {
 
