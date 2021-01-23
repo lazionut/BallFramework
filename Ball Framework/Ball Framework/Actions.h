@@ -3,6 +3,7 @@
 
 namespace BallFramework
 {
+
 	enum class Actions : uint8_t
 	{
 		NONE,
@@ -21,4 +22,5 @@ namespace BallFramework
 		//numarul de actiuni
 		ACTIONSNUMBER
 	};
+
 }

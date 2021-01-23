@@ -2,6 +2,7 @@
 
 namespace BallFramework
 {
+
 	std::mt19937 Random::s_generator{};
 
 	int Random::Range(int lower, int upper)
@@ -28,4 +29,5 @@ namespace BallFramework
 
 		s_generator.seed(seed_seq);
 	}
+
 }

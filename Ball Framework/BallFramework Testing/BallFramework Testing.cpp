@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "..\Ball Framework\Random.cpp"
+#include "..\Ball Framework\PlayerEntry.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -25,7 +26,11 @@ namespace BallFramework
 
 		TEST_METHOD(Test)
 		{
-		
+			PlayerEntry playerExample("PlayerName");
+			std::string name = playerExample.GetPlayerName();
+			std::string expectedName = "PlayerName";
+
+			Assert::AreEqual(name, expectedName);
 		}
 
 	};

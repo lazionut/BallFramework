@@ -2,6 +2,7 @@
 
 namespace BallFramework
 {
+
 	Renderer::Renderer(uint16_t widthUnits, uint16_t heightUnit) noexcept
 		: m_renderer{ nullptr }, m_window{ nullptr }, m_backgroundImage{ nullptr },
 		m_scale{ widthUnits, heightUnit,1 ,1 }, m_backgroundColor{ 15, 15, 15, 255 } {}
@@ -111,4 +112,5 @@ namespace BallFramework
 		SDL_DestroyRenderer(m_renderer);
 		SDL_DestroyTexture(m_backgroundImage);
 	}
+
 }

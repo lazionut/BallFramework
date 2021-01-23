@@ -145,5 +145,4 @@ namespace BallFramework
 		md_currentPlayer = text;
 	}
 
-
 }

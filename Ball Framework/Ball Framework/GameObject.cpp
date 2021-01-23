@@ -2,16 +2,17 @@
 
 namespace BallFramework
 {
+
 	GameObject::GameObject() noexcept
 		: m_position{ Vector2::zero }, m_size{ Vector2::one },
 		m_id{ 0 }, m_image{ nullptr }, m_isActive{ true }, m_isVisible{ true } {}
 
 	GameObject::GameObject(const Vector2& position, const Vector2& size, SDL_Texture* image) noexcept
-		: m_position{ position }, m_size{ size }, m_image{ image }, 
+		: m_position{ position }, m_size{ size }, m_image{ image },
 		m_id{ 0 }, m_isActive{ true }, m_isVisible{ true } {}
 
 	GameObject::GameObject(const Vector2& position, const Vector2& size, const uint16_t id, SDL_Texture* image) noexcept
-		: m_position{ position }, m_size{ size }, m_image{ image }, 
+		: m_position{ position }, m_size{ size }, m_image{ image },
 		m_id{ id }, m_isActive{ true }, m_isVisible{ true } {}
 
 	GameObject::~GameObject() {}
@@ -127,4 +128,5 @@ namespace BallFramework
 	{
 		m_image = image;
 	}
+
 }

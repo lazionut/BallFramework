@@ -2,6 +2,7 @@
 
 namespace BallFramework
 {
+
 	void PickUp::InvokeAction()
 	{
 		m_isMoving = false;
@@ -87,4 +88,5 @@ namespace BallFramework
 		m_startAction = startAction;
 		m_StopAction = stopAction;
 	}
+
 }

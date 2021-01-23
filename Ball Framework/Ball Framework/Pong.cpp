@@ -25,10 +25,10 @@ namespace BallFramework
 #define PICKUPSPEEDCHANGE 2.0f
 
 #define PLAYER          m_players[0] 
-#define AIPLAYER        m_players[1] 
+#define BOT             m_players[1] 
 #define BALL            m_balls[0] 
-#define PLAYER1SCORE    m_scores[0]
-#define AISCORE         m_scores[1] 
+#define PLAYERSCORE    m_scores[0]
+#define BOTSCORE         m_scores[1] 
 
 constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
 constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
@@ -123,13 +123,13 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		{
 			PLAYER.SetPosition(WIDTHPADDLESPACING1, UPPERLIMIT - PLAYER.GetHeight() / 2 - HEIGHTPADDLESPACING);
 		}
-		if (AIPLAYER.GetPosition().GetY() < LOWERLIMIT + AIPLAYER.GetHeight() / 2)
+		if (BOT.GetPosition().GetY() < LOWERLIMIT + BOT.GetHeight() / 2)
 		{
-			AIPLAYER.SetPosition(WIDTHPADDLESPACING2, LOWERLIMIT + AIPLAYER.GetHeight() / 2 + HEIGHTPADDLESPACING);
+			BOT.SetPosition(WIDTHPADDLESPACING2, LOWERLIMIT + BOT.GetHeight() / 2 + HEIGHTPADDLESPACING);
 		}
-		else if (AIPLAYER.GetPosition().GetY() > UPPERLIMIT - AIPLAYER.GetHeight() / 2)
+		else if (BOT.GetPosition().GetY() > UPPERLIMIT - BOT.GetHeight() / 2)
 		{
-			AIPLAYER.SetPosition(WIDTHPADDLESPACING2, UPPERLIMIT - AIPLAYER.GetHeight() / 2 - HEIGHTPADDLESPACING);
+			BOT.SetPosition(WIDTHPADDLESPACING2, UPPERLIMIT - BOT.GetHeight() / 2 - HEIGHTPADDLESPACING);
 		}
 	}
 
@@ -171,17 +171,17 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 			BALL.GetDirection().Normalize();
 		}
 
-		if (BALL.GetDirection().GetX() > 0 && BALL.CheckCollision(AIPLAYER))
+		if (BALL.GetDirection().GetX() > 0 && BALL.CheckCollision(BOT))
 		{
-			if (BALL.GetPosition().GetX() < AIPLAYER.GetPosition().GetX() - AIPLAYER.GetWidth() / 2)
+			if (BALL.GetPosition().GetX() < BOT.GetPosition().GetX() - BOT.GetWidth() / 2)
 			{
-				float difference = BALL.GetPosition().GetY() - AIPLAYER.GetPosition().GetY() / 3;
+				float difference = BALL.GetPosition().GetY() - BOT.GetPosition().GetY() / 3;
 				BALL.GetDirection().SetY(difference);
 				LOGGING_INFO("Pong -> ball-player1 paddle collision");
 			}
 			else
 			{
-				if (BALL.GetPosition().GetY() > AIPLAYER.GetPosition().GetY())
+				if (BALL.GetPosition().GetY() > BOT.GetPosition().GetY())
 					BALL.GetDirection().SetY(3);
 				else
 					BALL.GetDirection().SetY(-3);
@@ -228,10 +228,10 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 	{
 		if (BALL.GetPosition().GetX() < LEFTLIMIT)
 		{
-			PLAYER1SCORE.AddPoints(1);
-			PLAYER1SCORE.SetText(MakeText(PLAYER1SCORE.ConvertToString(), Colors::white, m_buttonFont));
+			PLAYERSCORE.AddPoints(1);
+			PLAYERSCORE.SetText(MakeText(PLAYERSCORE.ConvertToString(), Colors::white, m_buttonFont));
 			Repaint();
-			if (PLAYER1SCORE.GetScore() == 5)
+			if (PLAYERSCORE.GetScore() == 5)
 			{
 				m_playersStatistics.UpdateStatistics(m_playerName, false);
 				m_playersStatistics.UpdateStatistics(m_botName, true);
@@ -244,10 +244,10 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		}
 		else if (BALL.GetPosition().GetX() > RIGHTLIMIT)
 		{
-			AISCORE.AddPoints(1);
-			AISCORE.SetText(MakeText(AISCORE.ConvertToString(), Colors::white, m_buttonFont));
+			BOTSCORE.AddPoints(1);
+			BOTSCORE.SetText(MakeText(BOTSCORE.ConvertToString(), Colors::white, m_buttonFont));
 			Repaint();
-			if (AISCORE.GetScore() == 5)
+			if (BOTSCORE.GetScore() == 5)
 			{
 				m_playersStatistics.UpdateStatistics(m_playerName, true);
 				m_playersStatistics.UpdateStatistics(m_botName, false);
@@ -265,15 +265,15 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 	{
 		if (BALL.GetDirection().GetX() > 0 && BALL.GetX() > 1)
 		{
-			if (BALL.GetY() > AIPLAYER.GetY() + AIPLAYER.GetWidth() / 2)
+			if (BALL.GetY() > BOT.GetY() + BOT.GetWidth() / 2)
 			{
-				AIPLAYER.SetDirection(Vector2::up);
-				AIPLAYER.Move();
+				BOT.SetDirection(Vector2::up);
+				BOT.Move();
 			}
-			if (BALL.GetY() < AIPLAYER.GetY() - AIPLAYER.GetWidth() / 2)
+			if (BALL.GetY() < BOT.GetY() - BOT.GetWidth() / 2)
 			{
-				AIPLAYER.SetDirection(Vector2::down);
-				AIPLAYER.Move();
+				BOT.SetDirection(Vector2::down);
+				BOT.Move();
 			}
 		}
 	}

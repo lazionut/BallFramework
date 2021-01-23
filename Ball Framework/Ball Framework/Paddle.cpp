@@ -45,4 +45,5 @@ namespace BallFramework
 			m_direction -= m_rightDirection;
 		}
 	}
+
 }

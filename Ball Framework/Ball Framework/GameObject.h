@@ -4,6 +4,7 @@
 
 namespace BallFramework
 {
+
 	class GameObject
 	{
 	public:
@@ -46,5 +47,5 @@ namespace BallFramework
 		Vector2 m_size;
 		SDL_Texture* m_image;
 	};
-}
 
+}

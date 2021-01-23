@@ -2,6 +2,7 @@
 
 namespace BallFramework
 {
+
 	MovableObject::MovableObject() noexcept
 		: GameObject(), m_direction{ Vector2::zero }, m_speed{ 0.0f } {}
 
@@ -63,4 +64,5 @@ namespace BallFramework
 	{
 		m_position += m_direction * m_speed * Time::GetDeltaTime();
 	}
+
 }

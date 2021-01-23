@@ -3,6 +3,7 @@
 
 namespace BallFramework
 {
+
 	class Time
 	{
 	public:
@@ -27,4 +28,5 @@ namespace BallFramework
 
 		Time() = delete;
 	};
+
 }

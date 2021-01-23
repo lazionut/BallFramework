@@ -15,6 +15,7 @@
 
 namespace BallFramework
 {
+
 	class BallGame : public Game
 	{
 	public:
@@ -75,4 +76,5 @@ namespace BallFramework
 		void MousePressed(const SDL_MouseButtonEvent& mouse) override final;
 		void MouseReleased(const SDL_MouseButtonEvent& mouse) override final;
 	};
+
 }

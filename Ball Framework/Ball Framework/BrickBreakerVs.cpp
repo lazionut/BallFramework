@@ -1,6 +1,8 @@
 #include "BrickBreakerVS.h"
+
 namespace BallFramework
 {
+
 #pragma region CONSTANTS
 #define WIDTHUNITS 10
 #define HEIGHTUNITS 13

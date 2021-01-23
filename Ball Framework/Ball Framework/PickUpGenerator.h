@@ -5,6 +5,7 @@
 
 namespace BallFramework
 {
+
 	struct GeneratorData
 	{
 		float paddleSizeChange;
@@ -58,4 +59,5 @@ namespace BallFramework
 		GeneratorData m_data;
 		std::vector<Score>& m_scoreList;
 	};
+
 }

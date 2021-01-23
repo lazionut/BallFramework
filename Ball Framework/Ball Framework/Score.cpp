@@ -47,4 +47,5 @@ namespace BallFramework
 	{
 		m_points = points;
 	}
+
 }

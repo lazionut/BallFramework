@@ -2,6 +2,7 @@
 
 namespace BallFramework
 {
+
 	PickUpGenerator::PickUpGenerator(std::vector<Score>& scoreList) noexcept
 		: m_pickUp{}, m_actionTime{ 0.0f }, m_paddleAxis{ Vector2::zero },
 		m_scoreList{ scoreList } {}

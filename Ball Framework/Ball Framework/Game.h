@@ -9,6 +9,7 @@
 
 namespace BallFramework 
 {
+
 	class Game
 	{
 	public:

@@ -406,4 +406,5 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			m_pickUp.SetActive(false);
 		}
 	}
+
 }
