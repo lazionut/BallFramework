@@ -4,10 +4,10 @@
 
 namespace BallFramework
 {
+
 	class Random
 	{
 	public:
-
 		static int Range(int lower, int upper);
 		static int Range(int upper);
 		static bool CoinFlip() noexcept;
@@ -25,4 +25,5 @@ namespace BallFramework
 	{
 		s_generator.seed(seed);
 	}
+
 }
