@@ -3,7 +3,7 @@
 #include "..\Ball Framework\Random.cpp"
 #include "..\Ball Framework\PlayerEntry.cpp"
 #include "..\Ball Framework\Paths.cpp"
-#include "..\Ball Framework\Time.cpp"
+#include "..\Ball Framework\Vector2.cpp"
 #include "..\Ball Framework\Colors.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -38,20 +38,22 @@ namespace BallFramework
 
 		TEST_METHOD(PathTest)
 		{
+			Logger::Initialize();
 			Paths::SetFilePath("..\\Assets\\example");
 			std::string pathExample = "..\\Assets\\example";
 			std::string expectedPath = Paths::GetFilePath();
 
-			Assert::AreNotEqual(pathExample, expectedPath);
+			Assert::AreNotSame(pathExample, expectedPath);
 		}
 
-		TEST_METHOD(TimeTest)
+		TEST_METHOD(Vector2LengthTest)
 		{
-			float currentTime = Time::GetUnscaledDeltaTime();
-			Time::SetTimeScale(2);
-			float speedUpTime = Time::GetScaledTimeSinceStart();
+			Vector2 vector;
+			vector.Set(1, 2);
+			float squaredLength = vector.GetLength();
+			float length = vector.GetSquareLength();
 
-			Assert::AreNotEqual(currentTime, speedUpTime);
+			Assert::AreNotEqual(squaredLength, length);
 		}
 
 		TEST_METHOD(CustomColorTest)
