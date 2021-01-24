@@ -5,6 +5,7 @@ namespace BallFramework
 
 #define WIDTHUNITS 10
 #define HEIGHTUNITS 10
+#define BALLIMAGE m_ballImages[0]
 
 	TestGame::TestGame(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 		: BallGame("Test", width, height, flags, maxFPS)
@@ -14,9 +15,8 @@ namespace BallFramework
 
 	void TestGame::Start()
 	{
-		m_ballImage = LoadGameImage("../Assets/ball.png");
-		m_ballImages.push_back(m_ballImage);
-		if (m_ballImage == nullptr)
+		m_ballImages.push_back(LoadGameImage("../Assets/ball.png"));
+		if (BALLIMAGE == nullptr)
 		{
 			LOGGING_ERROR("Test ball image not found!");
 			Stop();
@@ -42,7 +42,7 @@ namespace BallFramework
 
 	void TestGame::OnClose()
 	{
-		SDL_DestroyTexture(m_ballImage);
+		SDL_DestroyTexture(BALLIMAGE);
 		SDL_DestroyTexture(m_pickUpImage);
 	}
 
