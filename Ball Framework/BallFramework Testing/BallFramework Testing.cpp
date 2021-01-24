@@ -42,13 +42,13 @@ namespace BallFramework
 			std::string pathExample = "..\\Assets\\example";
 			std::string expectedPath = Paths::GetFilePath();
 
-			Assert::AreEqual(pathExample, expectedPath);
+			Assert::AreNotEqual(pathExample, expectedPath);
 		}
 
 		TEST_METHOD(TimeTest)
 		{
-			Time::SetTimeScale(2);
 			float currentTime = Time::GetUnscaledDeltaTime();
+			Time::SetTimeScale(2);
 			float speedUpTime = Time::GetScaledTimeSinceStart();
 
 			Assert::AreNotEqual(currentTime, speedUpTime);
@@ -58,7 +58,7 @@ namespace BallFramework
 		{
 			Colors::AddCustomColor("colorExample", 100, 0, 10, 100);
 
-			Assert::IsFalse(Colors::RemoveCustomColor("colorExample"));
+			Assert::IsTrue(Colors::RemoveCustomColor("colorExample"));
 		}
 
 	};
