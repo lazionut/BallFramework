@@ -185,7 +185,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 					if (m_bricksNumber < 1)
 					{
-						m_bricks.resize(rand() % 5);
+						m_bricks.resize(Random::Range(1, 5));
 						InitializeBricks();
 					}
 

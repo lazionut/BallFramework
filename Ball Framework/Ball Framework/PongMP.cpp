@@ -28,12 +28,12 @@ namespace BallFramework
 #define PLAYER2SCORE    m_scores[1] 
 #define BALLIMAGE		m_balls[0].GetImage() 
 
-constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
-constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
-constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+	constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
+	constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
+	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
@@ -176,7 +176,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 					if (m_bricksNumber < 1)
 					{
-						m_bricks.resize(rand() % 7);
+						m_bricks.resize(Random::Range(1, 5));
 						InitializeBricks();
 					}
 
