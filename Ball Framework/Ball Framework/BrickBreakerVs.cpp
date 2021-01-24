@@ -45,6 +45,10 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 #define PLAYER2    m_players[1] 
 #define SCORE1     m_scores[0] 
 #define SCORE2     m_scores[1] 
+#define BALLIMG1     m_ballImages[0] 
+#define BALLIMG2     m_ballImages[1] 
+#define HEARTIMG    m_ballImages[2] 
+#define PICKUPIMG    m_ballImages[3] 
 
 #pragma endregion
 
@@ -64,81 +68,28 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreakerVS::Start()
 	{
-		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("redBall")); //first red
-		m_heartImage = LoadGameImage(Paths::ReturnObjectPath("redHeart"));
-		m_ballImages.push_back(m_ballImage);
-		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("ball")); // second white
-		m_ballImages.push_back(m_ballImage);
-		m_balls.emplace_back(Ball(Vector2(LEFTLIMIT + 2.0f, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
-		m_balls.emplace_back(Ball(Vector2(RIGHTLIMIT - 2.0f, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
-		BALL1.SetId(1);
-		BALL2.SetId(2);
 		InitializeBricks();
 		InitializeHearts();
-
-		m_players.emplace_back(Paddle(Vector2(LEFTLIMIT + 2.0f, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_a, SDLK_d, 5.0));
-		m_players.emplace_back(Paddle(Vector2(RIGHTLIMIT - 2.0f, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0));
-
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
-
-		m_score1.SetText(MakeText(std::to_string(m_score1.GetScore()), Colors::red));
-		m_score1.SetSize(0.5f, 1.0f);
-		m_score1.SetPosition(Vector2(LEFTLIMIT + 2.0f, UPPERLIMIT + 0.1f));
-		m_scores.push_back(m_score1);
-
-		m_score2.SetText(MakeText(std::to_string(m_score2.GetScore()), Colors::white));
-		m_score2.SetSize(0.5f, 1.0f);
-		m_score2.SetPosition(Vector2(RIGHTLIMIT - 2.0f, UPPERLIMIT + 0.1f));
-		m_scores.push_back(m_score2);
-
-		if (m_ballImage == nullptr)
-		{
-			LOGGING_ERROR("BrickBreaker -> ball image not found!");
-			Stop();
-			return;
-		}
-
-		if (m_ballImage == nullptr)
-		{
-			LOGGING_ERROR("BrickBreaker -> ball image 2 not found!");
-			Stop();
-			return;
-		}
-		if (m_heartImage == nullptr)
-		{
-			LOGGING_ERROR("BrickBreaker -> heart image not found!");
-			Stop();
-			return;
-		}
-
+		LoadBrickBreakerVSImages();
+		InitializeBrickBreakerVSObjects();
 		ResetBall();
 		ResetBall2();
-
-		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
-		if (m_pickUpImage == nullptr)
-		{
-			LOGGING_ERROR("BrickBreaker -> pick-up image not found!");
-			Stop();
-			return;
-		}
-
 		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
-
-		m_paddleColors.push_back(Colors::red);
-		m_paddleOutlines.push_back(Colors::yellow);
-		m_outlineSizes.push_back(0.05f);
-
-		m_paddleColors.push_back(Colors::white);
-		m_paddleOutlines.push_back(Colors::blue);
-		m_outlineSizes.push_back(0.05f);
 	}
 
 	void BrickBreakerVS::OnClose()
 	{
-		SDL_DestroyTexture(m_ballImage);
-		SDL_DestroyTexture(m_heartImage);
-		SDL_DestroyTexture(m_pickUpImage);
-		m_bricks.erase(m_bricks.begin(), m_bricks.end());
+		SDL_DestroyTexture(BALLIMG1);
+		SDL_DestroyTexture(BALLIMG2);
+		SDL_DestroyTexture(HEARTIMG);
+		SDL_DestroyTexture(PICKUPIMG);
+		m_bricks.clear();
+		m_outlineSizes.clear();
+		m_paddleColors.clear();
+		m_paddleOutlines.clear();
+		m_players.clear();
+		m_balls.clear();
+		m_scores.clear();
 		Time::SetTimeScale(1.0f);
 	}
 
@@ -380,19 +331,15 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		}
 		if (m_brickCounter1 == 0)
 		{
-			//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
 			m_playersStatistics.UpdateStatistics(m_player1Name, true);
 			m_playersStatistics.UpdateStatistics(m_player2Name, false);
-			//m_playersStatistics.UpdateStatistics(m_player2Name, true);
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player1 won! Congratulations!", nullptr);
 			Stop();
 		}
 		if (m_brickCounter2 == 0)
 		{
-			//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
 			m_playersStatistics.UpdateStatistics(m_player1Name, false);
 			m_playersStatistics.UpdateStatistics(m_player1Name, true);
-			//m_playersStatistics.UpdateStatistics(m_player2Name, true);
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Player2 won! Congratulations!", nullptr);
 			Stop();
 		}
@@ -421,14 +368,14 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			}
 			else
 			{
-				if (m_pickUp.CheckCollision(BALL1)) // TO DO 
+				if (m_pickUp.CheckCollision(BALL1)) 
 				{
 					m_pickUp.InvokeAction();
 					m_pickUp.SetVisible(false);
 					LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
 					m_switchBall = true;
 				}
-				if (m_pickUp.CheckCollision(BALL2)) // TO DO 
+				if (m_pickUp.CheckCollision(BALL2)) 
 				{
 					m_pickUp.InvokeAction();
 					m_pickUp.SetVisible(false);
@@ -447,7 +394,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		int8_t switchColor = 1;
 		for (auto&& row : m_bricks)
 		{
-			row.resize(BRICKPERROW); //MODIFY
+			row.resize(BRICKPERROW); 
 
 			for (auto&& brick : row)
 			{
@@ -493,6 +440,71 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			heart.Set(Vector2(x, y), HEARTSIZE, HEARTSIZE);
 			x -= offset + HEARTSIZE;
 		}
+	}
+
+	void BrickBreakerVS::LoadBrickBreakerVSImages()
+	{
+		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("redBall"))); //first red
+		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("ball"))); // second white
+		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("redHeart")));
+		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("star")));
+
+		if (BALLIMG1 == nullptr)
+		{
+			LOGGING_ERROR("BrickBreaker -> ball image not found!");
+			Stop();
+			return;
+		}
+
+		if (BALLIMG2 == nullptr)
+		{
+			LOGGING_ERROR("BrickBreaker -> ball image 2 not found!");
+			Stop();
+			return;
+		}
+		if (HEARTIMG == nullptr)
+		{
+			LOGGING_ERROR("BrickBreaker -> heart image not found!");
+			Stop();
+			return;
+		}
+		if (PICKUPIMG == nullptr)
+		{
+			LOGGING_ERROR("BrickBreaker -> pick-up image not found!");
+			Stop();
+			return;
+		}
+	}
+
+	void BrickBreakerVS::InitializeBrickBreakerVSObjects()
+	{
+		m_balls.emplace_back(Ball(Vector2(LEFTLIMIT + 2.0f, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
+		m_balls.emplace_back(Ball(Vector2(RIGHTLIMIT - 2.0f, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
+		BALL1.SetId(1);
+		BALL2.SetId(2);
+
+		m_players.emplace_back(Paddle(Vector2(LEFTLIMIT + 2.0f, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_a, SDLK_d, 5.0));
+		m_players.emplace_back(Paddle(Vector2(RIGHTLIMIT - 2.0f, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0));
+		m_paddleColors.push_back(Colors::red);
+		m_paddleOutlines.push_back(Colors::yellow);
+		m_outlineSizes.push_back(0.05f);
+
+		m_paddleColors.push_back(Colors::white);
+		m_paddleOutlines.push_back(Colors::blue);
+		m_outlineSizes.push_back(0.05f);
+
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
+
+		m_score1.SetText(MakeText(std::to_string(m_score1.GetScore()), Colors::red));
+		m_score1.SetSize(0.5f, 1.0f);
+		m_score1.SetPosition(Vector2(LEFTLIMIT + 2.0f, UPPERLIMIT + 0.1f));
+		m_scores.push_back(m_score1);
+
+		m_score2.SetText(MakeText(std::to_string(m_score2.GetScore()), Colors::white));
+		m_score2.SetSize(0.5f, 1.0f);
+		m_score2.SetPosition(Vector2(RIGHTLIMIT - 2.0f, UPPERLIMIT + 0.1f));
+		m_scores.push_back(m_score2);
+
 	}
 
 	void BrickBreakerVS::RenderHearts(SDL_Renderer* renderer)
