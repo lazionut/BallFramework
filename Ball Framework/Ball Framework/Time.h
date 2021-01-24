@@ -9,13 +9,13 @@ namespace BallFramework
 	public:
 		friend class TimeManager;
 
-		static double GetTimeSinceStartUp();
-		static double GetDeltaTime();
-		static double GetRealTime();
-		static double GetUnscaledDeltaTime();
-		static double GetScaledTimeSinceStart();
-		static float GetTimeScale();
-		static void SetTimeScale(float timeScale);
+		static double GetTimeSinceStartUp() noexcept;
+		static double GetDeltaTime() noexcept;
+		static double GetRealTime() noexcept;
+		static double GetUnscaledDeltaTime() noexcept;
+		static double GetScaledTimeSinceStart() noexcept;
+		static float GetTimeScale() noexcept;
+		static void SetTimeScale(float timeScale) noexcept;
 
 	private:
 		static double s_deltaTime;

@@ -3,10 +3,10 @@
 namespace BallFramework
 {
 
-	TimeManager::TimeManager()
+	TimeManager::TimeManager() noexcept
 		: m_realDelta{ 0.0 }, m_now{ system_clock::now() }, m_last{ system_clock::now() } {}
 
-	void TimeManager::ResetTime()
+	void TimeManager::ResetTime() noexcept
 	{
 		Time::s_deltaTime = 0.0;
 		Time::s_unscaledDelta = 0.0;
@@ -15,7 +15,7 @@ namespace BallFramework
 		Time::s_timeScale = 1.0f;
 	}
 
-	void TimeManager::UpdateTime()
+	void TimeManager::UpdateTime() noexcept
 	{
 		m_now = system_clock::now();
 
@@ -33,13 +33,13 @@ namespace BallFramework
 		m_last = m_now;
 	}
 
-	void TimeManager::UpdateDone()
+	void TimeManager::UpdateDone() noexcept
 	{
 		Time::s_deltaTime = 0.0;
 		Time::s_unscaledDelta = 0.0;
 	}
 
-	double TimeManager::GetRealDelta()
+	double TimeManager::GetRealDelta() const noexcept
 	{
 		return m_realDelta;
 	}

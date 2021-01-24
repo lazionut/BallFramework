@@ -16,13 +16,13 @@ namespace BallFramework
 		time_point<system_clock> m_now;
 
 	public:
-		TimeManager();
+		TimeManager() noexcept;
 
-		void ResetTime();
-		void UpdateTime();
-		void UpdateDone();
+		void ResetTime() noexcept;
+		void UpdateTime() noexcept;
+		void UpdateDone() noexcept;
 
-		double GetRealDelta();
+		double GetRealDelta() const noexcept;
 	};
 
 }
