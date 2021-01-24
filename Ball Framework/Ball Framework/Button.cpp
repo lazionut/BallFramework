@@ -99,6 +99,15 @@ namespace BallFramework
 		m_buttonId = id;
 	}
 
+	void Button::SetButton(const Vector2& position, const Vector2& size, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& text, int id)
+	{
+		Set(position, size);
+		m_text = text;
+		m_backColor = backColor;
+		m_fontColor = fontColor;
+		m_buttonId = id;
+	}
+
 	void Button::SetId(int id)
 	{
 		m_buttonId = id;

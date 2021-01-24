@@ -173,22 +173,22 @@ namespace BallFramework
 		{
 			switch (count) {
 			case 0:
-				button.SetButton(Vector2(0.0f, buttonYPos), 6.0f, 0.7f, Colors::white, Colors::black, "Play Pong Singleplayer", count);
+				button.SetButton(Vector2(0.0f, buttonYPos), Vector2(6.0f, 0.7f), Colors::white, Colors::black, "Play Pong Singleplayer", count);
 				break;
 			case 1:
-				button.SetButton(Vector2(0.0f, buttonYPos), 6.0f, 0.7f, Colors::white, Colors::black, "Play Pong Multiplayer", count);
+				button.SetButton(Vector2(0.0f, buttonYPos), Vector2(6.0f, 0.7f), Colors::white, Colors::black, "Play Pong Multiplayer", count);
 				break;
 			case 2:
-				button.SetButton(Vector2(0.0f, buttonYPos), 8.0f, 0.7f, Colors::white, Colors::black, "Play BrickBreaker Singleplayer", count);
+				button.SetButton(Vector2(0.0f, buttonYPos), Vector2(8.0f, 0.7f), Colors::white, Colors::black, "Play BrickBreaker Singleplayer", count);
 				break;
 			case 3:
-				button.SetButton(Vector2(0.0f, buttonYPos), 6.0f, 0.7f, Colors::white, Colors::black, "Play BrickBreaker CO-OP", count);
+				button.SetButton(Vector2(0.0f, buttonYPos), Vector2(6.0f, 0.7f), Colors::white, Colors::black, "Play BrickBreaker CO-OP", count);
 				break;
 			case 4:
-				button.SetButton(Vector2(0.0f, buttonYPos), 6.0f, 0.7f, Colors::white, Colors::black, "Play BrickBreaker Versus", count);
+				button.SetButton(Vector2(0.0f, buttonYPos), Vector2(6.0f, 0.7f), Colors::white, Colors::black, "Play BrickBreaker Versus", count);
 				break;
 			case 5:
-				button.SetButton(Vector2(0.0f, buttonYPos - 1.5f), 3.0f, 0.7f, Colors::white, Colors::black, "Statistics", count);
+				button.SetButton(Vector2(0.0f, buttonYPos - 1.5f), Vector2(3.0f, 0.7f), Colors::white, Colors::black, "Statistics", count);
 				break;
 			}
 			button.SetText(MakeText(button.GetButtonText(), button.GetFontColor()));

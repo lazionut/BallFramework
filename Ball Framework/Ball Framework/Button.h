@@ -16,6 +16,7 @@ namespace BallFramework
 		SDL_Color GetFontColor() const;
 
 		void SetButton(const Vector2& position, const float& width, const float& height, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& text, int id);
+		void SetButton(const Vector2& position, const Vector2& size, const SDL_Color& backColor, const SDL_Color& fontColor, const std::string& text, int id);
 		void SetId(int id);
 
 		SDL_Texture* GetText() const;
