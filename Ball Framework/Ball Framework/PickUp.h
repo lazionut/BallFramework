@@ -19,6 +19,7 @@ namespace BallFramework
 
 		bool IsMoving() const noexcept;
 		bool IsActionActive() const noexcept;
+		Actions GetActionType() const noexcept;
 
 		void SetActionType(Actions action) noexcept;
 		void SetStartAction(std::function<void()> action);

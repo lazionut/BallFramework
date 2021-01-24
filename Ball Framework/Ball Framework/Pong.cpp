@@ -60,6 +60,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		InitializePongObjects();
 		LoadPongImages();
 		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::up, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
+		m_pickUpGenerator.SetGeneratorData(BallGame::defaultGeneratorData);
 	}
 
 	void Pong::OnClose()
@@ -350,39 +351,29 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 	{
 		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
-			m_pickUp.SetActive(true);
+			m_pickUp = m_pickUpGenerator.CreateEmptyPickUp(position);
 
-			auto type = m_pickUpGenerator.GetPickUpType();
-			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(type));
-
-			switch (type)
+			switch (m_pickUp.GetActionType())
 			{
-			case Actions::SPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
-				break;
 			case Actions::PADDLESIZECHANGE:
-				m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER, 1);
-				m_pickUp.SetDirection(Vector2::left);
-				m_pickUp.StartMoving();
-				break;
 			case Actions::PADDLESPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER, 10);
-				m_pickUp.SetDirection(Vector2::left);
+				if (Random::CoinFlip())
+				{
+					m_pickUp.SetDirection(Vector2::left);
+				}
+				else
+				{
+					m_pickUp.SetDirection(Vector2::right);
+				}
 				m_pickUp.StartMoving();
 				break;
-			case Actions::BALLSIZECHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(BALL, 1);
-				break;
-			case Actions::BALLSPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL, 5);
-				break;
-			default:
+			case Actions::BONUSPOINTS:
+			case Actions::REMOVEPOINTS:
 				m_pickUp.SetActive(false);
 				return;
 			}
 
-			m_pickUp.SetPosition(position);
-			m_pickUp.SetVisible(true);
+			m_pickUp.SetActive(true);
 		}
 		else
 		{

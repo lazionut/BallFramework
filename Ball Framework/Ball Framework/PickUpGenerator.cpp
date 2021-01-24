@@ -7,14 +7,19 @@ namespace BallFramework
 		: m_pickUp{}, m_actionTime{ 0.0f }, m_paddleAxis{ Vector2::zero },
 		m_scoreList{ scoreList } {}
 
-	PickUp PickUpGenerator::CreateEmptyPickUp(const Vector2& postion) const noexcept
+	PickUp PickUpGenerator::CreateEmptyPickUp(const Vector2& position) const noexcept
 	{
-		return PickUp(m_pickUp);
+		PickUp result(m_pickUp);
+		result.SetActionType(GetPickUpType());
+		result.SetActive(true);
+		result.SetVisible(true);
+		result.SetPosition(position);
+		return result;
 	}
 
-	Actions PickUpGenerator::GetPickUpType()
+	Actions PickUpGenerator::GetPickUpType() const noexcept
 	{
-		return static_cast<Actions>(Random::Range(static_cast<int>(Actions::ACTIONSNUMBER)));
+		return static_cast<Actions>(Random::Range(1, static_cast<int>(Actions::ACTIONSNUMBER)));
 	}
 
 	void PickUpGenerator::SetPickUpDefaultProperties(const Vector2& paddleSize, const float ballSize, const float speed, const float time) noexcept

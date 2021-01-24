@@ -205,10 +205,11 @@ namespace BallFramework
 		{
 			if (m_pickUp.IsMoving())
 			{
-				for (const auto& paddle : m_players)
+				for (auto&& paddle : m_players)
 				{
 					if (m_pickUp.CheckCollision(paddle))
 					{
+						m_pickUpGenerator.SetActions(m_pickUp, &paddle);
 						m_pickUp.InvokeAction();
 						m_pickUp.SetVisible(false);
 						LOGGING_INFO("BrickBreaker -> player paddle-pick-up collision");
@@ -217,15 +218,22 @@ namespace BallFramework
 			}
 			else
 			{
-				for (const auto& ball : m_balls)
+				for (auto&& ball : m_balls)
 				{
 					if (m_pickUp.CheckCollision(ball))
 					{
+						m_pickUpGenerator.SetActions(m_pickUp, &ball);
 						m_pickUp.InvokeAction();
 						m_pickUp.SetVisible(false);
 						LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
 					}
 				}
+			}
+
+			if (m_pickUp.GetPosition().GetX() < -10 || m_pickUp.GetPosition().GetX() > 10
+				|| m_pickUp.GetPosition().GetY() < -10 || m_pickUp.GetPosition().GetY() > 10)
+			{
+				m_pickUp.SetVisible(false);
 			}
 		}
 	}

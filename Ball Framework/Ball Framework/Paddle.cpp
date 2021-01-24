@@ -28,7 +28,6 @@ namespace BallFramework
 		{
 			m_rightPressed = true;
 			m_direction += m_rightDirection;
-			std::cout << m_direction << "\n";
 		}
 	}
 

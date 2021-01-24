@@ -28,9 +28,9 @@ namespace BallFramework
 	public:
 		PickUpGenerator(std::vector<Score>& scoreList) noexcept;
 
-		PickUp CreateEmptyPickUp(const Vector2& postion) const noexcept;
+		PickUp CreateEmptyPickUp(const Vector2& position) const noexcept;
 
-		Actions GetPickUpType();
+		Actions GetPickUpType() const noexcept;
 		void SetActions(PickUp& pickUp, GameObject* object);
 
 		void SetPickUpDefaultProperties(const Vector2& paddleAxis, const float ballSize, const float speed, const float time) noexcept;
