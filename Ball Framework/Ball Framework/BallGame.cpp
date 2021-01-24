@@ -5,7 +5,7 @@ namespace BallFramework
 
 	BallGame::BallGame(const std::string& title, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit) :
 		Game(title, width, height, flags, maxFPS, widthUnit, heightUnit),
-		m_ballImage{ nullptr }, m_pickUpImage{ nullptr }, m_isPaused{ false },
+		m_pickUpImage{ nullptr }, m_isPaused{ false },
 		m_playersStatistics{ "..\\Assets\\statisticsBB.txt" },
 		m_lastTimeScale{ Time::GetTimeScale() }, m_pickUpGenerator{ m_scores } {}
 
@@ -132,7 +132,7 @@ namespace BallFramework
 		for (const auto& ball : m_balls)
 		{
 			scale.PointToPixel(aux, ball.GetPosition(), ball.GetSize(), ball.GetSize());
-			SDL_RenderCopy(renderer, m_ballImages[index], nullptr, &aux);
+			SDL_RenderCopy(renderer, ball.GetImage(), nullptr, &aux);
 			++index;
 		}
 	}
@@ -186,6 +186,14 @@ namespace BallFramework
 			}
 			scale.PointToPixel(aux, score.GetPosition(), score.GetWidth(), score.GetHeight());
 			SDL_RenderCopy(renderer, scoreTexture, nullptr, &aux);
+		}
+	}
+
+	void BallGame::DestroyGameImages()
+	{
+		for (auto&& img : m_ballImages)
+		{
+			SDL_DestroyTexture(img);
 		}
 	}
 

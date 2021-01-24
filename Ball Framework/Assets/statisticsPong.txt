@@ -1,8 +1,11 @@
-8
+10
 play1 2 2 0
 achi 2 2 0
+A Certain Kind of Bot 1 1 0
 play2 1 0 1
 play2 1 0 1
 mariu 1 0 1
 A 0 0 1
-A Certain Kind of Bot 1 0 1
+A 0 0 1
+A 0 0 1
+dna 1 0 1

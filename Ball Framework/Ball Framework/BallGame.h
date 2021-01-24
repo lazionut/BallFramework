@@ -26,8 +26,6 @@ namespace BallFramework
 		const inline static GeneratorData defaultGeneratorData{ 2.0f, 5.0f, 1.0f, 5.0f, 2.0f, 5 };
 
 	protected:
-		//void SetPaddlesColors(const SDL_Color& paddleColor, const SDL_Color& outlineColor, const float outlineSize);
-
 		void Pause();
 
 		bool IsMouseOnButton(Sint32 x, Sint32 y);
@@ -37,6 +35,7 @@ namespace BallFramework
 		void RenderButton(SDL_Renderer* renderer);
 		void RenderBricks(SDL_Renderer* renderer);
 		void RenderScore(SDL_Renderer* renderer);
+		void DestroyGameImages();
 
 		void CheckPickUpCollision();
 
@@ -65,7 +64,6 @@ namespace BallFramework
 		PlayersStatistics m_playersStatistics;
 		std::vector<SDL_Texture*> m_ballImages;
 		SDL_Texture* m_pickUpImage;
-		SDL_Texture* m_ballImage;
 
 	private:
 		void Update() override final;

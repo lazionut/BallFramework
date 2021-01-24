@@ -13,13 +13,13 @@ namespace BallFramework
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
 
-constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
-constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
-constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
-constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
+	constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
+	constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
+	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+	constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
@@ -45,20 +45,19 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 #define PLAYER2    m_players[1] 
 #define SCORE1     m_scores[0] 
 #define SCORE2     m_scores[1] 
-#define BALLIMG1     m_ballImages[0] 
-#define BALLIMG2     m_ballImages[1] 
-#define HEARTIMG    m_ballImages[2] 
-#define PICKUPIMG    m_ballImages[3] 
+#pragma endregion
 
+#pragma region OUR_IMAGES
+
+#define BALLIMG1     m_balls[0].GetImage() 
+#define BALLIMG2     m_balls[1].GetImage()
+#define HEARTIMG    m_ballImages[0] 
 #pragma endregion
 
 	BallFramework::BrickBreakerVS::BrickBreakerVS(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS) :
 		BallGame("BrickBreakerVS", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-		m_heartImage{ nullptr },
 		m_heartCounter1{ 3 }, m_brickCounter1{ BRICKCOUNTER },
 		m_heartCounter2{ 3 }, m_brickCounter2{ BRICKCOUNTER },
-		m_score1{ Colors::red },
-		m_score2{ Colors::white },
 		m_player1Name{ playersNames.front() }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKROWS };
@@ -68,13 +67,15 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreakerVS::Start()
 	{
+		m_renderer.SetBackgroundColor(Colors::dark_blue);
+		InitializeBrickBreakerVSObjects();
+		LoadBrickBreakerVSImages();
 		InitializeBricks();
 		InitializeHearts();
-		LoadBrickBreakerVSImages();
-		InitializeBrickBreakerVSObjects();
 		ResetBall();
 		ResetBall2();
 		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
+		m_pickUpGenerator.SetGeneratorData(GeneratorData(2.0f, 5.0f, 1.0f, 5.0f, 2.0f, 5));
 	}
 
 	void BrickBreakerVS::OnClose()
@@ -82,7 +83,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		SDL_DestroyTexture(BALLIMG1);
 		SDL_DestroyTexture(BALLIMG2);
 		SDL_DestroyTexture(HEARTIMG);
-		SDL_DestroyTexture(PICKUPIMG);
+		SDL_DestroyTexture(m_pickUpImage);
 		m_bricks.clear();
 		m_outlineSizes.clear();
 		m_paddleColors.clear();
@@ -368,14 +369,14 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			}
 			else
 			{
-				if (m_pickUp.CheckCollision(BALL1)) 
+				if (m_pickUp.CheckCollision(BALL1))
 				{
 					m_pickUp.InvokeAction();
 					m_pickUp.SetVisible(false);
 					LOGGING_INFO("BrickBreaker -> ball-pick-up collision");
 					m_switchBall = true;
 				}
-				if (m_pickUp.CheckCollision(BALL2)) 
+				if (m_pickUp.CheckCollision(BALL2))
 				{
 					m_pickUp.InvokeAction();
 					m_pickUp.SetVisible(false);
@@ -386,7 +387,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		}
 	}
 #pragma endregion
-	
+
 	void BrickBreakerVS::InitializeBricks()
 	{
 		float offset = 0.5f;
@@ -394,7 +395,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		int8_t switchColor = 1;
 		for (auto&& row : m_bricks)
 		{
-			row.resize(BRICKPERROW); 
+			row.resize(BRICKPERROW);
 
 			for (auto&& brick : row)
 			{
@@ -444,10 +445,10 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreakerVS::LoadBrickBreakerVSImages()
 	{
-		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("redBall"))); //first red
-		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("ball"))); // second white
+		BALL1.SetImage(LoadGameImage(Paths::ReturnObjectPath("redBall"))); //first red
+		BALL2.SetImage(LoadGameImage(Paths::ReturnObjectPath("ball"))); // second white
 		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("redHeart")));
-		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("star")));
+		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
 
 		if (BALLIMG1 == nullptr)
 		{
@@ -468,7 +469,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			Stop();
 			return;
 		}
-		if (PICKUPIMG == nullptr)
+		if (m_pickUpImage == nullptr)
 		{
 			LOGGING_ERROR("BrickBreaker -> pick-up image not found!");
 			Stop();
@@ -480,8 +481,6 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 	{
 		m_balls.emplace_back(Ball(Vector2(LEFTLIMIT + 2.0f, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
 		m_balls.emplace_back(Ball(Vector2(RIGHTLIMIT - 2.0f, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
-		BALL1.SetId(1);
-		BALL2.SetId(2);
 
 		m_players.emplace_back(Paddle(Vector2(LEFTLIMIT + 2.0f, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_a, SDLK_d, 5.0));
 		m_players.emplace_back(Paddle(Vector2(RIGHTLIMIT - 2.0f, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0));
@@ -490,20 +489,24 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		m_outlineSizes.push_back(0.05f);
 
 		m_paddleColors.push_back(Colors::white);
-		m_paddleOutlines.push_back(Colors::blue);
+		m_paddleOutlines.push_back(Colors::pink);
 		m_outlineSizes.push_back(0.05f);
 
+		BALL1.SetId(1);
+		BALL2.SetId(2);
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
 
-		m_score1.SetText(MakeText(std::to_string(m_score1.GetScore()), Colors::red));
-		m_score1.SetSize(0.5f, 1.0f);
-		m_score1.SetPosition(Vector2(LEFTLIMIT + 2.0f, UPPERLIMIT + 0.1f));
-		m_scores.push_back(m_score1);
+		Score score1{ Colors::red };
+		Score score2{ Colors::white };
+		score1.SetText(MakeText(std::to_string(score1.GetScore()), Colors::red));
+		score1.SetSize(0.5f, 1.0f);
+		score1.SetPosition(Vector2(LEFTLIMIT + 2.0f, UPPERLIMIT + 0.1f));
+		m_scores.push_back(score1);
 
-		m_score2.SetText(MakeText(std::to_string(m_score2.GetScore()), Colors::white));
-		m_score2.SetSize(0.5f, 1.0f);
-		m_score2.SetPosition(Vector2(RIGHTLIMIT - 2.0f, UPPERLIMIT + 0.1f));
-		m_scores.push_back(m_score2);
+		score2.SetText(MakeText(std::to_string(score2.GetScore()), Colors::white));
+		score2.SetSize(0.5f, 1.0f);
+		score2.SetPosition(Vector2(RIGHTLIMIT - 2.0f, UPPERLIMIT + 0.1f));
+		m_scores.push_back(score2);
 
 	}
 
@@ -515,12 +518,12 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		for (const auto& iter : m_hearts1)
 		{
 			scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
-			SDL_RenderCopy(renderer, m_heartImage, nullptr, &rect);
+			SDL_RenderCopy(renderer, HEARTIMG, nullptr, &rect);
 		}
 		for (const auto& iter : m_hearts2)
 		{
 			scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
-			SDL_RenderCopy(renderer, m_heartImage, nullptr, &rect);
+			SDL_RenderCopy(renderer, HEARTIMG, nullptr, &rect);
 		}
 	}
 

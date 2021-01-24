@@ -28,6 +28,8 @@ namespace BallFramework
 
 		void InitializeBricks();
 		void InitializeScore();
+		void InitializePongObjects();
+		void LoadPongImages();
 
 		void CreatePickUp(const Vector2& position) ;
 

@@ -13,13 +13,13 @@ namespace BallFramework
 #define SPACING 0.25f
 #define HEARTSIZE 0.25f
 
-constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
-constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
-constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
-constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
-constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
-constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
-constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
+	constexpr auto BRICKLIMIT_X = -WIDTHUNITS / 2 + 0.75f;
+	constexpr auto BRICKLIMIT_Y = HEIGHTUNITS / 2 - SPACING * 2;
+	constexpr auto LEFTLIMIT = -WIDTHUNITS / 2;
+	constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
+	constexpr auto UPPERLIMIT = HEIGHTUNITS / 2;
+	constexpr auto LOWERLIMIT = -HEIGHTUNITS / 2;
+	constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	//pickUp constants
 #define PICKUPSPAWNCHANCE 20
@@ -42,16 +42,15 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 #define OURBALL     m_balls[0] 
 #define OURPLAYER   m_players[0] 
 #define OURSCORE    m_scores[0] 
-#define BALLIMAGE   m_ballImages[0] 
-#define HEARTIMAGE   m_ballImages[1] 
-#define PICKUPIMAGE   m_ballImages[2] 
+#pragma endregion
+#pragma region OUR_IMAGES
 
+#define BALLIMAGE	 m_balls[0].GetImage() 
+#define HEARTIMAGE   m_ballImages[0] 
 #pragma endregion
 
 	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
 		: BallGame("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-
-		m_heartImage{ nullptr },
 		m_heartCounter{ 3 }, m_brickCounter{ BRICKCOUNTER },
 		m_playerName{ playersNames.front() }
 	{
@@ -62,11 +61,11 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreaker::Start()
 	{
-		//m_renderer.SetBackgroundColor(Colors::orange);
+		m_renderer.SetBackgroundColor(Colors::orange);
 		InitializeBricks();
 		InitializeHearts();
-		LoadBrickBreakerImages();
 		InitializeBrickBreakerObjects();
+		LoadBrickBreakerImages();
 		ResetBall();
 		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
 		m_pickUpGenerator.SetGeneratorData(GeneratorData(2.0f, 5.0f, 1.0f, 5.0f, 2.0f, 5));
@@ -80,9 +79,8 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreaker::OnClose()
 	{
-		SDL_DestroyTexture(BALLIMAGE);
-		SDL_DestroyTexture(HEARTIMAGE);
-		SDL_DestroyTexture(PICKUPIMAGE);
+		DestroyGameImages();
+		SDL_DestroyTexture(m_pickUpImage);
 		m_bricks.clear();
 		m_outlineSizes.clear();
 		m_paddleColors.clear();
@@ -232,9 +230,9 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreaker::LoadBrickBreakerImages()
 	{
-		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("redBall")));
+		OURBALL.SetImage(LoadGameImage(Paths::ReturnObjectPath("redBall")));
 		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("redHeart")));
-		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("star")));
+		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
 
 		if (BALLIMAGE == nullptr)
 		{
@@ -250,7 +248,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			return;
 		}
 
-		if (PICKUPIMAGE == nullptr)
+		if (m_pickUpImage == nullptr)
 		{
 			LOGGING_ERROR("BrickBreaker -> pick-up image not found!");
 			Stop();
@@ -313,7 +311,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 	void BrickBreaker::InitializeBrickBreakerObjects()
 	{
 		m_players.emplace_back(Paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0)),
-			m_paddleColors.push_back(Colors::purple);
+		m_paddleColors.push_back(Colors::purple);
 		m_paddleOutlines.push_back(Colors::violet);
 		m_outlineSizes.push_back(0.05f);
 

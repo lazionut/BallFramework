@@ -28,6 +28,8 @@ namespace BallFramework
 
 		void InitializeBricks();
 		void InitializeScore();
+		void InitializePongMPObjects();
+		void LoadPongMPImages();
 	private:
 		uint8_t m_bricksNumber;
 

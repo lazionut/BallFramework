@@ -26,6 +26,7 @@ namespace BallFramework
 #define BALL            m_balls[0] 
 #define PLAYER1SCORE    m_scores[0]
 #define PLAYER2SCORE    m_scores[1] 
+#define BALLIMAGE		m_balls[0].GetImage() 
 
 constexpr auto WIDTHPADDLESPACING1 = -WIDTHUNITS / 2 + 1;
 constexpr auto WIDTHPADDLESPACING2 = WIDTHUNITS / 2 - 1;
@@ -50,46 +51,15 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		SetBackgroundColor({ 7, 62, 95, 255 });
 
 		InitializeBricks();
-
-		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED));
-		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED));
-		m_balls.emplace_back(Ball(Vector2::zero, 0.5f, Vector2(pow(-1, Random::Range(2)), 0), 10));
-
 		InitializeScore();
-
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
-
-		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("ball"));
-		m_ballImages.push_back(m_ballImage);
-		if (m_ballImage == nullptr)
-		{
-			LOGGING_ERROR("PongMP -> ball image not found!");
-			Stop();
-			return;
-		}
-
-		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
-		if (m_pickUpImage == nullptr)
-		{
-			LOGGING_ERROR("PongMP -> pick-up image not found!");
-			Stop();
-			return;
-		}
-
-		m_paddleColors.push_back(Colors::green);
-		m_paddleOutlines.push_back(Colors::dark_green);
-		m_outlineSizes.push_back(0.1f);
-
-		m_paddleColors.push_back(Colors::green);
-		m_paddleOutlines.push_back(Colors::dark_green);
-		m_outlineSizes.push_back(0.1f);
-
+		InitializePongMPObjects();
+		LoadPongMPImages();
 		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
 	}
 
 	void PongMP::OnClose()
 	{
-		SDL_DestroyTexture(m_ballImage);
+		SDL_DestroyTexture(BALLIMAGE);
 		SDL_DestroyTexture(m_pickUpImage);
 		m_bricks.erase(m_bricks.begin(), m_bricks.end());
 		Time::SetTimeScale(1.0f);
@@ -318,6 +288,44 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		score.SetPosition(Vector2(-2.0f, 4.0f));
 		m_scores.push_back(score);
 		m_scores.back().SetText(MakeText(score.ConvertToString(), score.GetScoreColor()));
+	}
+
+	void PongMP::InitializePongMPObjects()
+	{
+		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING1, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_w, SDLK_s, PADDLESPEED));
+		m_players.emplace_back(Paddle(Vector2(WIDTHPADDLESPACING2, 0), PADDLEHEIGHT, PADDLEWIDTH, Vector2::up, Vector2::down, SDLK_UP, SDLK_DOWN, PADDLESPEED));
+
+		m_paddleColors.push_back(Colors::green);
+		m_paddleOutlines.push_back(Colors::dark_green);
+		m_outlineSizes.push_back(0.1f);
+
+		m_paddleColors.push_back(Colors::green);
+		m_paddleOutlines.push_back(Colors::dark_green);
+		m_outlineSizes.push_back(0.1f);
+
+		m_balls.emplace_back(Ball(Vector2::zero, 0.5f, Vector2(pow(-1, Random::Range(2)), 0), 10));
+
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
+
+	}
+
+	void PongMP::LoadPongMPImages()
+	{
+		BALL.SetImage(LoadGameImage(Paths::ReturnObjectPath("ball")));
+		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
+
+		if (BALLIMAGE == nullptr)
+		{
+			LOGGING_ERROR("PongMP -> ball image not found!");
+			Stop();
+			return;
+		}
+		if (m_pickUpImage == nullptr)
+		{
+			LOGGING_ERROR("PongMP -> pick-up image not found!");
+			Stop();
+			return;
+		}
 	}
 
 	void PongMP::CreatePickUp(const Vector2& position)

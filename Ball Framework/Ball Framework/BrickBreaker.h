@@ -37,7 +37,6 @@ namespace BallFramework
 		std::string m_playerName;
 
 		std::vector<Rectangle> m_hearts;
-		SDL_Texture* m_heartImage;
 		uint8_t m_heartCounter;
 		uint16_t m_brickCounter;
 
