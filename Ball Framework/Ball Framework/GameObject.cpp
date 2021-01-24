@@ -32,7 +32,7 @@ namespace BallFramework
 		return m_isVisible && m_isActive;
 	}
 
-	const Vector2& GameObject::GetPosition() const noexcept
+	const Vector2& GameObject::GetPosition()const noexcept
 	{
 		return m_position;
 	}

@@ -61,11 +61,11 @@ namespace BallFramework
 		Button m_pauseButton;
 
 		std::vector<std::string> m_playersNames;
-		PlayersStatistics m_playersStatistics;
 
-		SDL_Texture* m_ballImage;
+		PlayersStatistics m_playersStatistics;
 		std::vector<SDL_Texture*> m_ballImages;
 		SDL_Texture* m_pickUpImage;
+		SDL_Texture* m_ballImage;
 
 	private:
 		void Update() override final;

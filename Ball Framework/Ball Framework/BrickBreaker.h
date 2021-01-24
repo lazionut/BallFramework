@@ -29,6 +29,8 @@ namespace BallFramework
 
 		void InitializeBricks();
 		void InitializeHearts();
+		void LoadBrickBreakerImages();
+		void InitializeBrickBreakerObjects();
 		void RenderHearts(SDL_Renderer* renderer);
 
 	private:

@@ -42,6 +42,9 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 #define OURBALL     m_balls[0] 
 #define OURPLAYER   m_players[0] 
 #define OURSCORE    m_scores[0] 
+#define BALLIMAGE   m_ballImages[0] 
+#define HEARTIMAGE   m_ballImages[1] 
+#define PICKUPIMAGE   m_ballImages[2] 
 
 #pragma endregion
 
@@ -59,57 +62,14 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreaker::Start()
 	{
+		//m_renderer.SetBackgroundColor(Colors::orange);
 		InitializeBricks();
 		InitializeHearts();
-
-		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("redBall"));
-		m_ballImages.push_back(m_ballImage);
-		m_heartImage = LoadGameImage(Paths::ReturnObjectPath("redHeart"));
-
-		m_players.emplace_back(Paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0)),
-		m_balls.emplace_back(Ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
-
-		Score score{ Colors::white };
-		score.SetText(MakeText(score.ConvertToString(), score.GetScoreColor()));
-		score.SetPosition(0.0f, 6.0f);
-		score.SetSize(0.5f, 1.0f);
-		m_scores.push_back(score);
-
-		if (m_ballImage == nullptr)
-		{
-			LOGGING_ERROR("BrickBreaker -> ball image not found!");
-			Stop();
-			return;
-		}
-
-		if (m_heartImage == nullptr)
-		{
-			LOGGING_ERROR("BrickBreaker -> heart image not found!");
-			Stop();
-			return;
-		}
-
+		LoadBrickBreakerImages();
+		InitializeBrickBreakerObjects();
 		ResetBall();
-
-		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
-		if (m_pickUpImage == nullptr)
-		{
-			LOGGING_ERROR("BrickBreaker -> pick-up image not found!");
-			Stop();
-			return;
-		}
-
 		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
 		m_pickUpGenerator.SetGeneratorData(GeneratorData(2.0f, 5.0f, 1.0f, 5.0f, 2.0f, 5));
-
-		m_paddleColors.push_back(Colors::blue);
-		m_paddleOutlines.push_back(Colors::orange);
-		m_outlineSizes.push_back(0.05f);
-
-		m_paddleColors.push_back(Colors::green);
-		m_paddleOutlines.push_back(Colors::violet);
-		m_outlineSizes.push_back(0.05f);
 	}
 
 	void BrickBreaker::ResetBall()
@@ -120,10 +80,16 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 	void BrickBreaker::OnClose()
 	{
-		SDL_DestroyTexture(m_ballImage);
-		SDL_DestroyTexture(m_heartImage);
-		SDL_DestroyTexture(m_pickUpImage);
-		m_bricks.erase(m_bricks.begin(), m_bricks.end());
+		SDL_DestroyTexture(BALLIMAGE);
+		SDL_DestroyTexture(HEARTIMAGE);
+		SDL_DestroyTexture(PICKUPIMAGE);
+		m_bricks.clear();
+		m_outlineSizes.clear();
+		m_paddleColors.clear();
+		m_paddleOutlines.clear();
+		m_players.clear();
+		m_balls.clear();
+		m_scores.clear();
 		Time::SetTimeScale(1.0f);
 	}
 
@@ -181,7 +147,6 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			LOGGING_INFO("BrickBreaker -> lose one heart");
 			if (m_heartCounter == 0)
 			{
-				//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
 				m_playersStatistics.UpdateStatistics(m_playerName, false);
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "Better luck next time!", nullptr);
 				Stop();
@@ -196,15 +161,9 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		{
 			if (OURBALL.GetPosition().GetY() >= OURPLAYER.GetPosition().GetY() + OURPLAYER.GetHeight() / 2) //temporary solution to a bug
 			{
-				//OURBALL.ChangeDirection(OURPLAYER);
 				float difference = abs(OURBALL.GetPosition().GetX() - OURPLAYER.GetPosition().GetX());
 				OURBALL.GetDirection().GetY() *= -1;
-
-				//if (OURBALL.GetDirection().GetX() >= 0) //prima versiune
-
 				if (OURBALL.GetPosition().GetX() >= OURPLAYER.GetPosition().GetX())
-					//asta e a doua optiune de design in care mingea isi schimba dir 
-					//pe axa x in functie de unde pica pe paleta
 				{
 					OURBALL.GetDirection().SetX(difference);
 				}
@@ -251,7 +210,6 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		}
 		if (m_brickCounter == 0)
 		{
-			//playersStatistics.ReadStatistics("..\\Assets\\statisticsBB.txt");
 			m_playersStatistics.UpdateStatistics(m_playerName, true);
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", "You won! Congratulations!", nullptr);
 			Stop();
@@ -272,6 +230,34 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		RenderGameObjects(renderer);
 	}
 
+	void BrickBreaker::LoadBrickBreakerImages()
+	{
+		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("redBall")));
+		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("redHeart")));
+		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("star")));
+
+		if (BALLIMAGE == nullptr)
+		{
+			LOGGING_ERROR("BrickBreaker -> ball image not found!");
+			Stop();
+			return;
+		}
+
+		if (HEARTIMAGE == nullptr)
+		{
+			LOGGING_ERROR("BrickBreaker -> heart image not found!");
+			Stop();
+			return;
+		}
+
+		if (PICKUPIMAGE == nullptr)
+		{
+			LOGGING_ERROR("BrickBreaker -> pick-up image not found!");
+			Stop();
+			return;
+		}
+	}
+
 	void BrickBreaker::RenderHearts(SDL_Renderer* renderer)
 	{
 		SDL_Rect rect;
@@ -280,7 +266,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		for (const auto& iter : m_hearts)
 		{
 			scale.PointToPixel(rect, iter.GetPosition(), iter.GetWidth(), iter.GetHeight());
-			SDL_RenderCopy(renderer, m_heartImage, nullptr, &rect);
+			SDL_RenderCopy(renderer, HEARTIMAGE, nullptr, &rect);
 		}
 	}
 
@@ -322,6 +308,24 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 			heart.Set(Vector2(x, y), HEARTSIZE, HEARTSIZE);
 			x += offset + HEARTSIZE;
 		}
+	}
+
+	void BrickBreaker::InitializeBrickBreakerObjects()
+	{
+		m_players.emplace_back(Paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0)),
+			m_paddleColors.push_back(Colors::purple);
+		m_paddleOutlines.push_back(Colors::violet);
+		m_outlineSizes.push_back(0.05f);
+
+		m_balls.emplace_back(Ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
+
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
+
+		Score score{ Colors::white };
+		score.SetText(MakeText(score.ConvertToString(), score.GetScoreColor()));
+		score.SetPosition(0.0f, 6.0f);
+		score.SetSize(0.5f, 1.0f);
+		m_scores.push_back(score);
 	}
 
 #pragma endregion
