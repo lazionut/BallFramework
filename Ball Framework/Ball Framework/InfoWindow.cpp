@@ -3,11 +3,10 @@
 namespace BallFramework
 {
 
-	InfoWindow::InfoWindow(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint8_t playersNum,
+	InfoWindow::InfoWindow(const std::string& title, uint16_t width, uint16_t height, uint8_t playersNum,
 		uint32_t flags, uint16_t maxFPS, uint16_t widthUnit, uint16_t heightUnit) :
 		Game(title, width, height, flags, maxFPS, widthUnit, heightUnit),
 		m_inputText{ "" },
-		m_font{ font },
 		m_renderer{ nullptr },
 		m_textTexture{ nullptr },
 		m_dialogTexture{ nullptr },
@@ -66,10 +65,10 @@ namespace BallFramework
 		const auto& scale = GetScale();
 
 		SDL_DestroyTexture(m_textTexture);
-		m_textTexture = MakeText(m_inputText, m_textColor, m_font);
+		m_textTexture = MakeText(m_inputText, m_textColor);
 
 		SDL_DestroyTexture(m_dialogTexture);
-		m_dialogTexture = MakeText(m_dialog.GetDialog(), m_textColor, m_font);
+		m_dialogTexture = MakeText(m_dialog.GetDialog(), m_textColor);
 
 		scale.PointToPixel(rect, Vector2(0.0f, 3.0f), m_dialog.GetDialog().length() / 2, m_height / m_height);
 		SDL_RenderCopy(m_renderer, m_dialogTexture, nullptr, &rect);

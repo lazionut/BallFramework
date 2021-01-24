@@ -4,8 +4,8 @@ namespace BallFramework
 {
 
 	Renderer::Renderer(uint16_t widthUnits, uint16_t heightUnit) noexcept
-		: m_renderer{ nullptr }, m_window{ nullptr }, m_backgroundImage{ nullptr },
-		m_scale{ widthUnits, heightUnit,1 ,1 }, m_backgroundColor{ 15, 15, 15, 255 } {}
+		: m_renderer{ nullptr }, m_window{ nullptr }, m_backgroundImage{ nullptr }, m_font{ nullptr },
+		m_scale{ widthUnits, heightUnit, 1, 1 }, m_backgroundColor{ 15, 15, 15, 255 } {}
 
 	bool Renderer::InitRenderer(const char* title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags) noexcept
 	{
@@ -20,8 +20,10 @@ namespace BallFramework
 			{
 				LOGGING_WARN("Renderer created!");
 				m_scale.Set(width, height);
-
-				return true;
+				if (m_renderer) {
+					LoadFont();
+					return true;
+				}
 			}
 		}
 		return false;
@@ -42,6 +44,11 @@ namespace BallFramework
 		return m_backgroundColor;
 	}
 
+	const TTF_Font* Renderer::GetFont() const noexcept
+	{
+		return m_font;
+	}
+
 	[[nodiscard("SDL Texture")]]
 	SDL_Texture* Renderer::LoadGameImage(const std::string& path) const
 	{
@@ -59,9 +66,9 @@ namespace BallFramework
 	}
 
 	[[nodiscard("SDL Texture")]]
-	SDL_Texture* Renderer::MakeText(const std::string& text, const SDL_Color& fontColor, TTF_Font* font) const
+	SDL_Texture* Renderer::MakeText(const std::string& text, const SDL_Color& fontColor) const
 	{
-		SDL_Surface* loadedText = TTF_RenderText_Solid(font, text.c_str(), fontColor);
+		SDL_Surface* loadedText = TTF_RenderText_Solid(m_font, text.c_str(), fontColor);
 		SDL_Texture* sdlText = SDL_CreateTextureFromSurface(m_renderer, loadedText);
 		SDL_FreeSurface(loadedText);
 		return  sdlText;
@@ -111,6 +118,18 @@ namespace BallFramework
 		SDL_DestroyWindow(m_window);
 		SDL_DestroyRenderer(m_renderer);
 		SDL_DestroyTexture(m_backgroundImage);
+		TTF_CloseFont(m_font);
+	}
+
+	[[nodiscard("SDL Font")]]
+	void Renderer::LoadFont()
+	{
+		m_font = TTF_OpenFont("../Assets/Pixel7.ttf", 24);
+		if (m_font == nullptr)
+		{
+			LOGGING_ERROR("Font not found!");
+			TTF_CloseFont(m_font);
+		}
 	}
 
 }

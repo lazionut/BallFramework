@@ -48,9 +48,9 @@ namespace BallFramework
 	}
 
 	[[nodiscard("SDL Texture")]]
-	SDL_Texture* Game::MakeText(const std::string& text, const SDL_Color& fontColor, TTF_Font* font) const
+	SDL_Texture* Game::MakeText(const std::string& text, const SDL_Color& fontColor) const
 	{
-		return m_renderer.MakeText(text, fontColor, font);
+		return m_renderer.MakeText(text, fontColor);
 	}
 
 	const ScreenScale& Game::GetScale() const

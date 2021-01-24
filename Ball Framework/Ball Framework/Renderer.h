@@ -20,11 +20,12 @@ namespace BallFramework
 		SDL_Renderer* GetRenderer() const noexcept;
 		const ScreenScale& GetScale() const noexcept;
 		const SDL_Color& GetBackgroundColor() const noexcept;
+		const TTF_Font* GetFont()const noexcept;
 
 		[[nodiscard("SDL Texture")]]
 		SDL_Texture* LoadGameImage(const std::string& path) const;
 		[[nodiscard("SDL Texture")]]
-		SDL_Texture* MakeText(const std::string& text, const SDL_Color& fontColor, TTF_Font* font) const;
+		SDL_Texture* MakeText(const std::string& text, const SDL_Color& fontColor) const;
 		void ResetRenderer();
 
 		void SetBackgroundColor(const SDL_Color& color) noexcept;
@@ -36,11 +37,15 @@ namespace BallFramework
 	private:
 		void Clean();
 
+		[[nodiscard("SDL Font")]]
+		void LoadFont();
+
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
 		SDL_Texture* m_backgroundImage;
 		ScreenScale m_scale;
 		SDL_Color m_backgroundColor;
+		TTF_Font* m_font;
 	};
 
 }

@@ -19,7 +19,7 @@ namespace BallFramework
 	class BallGame : public Game
 	{
 	public:
-		BallGame(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
+		BallGame(const std::string& title, uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 
 		void SetPlayers(const std::vector<std::string>& players);
 
@@ -43,8 +43,6 @@ namespace BallFramework
 		virtual void CreatePickUp(const Vector2& position) = 0;
 
 	protected:
-		TTF_Font* m_buttonFont;
-
 		float m_lastTimeScale;
 		bool m_isPaused;
 		std::vector<float> m_outlineSizes;

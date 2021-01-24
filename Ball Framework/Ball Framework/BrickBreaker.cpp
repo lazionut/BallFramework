@@ -45,8 +45,8 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 #pragma endregion
 
-	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
-		: BallGame("BrickBreaker", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
+	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
+		: BallGame("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 		m_heartImage{ nullptr },
 		m_heartCounter{ 3 }, m_brickCounter{ BRICKCOUNTER },
@@ -68,12 +68,12 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 		m_players.emplace_back(Paddle(Vector2(0, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0)),
 		m_balls.emplace_back(Ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
 
 		Score score{ Colors::white };
-		score.SetText(MakeText(score.ConvertToString(), Colors::white, m_buttonFont));
+		score.SetText(MakeText(score.ConvertToString(), score.GetScoreColor()));
 		score.SetPosition(0.0f, 6.0f);
-		score.SetSize(0.5f, 0.5f);
+		score.SetSize(0.5f, 1.0f);
 		m_scores.push_back(score);
 
 		if (m_ballImage == nullptr)
@@ -243,7 +243,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 					LOGGING_INFO("BrickBreaker -> ball-brick collision");
 
 					OURSCORE.AddPoints(1);
-					OURSCORE.SetText(MakeText(OURSCORE.ConvertToString(), Colors::white, m_buttonFont));
+					OURSCORE.SetText(MakeText(OURSCORE.ConvertToString(), OURSCORE.GetScoreColor()));
 					return;
 				}
 			}

@@ -14,22 +14,15 @@ namespace BallFramework
 		Game("Ball Games", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 		m_buttons{ buttonsNum }, m_lastButton{ nullptr }
 	{
-		InitMenu();
-	}
-
-	void Menu::InitMenu()
-	{
-		LoadFont();
-		InitButtons();
 	}
 
 	void Menu::Start() 
 	{
+		InitButtons();
 	}
 
 	void Menu::OnClose()
 	{
-		TTF_CloseFont(m_font);
 		DestroyButtons();
 	}
 
@@ -68,22 +61,21 @@ namespace BallFramework
 
 	void Menu::Render(SDL_Renderer* renderer)
 	{
-		m_renderer = renderer;
 		SDL_Rect rect;
 		const auto& scale = GetScale();
 
 		for (auto& button : m_buttons)
 		{
 			scale.PointToPixel(rect, button.GetPosition(), button.GetWidth(), button.GetHeight());
-			SDL_SetRenderDrawColor(m_renderer, button.GetBackColor().r, button.GetBackColor().g,
+			SDL_SetRenderDrawColor(renderer, button.GetBackColor().r, button.GetBackColor().g,
 				button.GetBackColor().b, button.GetBackColor().a);
-			SDL_RenderFillRect(m_renderer, &rect);
+			SDL_RenderFillRect(renderer, &rect);
 			button.SetRect(rect);
 
 			scale.PointToPixel(rect, button.GetPosition().GetX(), button.GetPosition().GetY(),
 				button.GetWidth() - 0.2f, button.GetHeight());
 
-			SDL_RenderCopy(m_renderer, button.GetText(), nullptr, &rect);
+			SDL_RenderCopy(renderer, button.GetText(), nullptr, &rect);
 		}
 	}
 
@@ -111,47 +103,47 @@ namespace BallFramework
 		switch (m_lastButton->GetButtonId())
 		{
 		case 0:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, m_font, SINGLEPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, SINGLEPLAYER, SDL_WINDOW_RESIZABLE, 20);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<Pong>(1000, 500, m_font, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<Pong>(1000, 500, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
 		case 1:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, m_font, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<PongMP>(1000, 500, m_font, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<PongMP>(1000, 500, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
 		case 2:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, m_font, SINGLEPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, SINGLEPLAYER, SDL_WINDOW_RESIZABLE, 20);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<BrickBreaker>(500, 650, m_font, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<BrickBreaker>(500, 650, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
 		case 3:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, m_font, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<BrickBreakerCoop>(500, 650, m_font, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<BrickBreakerCoop>(500, 650, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
 		case 4:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, m_font, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<BrickBreakerVS>(500, 650, m_font, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<BrickBreakerVS>(500, 650, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
@@ -172,21 +164,6 @@ namespace BallFramework
 		m_buttons.clear();
 	}
 
-	void Menu::LoadFont()
-	{
-		m_font = TTF_OpenFont("../Assets/Pixel7.ttf", 24);
-		if (m_font == nullptr)
-		{
-			LOGGING_ERROR("Menu font not found!");
-			TTF_CloseFont(m_font);
-		}
-	}
-
-	TTF_Font* Menu::GetFont()
-	{
-		return m_font;
-	}
-
 	void Menu::InitButtons()
 	{
 		int count = 0;
@@ -196,32 +173,28 @@ namespace BallFramework
 			switch (count) {
 			case 0:
 				button.SetButton(Vector2(0.0f, buttonYPos), 6.0f, 0.7f, Colors::white, Colors::black, "Play Pong Singleplayer", count);
-				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 				break;
 			case 1:
 				button.SetButton(Vector2(0.0f, buttonYPos), 6.0f, 0.7f, Colors::white, Colors::black, "Play Pong Multiplayer", count);
-				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 				break;
 			case 2:
 				button.SetButton(Vector2(0.0f, buttonYPos), 8.0f, 0.7f, Colors::white, Colors::black, "Play BrickBreaker Singleplayer", count);
-				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 				break;
 			case 3:
 				button.SetButton(Vector2(0.0f, buttonYPos), 6.0f, 0.7f, Colors::white, Colors::black, "Play BrickBreaker CO-OP", count);
-				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 				break;
 			case 4:
 				button.SetButton(Vector2(0.0f, buttonYPos), 6.0f, 0.7f, Colors::white, Colors::black, "Play BrickBreaker Versus", count);
-				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 				break;
 			case 5:
 				button.SetButton(Vector2(0.0f, buttonYPos - 1.5f), 3.0f, 0.7f, Colors::white, Colors::black, "Statistics", count);
-				button.SetText(MakeText(button.GetButtonText(), button.GetFontColor(), m_font));
 				break;
 			}
+			button.SetText(MakeText(button.GetButtonText(), button.GetFontColor()));
 			++count;
 			buttonYPos -= 1.5f;
 		}
+
 	}
 
 }

@@ -19,9 +19,6 @@ namespace BallFramework
 	public:
 		Menu(int16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
 
-		void InitMenu();
-		void LoadFont();
-
 		void Start() override;
 		void OnClose() override;
 		void CheckCollision() override;
@@ -40,15 +37,11 @@ namespace BallFramework
 
 		void DestroyButtons();
 
-		TTF_Font* GetFont();
-
 	private:
 		void InitButtons();
 
 	private:
 		std::vector<Button> m_buttons;
-		TTF_Font* m_font;
-		SDL_Renderer* m_renderer;
 		Button* m_lastButton;
 	};
 

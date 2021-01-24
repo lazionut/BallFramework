@@ -36,8 +36,8 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
-	PongMP::PongMP(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
-		: BallGame("Pong - Multiplayer", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
+	PongMP::PongMP(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
+		: BallGame("Pong - Multiplayer", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 		m_bricksNumber{ 0 }, m_player1Name{ playersNames[0] }, m_player2Name{ playersNames[1] }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKCOLUMNS };
@@ -57,7 +57,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 		InitializeScore();
 
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
 
 		m_ballImage = LoadGameImage(Paths::ReturnObjectPath("ball"));
 		m_ballImages.push_back(m_ballImage);
@@ -221,7 +221,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		if (BALL.GetPosition().GetX() < LEFTLIMIT)
 		{
 			PLAYER1SCORE.AddPoints(1);
-			PLAYER1SCORE.SetText(MakeText(PLAYER1SCORE.ConvertToString(), Colors::white, m_buttonFont));
+			PLAYER1SCORE.SetText(MakeText(PLAYER1SCORE.ConvertToString(), PLAYER1SCORE.GetScoreColor()));
 			Repaint();
 			if (PLAYER1SCORE.GetScore() == 5)
 			{
@@ -237,7 +237,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		else if (BALL.GetPosition().GetX() > RIGHTLIMIT)
 		{
 			PLAYER2SCORE.AddPoints(1);
-			PLAYER2SCORE.SetText(MakeText(PLAYER2SCORE.ConvertToString(), Colors::white, m_buttonFont));
+			PLAYER2SCORE.SetText(MakeText(PLAYER2SCORE.ConvertToString(), PLAYER2SCORE.GetScoreColor()));
 			Repaint();
 			if (PLAYER2SCORE.GetScore() == 5)
 			{
@@ -312,12 +312,12 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		score.SetSize(0.5f, 0.5f);
 		score.SetPosition(Vector2(2.0f, 4.0f));
 		m_scores.push_back(score);
-		m_scores.back().SetText(MakeText(score.ConvertToString(), Colors::white, m_buttonFont));
+		m_scores.back().SetText(MakeText(score.ConvertToString(), score.GetScoreColor()));
 
 		score.SetSize(0.5f, 0.5f);
 		score.SetPosition(Vector2(-2.0f, 4.0f));
 		m_scores.push_back(score);
-		m_scores.back().SetText(MakeText(score.ConvertToString(), Colors::white, m_buttonFont));
+		m_scores.back().SetText(MakeText(score.ConvertToString(), score.GetScoreColor()));
 	}
 
 	void PongMP::CreatePickUp(const Vector2& position)

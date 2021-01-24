@@ -46,8 +46,8 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 
 #pragma endregion
 
-	BrickBreakerCoop::BrickBreakerCoop(uint16_t width, uint16_t height, TTF_Font* font, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS) :
-		BallGame("BrickBreakerCoop", width, height, font, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
+	BrickBreakerCoop::BrickBreakerCoop(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS) :
+		BallGame("BrickBreakerCoop", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 		m_heartImage{ nullptr },
 		m_heartCounter{ 3 }, m_brickCounter{ BRICKCOUNTER },
 		m_score{ Colors::white },
@@ -73,11 +73,10 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 		m_players.emplace_back(Paddle(Vector2(LEFTLIMIT + 2.0f, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_a, SDLK_d, 5.0));
 		m_players.emplace_back(Paddle(Vector2(RIGHTLIMIT - 2.0f, LOWERLIMIT + 0.5f), 2.0f, 0.25f, Vector2::left, Vector2::right, SDLK_LEFT, SDLK_RIGHT, 5.0));
 
-		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor(), m_buttonFont));
+		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
 
-		m_score.SetText(MakeText(std::to_string(m_score.GetScore()), Colors::white, m_buttonFont));
-		m_score.SetHeight(1.0f);
-		m_score.SetWidth(0.5f);
+		m_score.SetText(MakeText(std::to_string(m_score.GetScore()), Colors::white));
+		m_score.SetSize(0.5f, 1.0f);
 		m_score.SetPosition(Vector2(0, UPPERLIMIT + 0.1f));
 		m_scores.push_back(m_score);
 
@@ -319,7 +318,7 @@ constexpr auto BRICKCOUNTER = BRICKPERROW * BRICKROWS;
 					LOGGING_INFO("BrickBreaker -> ball-brick collision");
 
 					OURSCORE.AddPoints(1);
-					OURSCORE.SetText(MakeText(OURSCORE.ConvertToString(), Colors::white, m_buttonFont));
+					OURSCORE.SetText(MakeText(OURSCORE.ConvertToString(), OURSCORE.GetScoreColor()));
 					return;
 				}
 			}

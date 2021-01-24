@@ -30,10 +30,12 @@ namespace BallFramework
 		virtual void MouseReleased(const SDL_MouseButtonEvent& mouse) = 0;
 		virtual void Render(SDL_Renderer* renderer) = 0;
 
+		Renderer m_renderer;
+
 		[[nodiscard("SDL Texture")]]
 		SDL_Texture* LoadGameImage(const std::string& path) const;
 		[[nodiscard("SDL Texture")]]
-		SDL_Texture* MakeText(const std::string& text, const SDL_Color& fontColor, TTF_Font* font) const;
+		SDL_Texture* MakeText(const std::string& text, const SDL_Color& fontColor) const;
 
 		const ScreenScale& GetScale() const;
 		void SetBackgroundImage(SDL_Texture* backgroundImage);
@@ -45,7 +47,6 @@ namespace BallFramework
 
 	private:
 		TimeManager m_timeManager;
-		Renderer m_renderer;
 		std::unique_ptr<SDL_Event> m_gameEvent;
 		uint16_t m_maxFPS;
 		bool m_running;

@@ -7,7 +7,7 @@ namespace BallFramework
 	class InfoWindow : public Game
 	{
 	public:
-		InfoWindow(const std::string& title, uint16_t width, uint16_t height, TTF_Font* font, uint8_t playersNum,
+		InfoWindow(const std::string& title, uint16_t width, uint16_t height, uint8_t playersNum,
 			uint32_t flags = 0, uint16_t maxFPS = 0, uint16_t widthUnit = 10, uint16_t heightUnit = 10);
 
 		void Start() override;
@@ -43,8 +43,6 @@ namespace BallFramework
 
 		SDL_Texture* m_textTexture;
 		SDL_Texture* m_dialogTexture;
-
-		TTF_Font* m_font;
 
 		uint16_t m_width;
 		uint16_t m_height;

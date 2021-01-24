@@ -7,7 +7,7 @@ namespace BallFramework
 #define HEIGHTUNITS 10
 
 	TestGame::TestGame(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
-		: BallGame("Test", width, height, nullptr, flags, maxFPS)
+		: BallGame("Test", width, height, flags, maxFPS)
 		/*ballImage{ nullptr },
 		ball{ Vector2(0.0f, 0.5f), 2, Vector2::zero, 5 }, rect{ Vector2::zero, 4, 4 },
 		color{ 0, 255, 0, 255 }*/ {}
