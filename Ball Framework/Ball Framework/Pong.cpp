@@ -270,17 +270,17 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 	{
 		float x = BRICKLIMIT_X, y = BRICKLIMIT_Y;
 
-		Brick temp;
+		Brick temporaryBrick;
 
 		for (auto&& row : m_bricks)
 		{
-			for (int i = 0; i < MAXBRICKSONROW; ++i)
+			for (int index = 0; index < MAXBRICKSONROW; ++index)
 			{
 				if (Random::CoinFlip())
 				{
-					temp.Set(Vector2(x, y), BRICKHEIGHT, BRICKWIDTH);
-					temp.SetColor(Colors::green);
-					row.push_back(temp);
+					temporaryBrick.Set(Vector2(x, y), BRICKHEIGHT, BRICKWIDTH);
+					temporaryBrick.SetColor(Colors::green);
+					row.push_back(temporaryBrick);
 					++m_bricksNumber;
 					LOGGING_INFO("Brick created");
 				}
