@@ -2,7 +2,9 @@
 #include "CppUnitTest.h"
 #include "..\Ball Framework\Random.cpp"
 #include "..\Ball Framework\PlayerEntry.cpp"
-#include "..\Ball Framework\Score.cpp"
+#include "..\Ball Framework\Paths.cpp"
+#include "..\Ball Framework\Time.cpp"
+#include "..\Ball Framework\Colors.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -13,16 +15,16 @@ namespace BallFramework
 	{
 	public:
 
-		TEST_METHOD(RandomClassTest)
+		TEST_METHOD(RandomRangeTest)
 		{
-			uint8_t randomChance = Random::CoinFlip();
-			uint8_t isMinimumExpectedChance = 1;
-			uint8_t isExpectedChance;
+			int randomChance = Random::Range(10, 20);
+			int isRandomExpectedChance = 1;
+			int isExpectedChance;
 
-			if (randomChance >= 50)
+			if (randomChance >= 10 && randomChance < 20)
 				isExpectedChance = 1;
 
-			Assert::AreEqual(isMinimumExpectedChance, isExpectedChance);
+			Assert::AreEqual(isRandomExpectedChance, isExpectedChance);
 		}
 
 		TEST_METHOD(PlayerEntryConstructorTest)
@@ -34,17 +36,29 @@ namespace BallFramework
 			Assert::AreEqual(name, expectedName);
 		}
 
-		TEST_METHOD(PongWinConditionTest)
+		TEST_METHOD(PathTest)
 		{
-			Score score;
-			score.AddPoints(5);
-			uint8_t isWinScore;
-			uint8_t isGameOver = 1;
+			Paths::SetFilePath("..\\Assets\\example");
+			std::string pathExample = "..\\Assets\\example";
+			std::string expectedPath = Paths::GetFilePath();
 
-			if (score.GetScore() == 5)
-				isWinScore = 1;
-		
-			Assert::AreEqual(isWinScore, isGameOver);
+			Assert::AreEqual(pathExample, expectedPath);
+		}
+
+		TEST_METHOD(TimeTest)
+		{
+			Time::SetTimeScale(2);
+			float currentTime = Time::GetUnscaledDeltaTime();
+			float speedUpTime = Time::GetScaledTimeSinceStart();
+
+			Assert::AreNotEqual(currentTime, speedUpTime);
+		}
+
+		TEST_METHOD(CustomColorTest)
+		{
+			Colors::AddCustomColor("colorExample", 100, 0, 10, 100);
+
+			Assert::IsFalse(Colors::RemoveCustomColor("colorExample"));
 		}
 
 	};

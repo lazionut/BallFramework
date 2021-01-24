@@ -177,6 +177,9 @@
     <ProjectReference Include="..\Ball Framework\Ball Framework.vcxproj">
       <Project>{942deeab-35c4-437a-b871-ba5e26bce3a7}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\LoggerDLL\LoggerDLL.vcxproj">
+      <Project>{5048edaf-96f4-40c5-93fe-7d834983c265}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

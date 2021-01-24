@@ -11,7 +11,6 @@ namespace BallFramework
 	class Score : public GameObject
 	{
 	public:
-		Score() = default;
 		Score(const SDL_Color& color);
 		void AddPoints(int16_t points);
 

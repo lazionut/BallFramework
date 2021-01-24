@@ -3,7 +3,7 @@
 namespace BallFramework
 {
 
-	Score::Score(const SDL_Color& color) 
+	Score::Score(const SDL_Color& color)
 		: GameObject(), m_scoreColor{ color }, m_scoreText{ nullptr }, m_points{ 0 } {}
 
 	void Score::AddPoints(int16_t points)
