@@ -40,11 +40,11 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
-	Pong::Pong(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
+	Pong::Pong(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 		: BallGame("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 		m_bricksNumber{ 0 },
-		m_playerName{ playersNames[0] }, m_botName{ "A Certain Kind of Bot" }
+		m_botName{ "A Certain Kind of Bot" }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKCOLUMNS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsPong.txt" };
@@ -323,6 +323,8 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		m_balls.emplace_back(Ball(Vector2::zero, 0.5f, Vector2(pow(-1, Random::Range(2)), 0), 10.0f));
 
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
+
+		m_playerName = m_playersNames.front();
 	}
 
 	void Pong::LoadPongImages()

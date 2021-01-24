@@ -35,6 +35,8 @@ namespace BallFramework
 		bool IsInBounds(Sint32 x, Sint32 y);
 		void PerformAction();
 
+		std::unique_ptr<InfoWindow> MakeWindow(const uint8_t& type);
+
 		void DestroyButtons();
 
 	private:

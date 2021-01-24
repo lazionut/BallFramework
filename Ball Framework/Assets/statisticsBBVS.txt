@@ -1,3 +1,4 @@
-3
+5
+anon 2 2 0
 hello 2 1 1
-dna 3 1 2
+marius 2 0 2

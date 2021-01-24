@@ -54,11 +54,10 @@ namespace BallFramework
 #define HEARTIMG    m_ballImages[0] 
 #pragma endregion
 
-	BallFramework::BrickBreakerVS::BrickBreakerVS(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS) :
+	BallFramework::BrickBreakerVS::BrickBreakerVS(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS) :
 		BallGame("BrickBreakerVS", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 		m_heartCounter1{ 3 }, m_brickCounter1{ BRICKCOUNTER },
-		m_heartCounter2{ 3 }, m_brickCounter2{ BRICKCOUNTER },
-		m_player1Name{ playersNames.front() }
+		m_heartCounter2{ 3 }, m_brickCounter2{ BRICKCOUNTER }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKROWS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsBBVS.txt" };
@@ -495,6 +494,9 @@ namespace BallFramework
 		BALL1.SetId(1);
 		BALL2.SetId(2);
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
+
+		m_player1Name = m_playersNames.front();
+		m_player2Name = m_playersNames.back();
 
 		Score score1{ Colors::red };
 		Score score2{ Colors::white };

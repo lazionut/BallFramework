@@ -17,7 +17,7 @@ namespace BallFramework
 	class BrickBreakerVS : public BallGame
 	{
 	public:
-		BrickBreakerVS(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags = 0, uint16_t maxFPS = 0);
+		BrickBreakerVS(uint16_t width, uint16_t height, uint32_t flags = 0, uint16_t maxFPS = 0);
 
 	private: //override Game class methods
 		void Start() override;

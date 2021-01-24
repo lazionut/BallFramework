@@ -98,52 +98,52 @@ namespace BallFramework
 	void Menu::PerformAction()
 	{
 		std::unique_ptr<InfoWindow> window;
-		std::unique_ptr<Game> game;
+		std::unique_ptr<BallGame> game;
 
 		switch (m_lastButton->GetButtonId())
 		{
 		case 0:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, SINGLEPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = MakeWindow(SINGLEPLAYER);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<Pong>(1000, 500, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<Pong>(1000, 500, SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
 		case 1:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = MakeWindow(MULTIPLAYER);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<PongMP>(1000, 500, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<PongMP>(1000, 500, SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
 		case 2:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, SINGLEPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = MakeWindow(SINGLEPLAYER);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<BrickBreaker>(500, 650, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<BrickBreaker>(500, 650, SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
 		case 3:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = MakeWindow(MULTIPLAYER);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<BrickBreakerCoop>(500, 650, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<BrickBreakerCoop>(500, 650, SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
 		case 4:
-			window = std::make_unique<InfoWindow>("Insert Players", 300, 300, MULTIPLAYER, SDL_WINDOW_RESIZABLE, 20);
+			window = MakeWindow(MULTIPLAYER);
 			window->Run();
 			if (window->GetValidInput())
 			{
-				game = std::make_unique<BrickBreakerVS>(500, 650, window->GetPlayersNames(), SDL_WINDOW_RESIZABLE, 60);
+				game = std::make_unique<BrickBreakerVS>(500, 650, SDL_WINDOW_RESIZABLE, 60);
 			}
 			break;
 
@@ -155,6 +155,7 @@ namespace BallFramework
 
 		if (game.get())
 		{
+			game->SetPlayers(window->GetPlayersNames());
 			game->Run();
 		}
 	}
@@ -194,7 +195,10 @@ namespace BallFramework
 			++count;
 			buttonYPos -= 1.5f;
 		}
+	}
 
+	std::unique_ptr<InfoWindow> Menu::MakeWindow(const uint8_t& type) {
+		return std::make_unique<InfoWindow>("Insert Players", 300, 300, type, SDL_WINDOW_RESIZABLE, 20);
 	}
 
 }

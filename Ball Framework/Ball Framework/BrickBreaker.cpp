@@ -49,10 +49,9 @@ namespace BallFramework
 #define HEARTIMAGE   m_ballImages[0] 
 #pragma endregion
 
-	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
+	BrickBreaker::BrickBreaker(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 		: BallGame("BrickBreaker", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-		m_heartCounter{ 3 }, m_brickCounter{ BRICKCOUNTER },
-		m_playerName{ playersNames.front() }
+		m_heartCounter{ 3 }, m_brickCounter{ BRICKCOUNTER }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKROWS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsBB.txt" };
@@ -316,6 +315,8 @@ namespace BallFramework
 		m_outlineSizes.push_back(0.05f);
 
 		m_balls.emplace_back(Ball(Vector2(0, LOWERLIMIT + 1.0f), 0.5f, Vector2(0, 1), 4.5f));
+		
+		m_playerName = m_playersNames.front();
 
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
 

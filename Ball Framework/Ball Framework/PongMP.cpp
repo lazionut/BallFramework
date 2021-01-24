@@ -37,9 +37,9 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 #pragma endregion
 
-	PongMP::PongMP(uint16_t width, uint16_t height, const std::vector<std::string>& playersNames, uint32_t flags, uint16_t maxFPS)
+	PongMP::PongMP(uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS)
 		: BallGame("Pong - Multiplayer", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
-		m_bricksNumber{ 0 }, m_player1Name{ playersNames[0] }, m_player2Name{ playersNames[1] }
+		m_bricksNumber{ 0 }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKCOLUMNS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsPongMP.txt" };
@@ -307,6 +307,8 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 		m_pauseButton.SetText(MakeText(m_pauseButton.GetButtonText(), m_pauseButton.GetFontColor()));
 
+		m_player1Name = m_playersNames.front();
+		m_player2Name = m_playersNames.back();
 	}
 
 	void PongMP::LoadPongMPImages()
