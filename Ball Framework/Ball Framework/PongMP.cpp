@@ -20,6 +20,9 @@ namespace BallFramework
 #define MAXBRICKSONROW 4
 
 #define PICKUPSPAWNCHANCE 70
+#define ACTIONTIME 5.0f
+#define PICKUPSIZE 0.5f
+#define PICKUPSPEEDCHANGE 2.0f
 
 #define PLAYER1         m_players[0] 
 #define PLAYER2         m_players[1] 
@@ -54,7 +57,7 @@ namespace BallFramework
 		InitializeScore();
 		InitializePongMPObjects();
 		LoadPongMPImages();
-		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::up, 1.0f, 1.0f, 5.0f);
+		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::up, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
 	}
 
 	void PongMP::OnClose()
