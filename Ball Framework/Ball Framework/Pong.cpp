@@ -44,7 +44,7 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 		: BallGame("Pong", width, height, flags, maxFPS, WIDTHUNITS, HEIGHTUNITS),
 
 		m_bricksNumber{ 0 },
-		m_botName{ "A Certain Kind of Bot" }
+		m_botName{ "ACertainKindOfBot" }
 	{
 		m_bricks = std::vector<std::vector<Brick>>{ BRICKCOLUMNS };
 		m_playersStatistics = PlayersStatistics{ "..\\Assets\\statisticsPong.txt" };
