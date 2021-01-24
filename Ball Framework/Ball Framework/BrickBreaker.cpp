@@ -67,7 +67,7 @@ namespace BallFramework
 		LoadBrickBreakerImages();
 		ResetBall();
 		m_pickUpGenerator.SetPickUpDefaultProperties(Vector2::right, PICKUPSIZE, PICKUPSPEEDCHANGE, ACTIONTIME);
-		m_pickUpGenerator.SetGeneratorData(GeneratorData(2.0f, 5.0f, 1.0f, 5.0f, 2.0f, 5));
+		m_pickUpGenerator.SetGeneratorData(BallGame::defaultGeneratorData);
 	}
 
 	void BrickBreaker::ResetBall()
@@ -333,45 +333,19 @@ namespace BallFramework
 	{
 		if (Random::Range(100) > PICKUPSPAWNCHANCE)
 		{
-			m_pickUp.SetActive(true);
+			m_pickUp = m_pickUpGenerator.CreateEmptyPickUp(position);
 
-			auto type = m_pickUpGenerator.GetPickUpType();
-			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(type));
+			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(m_pickUp.GetActionType()));
 
-			switch (m_pickUpGenerator.GetPickUpType())
+			switch (m_pickUp.GetActionType())
 			{
-			case Actions::SPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
-				break;
 			case Actions::PADDLESIZECHANGE:
-				m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(OURPLAYER, PADDLESIZEDIFFERENCE);
-				m_pickUp.SetDirection(Vector2::down);
-				m_pickUp.StartMoving();
-				break;
 			case Actions::PADDLESPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(OURPLAYER, PADDLESPEEDDIFFERENCE);
 				m_pickUp.SetDirection(Vector2::down);
 				m_pickUp.StartMoving();
 				break;
-			case Actions::BALLSIZECHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(OURBALL, BALLSIZEDIFFERENCE);
-				break;
-			case Actions::BALLSPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(OURBALL, BALLSPEEDDIFFERENCE);
-				break;
-			case Actions::BONUSPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
-				break;
-			case Actions::REMOVEPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
-				break;
-			default:
-				m_pickUp.SetActive(false);
-				return;
 			}
-
-			m_pickUp.SetPosition(position);
-			m_pickUp.SetVisible(true);
+			m_pickUp.SetActive(true);
 		}
 		else
 		{
