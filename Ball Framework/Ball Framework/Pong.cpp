@@ -349,14 +349,17 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 	void Pong::CreatePickUp(const Vector2& position)
 	{
-		if (Random::Range(100) > PICKUPSPAWNCHANCE)
+		if ((Random::Range(100)) > PICKUPSPAWNCHANCE)
 		{
 			m_pickUp = m_pickUpGenerator.CreateEmptyPickUp(position);
-
+			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(m_pickUp.GetActionType()));
+			m_pickUp.SetActive(true);
+			m_pickUp.SetVisible(true);
 			switch (m_pickUp.GetActionType())
 			{
+			case Actions::SPEEDCHANGE:
+				break;
 			case Actions::PADDLESIZECHANGE:
-			case Actions::PADDLESPEEDCHANGE:
 				if (Random::CoinFlip())
 				{
 					m_pickUp.SetDirection(Vector2::left);
@@ -367,13 +370,18 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 				}
 				m_pickUp.StartMoving();
 				break;
-			case Actions::BONUSPOINTS:
-			case Actions::REMOVEPOINTS:
+			case Actions::PADDLESPEEDCHANGE:
+			case Actions::BALLSIZECHANGE:
+			case Actions::BALLSPEEDCHANGE:
+			case Actions::BONUSPOINTS:m_pickUp.SetVisible(false);
+			case Actions::REMOVEPOINTS:m_pickUp.SetVisible(false);
+			default:
 				m_pickUp.SetActive(false);
-				return;
+				break;
 			}
 
-			m_pickUp.SetActive(true);
+			/*	m_pickUp.SetPosition(position);
+				m_pickUp.SetVisible(true);*/
 		}
 		else
 		{

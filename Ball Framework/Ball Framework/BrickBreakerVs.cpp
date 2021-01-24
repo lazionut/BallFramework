@@ -531,65 +531,29 @@ namespace BallFramework
 
 	void BrickBreakerVS::CreatePickUp(const Vector2& position)
 	{
-		if (Random::Range(100) > PICKUPSPAWNCHANCE)
+		if ((Random::Range(100)) > PICKUPSPAWNCHANCE)
 		{
+			m_pickUp = m_pickUpGenerator.CreateEmptyPickUp(position);
+			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(m_pickUp.GetActionType()));
 			m_pickUp.SetActive(true);
-
-			auto type = m_pickUpGenerator.GetPickUpType();
-			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(type));
-
-			switch (m_pickUpGenerator.GetPickUpType())
+			m_pickUp.SetVisible(true);
+			switch (m_pickUp.GetActionType())
 			{
 			case Actions::SPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
 				break;
 			case Actions::PADDLESIZECHANGE:
-				if (m_lastPaddleHit)
-					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER1, PADDLESIZEDIFFERENCE);
-				else
-					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER2, PADDLESIZEDIFFERENCE);
 				m_pickUp.SetDirection(Vector2::down);
 				m_pickUp.StartMoving();
 				break;
 			case Actions::PADDLESPEEDCHANGE:
-				if (m_lastPaddleHit)
-					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER1, PADDLESPEEDDIFFERENCE);
-				else
-					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER2, PADDLESPEEDDIFFERENCE);
-				m_pickUp.SetDirection(Vector2::down);
-				m_pickUp.StartMoving();
-				break;
 			case Actions::BALLSIZECHANGE:
-				if (m_switchBall)
-					m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(BALL1, BALLSIZEDIFFERENCE);
-				else
-					m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(BALL2, BALLSIZEDIFFERENCE);
-				break;
 			case Actions::BALLSPEEDCHANGE:
-				if (m_switchBall)
-					m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL1, BALLSPEEDDIFFERENCE);
-				else
-					m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL2, BALLSPEEDDIFFERENCE);
-				break;
-			case Actions::BONUSPOINTS:
-				if (m_switchBall)
-					m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(SCORE1, Random::Range(1, MAXSCOREDIFFERENCE));
-				else
-					m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(SCORE2, Random::Range(1, MAXSCOREDIFFERENCE));
-				break;
-			case Actions::REMOVEPOINTS:
-				if (m_switchBall)
-					m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(SCORE1, Random::Range(1, MAXSCOREDIFFERENCE));
-				else
-					m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(SCORE2, Random::Range(1, MAXSCOREDIFFERENCE));
-				break;
+			case Actions::BONUSPOINTS:m_pickUp.SetVisible(false);
+			case Actions::REMOVEPOINTS:m_pickUp.SetVisible(false);
 			default:
 				m_pickUp.SetActive(false);
 				break;
 			}
-
-			m_pickUp.SetPosition(position);
-			m_pickUp.SetVisible(true);
 		}
 		else
 		{

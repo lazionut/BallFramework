@@ -120,8 +120,6 @@ namespace BallFramework
 	{
 		SDL_Rect aux;
 		decltype(auto) scale = GetScale();
-
-		//if (m_isPickActive)
 		if(m_pickUp.IsVisible())
 		{
 			scale.PointToPixel(aux, m_pickUp.GetPosition(), m_pickUp.GetSize(), m_pickUp.GetSize());
@@ -230,8 +228,8 @@ namespace BallFramework
 				}
 			}
 
-			if (m_pickUp.GetPosition().GetX() < -10 || m_pickUp.GetPosition().GetX() > 10
-				|| m_pickUp.GetPosition().GetY() < -10 || m_pickUp.GetPosition().GetY() > 10)
+			if (m_pickUp.GetPosition().GetX() < -15 || m_pickUp.GetPosition().GetX() > 15
+				|| m_pickUp.GetPosition().GetY() < -15 || m_pickUp.GetPosition().GetY() > 15)
 			{
 				m_pickUp.SetVisible(false);
 			}

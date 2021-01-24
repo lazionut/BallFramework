@@ -331,26 +331,33 @@ namespace BallFramework
 
 	void BrickBreaker::CreatePickUp(const Vector2& position)
 	{
-		if (Random::Range(100) > PICKUPSPAWNCHANCE)
+		if ((Random::Range(100)) > PICKUPSPAWNCHANCE)
 		{
 			m_pickUp = m_pickUpGenerator.CreateEmptyPickUp(position);
-
 			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(m_pickUp.GetActionType()));
-
+			m_pickUp.SetActive(true);
+			m_pickUp.SetVisible(true);
 			switch (m_pickUp.GetActionType())
 			{
+			case Actions::SPEEDCHANGE:
+				break;
 			case Actions::PADDLESIZECHANGE:
-			case Actions::PADDLESPEEDCHANGE:
 				m_pickUp.SetDirection(Vector2::down);
 				m_pickUp.StartMoving();
 				break;
+			case Actions::PADDLESPEEDCHANGE:
+			case Actions::BALLSIZECHANGE:
+			case Actions::BALLSPEEDCHANGE:
+			case Actions::BONUSPOINTS:m_pickUp.SetVisible(false);
+			case Actions::REMOVEPOINTS:m_pickUp.SetVisible(false);
+			default:
+				m_pickUp.SetActive(false);
+				break;
 			}
-			m_pickUp.SetActive(true);
 		}
 		else
 		{
 			m_pickUp.SetActive(false);
 		}
 	}
-
 }

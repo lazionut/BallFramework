@@ -332,62 +332,40 @@ constexpr auto RIGHTLIMIT = WIDTHUNITS / 2;
 
 	void PongMP::CreatePickUp(const Vector2& position)
 	{
-		if (Random::Range(100) > PICKUPSPAWNCHANCE)
+		if ((Random::Range(100)) > PICKUPSPAWNCHANCE)
 		{
+
+			m_pickUp = m_pickUpGenerator.CreateEmptyPickUp(position);
+			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(m_pickUp.GetActionType()));
 			m_pickUp.SetActive(true);
-			auto random = Random::CoinFlip();
-			auto difference = 0.0f;
-
-			auto type = m_pickUpGenerator.GetPickUpType();
-			LOGGING_INFO("PongMP -> pick-up type is: {0}", static_cast<int>(type));
-
-			switch (type)
+			m_pickUp.SetVisible(true);
+			switch (m_pickUp.GetActionType())
 			{
 			case Actions::SPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
-				m_pickUp.StartMoving();
 				break;
 			case Actions::PADDLESIZECHANGE:
-				difference = 3;
-				if (random)
+				if (Random::CoinFlip())
 				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER1, difference);
-					m_pickUp.SetDirection(PLAYER1.GetPosition() - position);
+					m_pickUp.SetDirection(Vector2::left);
 				}
 				else
 				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER2, difference);
-					m_pickUp.SetDirection(PLAYER1.GetPosition() - position);
+					m_pickUp.SetDirection(Vector2::right);
 				}
 				m_pickUp.StartMoving();
 				break;
 			case Actions::PADDLESPEEDCHANGE:
-				difference = 3;
-				if (random)
-				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER1, difference);
-					m_pickUp.SetDirection(PLAYER1.GetPosition() - position);
-				}
-				else
-				{
-					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER2, difference);
-					m_pickUp.SetDirection(PLAYER1.GetPosition() - position);
-				}
-				m_pickUp.StartMoving();
-				break;
 			case Actions::BALLSIZECHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(BALL, 2);
-				break;
 			case Actions::BALLSPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(BALL, 2);
-				break;
+			case Actions::BONUSPOINTS:m_pickUp.SetVisible(false);
+			case Actions::REMOVEPOINTS:m_pickUp.SetVisible(false);
 			default:
 				m_pickUp.SetActive(false);
-				return;
+				break;
 			}
 
-			m_pickUp.SetPosition(position);
-			m_pickUp.SetVisible(true);
+			/*	m_pickUp.SetPosition(position);
+				m_pickUp.SetVisible(true);*/
 		}
 		else
 		{

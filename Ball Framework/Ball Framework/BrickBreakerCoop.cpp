@@ -372,51 +372,28 @@ namespace BallFramework
 	{
 		if ((Random::Range(100)) > PICKUPSPAWNCHANCE)
 		{
+
+			m_pickUp = m_pickUpGenerator.CreateEmptyPickUp(position);
+			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(m_pickUp.GetActionType()));
 			m_pickUp.SetActive(true);
-
-			auto type = m_pickUpGenerator.GetPickUpType();
-			LOGGING_INFO("BrickBreaker -> pick-up type is: {0}", static_cast<int>(type));
-
-			switch (m_pickUpGenerator.GetPickUpType())
+			m_pickUp.SetVisible(true);
+			switch (m_pickUp.GetActionType())
 			{
 			case Actions::SPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateSpeedPickUp();
 				break;
 			case Actions::PADDLESIZECHANGE:
-				if (m_lastPaddleHit)
-					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER1, PADDLESIZEDIFFERENCE);
-				else
-					m_pickUp = m_pickUpGenerator.CreatePaddleSizeChangePickUp(PLAYER2, PADDLESIZEDIFFERENCE);
 				m_pickUp.SetDirection(Vector2::down);
 				m_pickUp.StartMoving();
 				break;
 			case Actions::PADDLESPEEDCHANGE:
-				if (m_lastPaddleHit)
-					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER1, PADDLESPEEDDIFFERENCE);
-				else
-					m_pickUp = m_pickUpGenerator.CreatePaddleSpeedChangePickUp(PLAYER2, PADDLESPEEDDIFFERENCE);
-				m_pickUp.SetDirection(Vector2::down);
-				m_pickUp.StartMoving();
-				break;
 			case Actions::BALLSIZECHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSizeChangePickUp(OURBALL, BALLSIZEDIFFERENCE);
-				break;
 			case Actions::BALLSPEEDCHANGE:
-				m_pickUp = m_pickUpGenerator.CreateBallSpeedChangePickUp(OURBALL, BALLSPEEDDIFFERENCE);
-				break;
-			case Actions::BONUSPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateBonusPointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
-				break;
-			case Actions::REMOVEPOINTS:
-				m_pickUp = m_pickUpGenerator.CreateRemovePointsPickUp(OURSCORE, Random::Range(1, MAXSCOREDIFFERENCE));
-				break;
+			case Actions::BONUSPOINTS:m_pickUp.SetVisible(false);
+			case Actions::REMOVEPOINTS:m_pickUp.SetVisible(false);
 			default:
 				m_pickUp.SetActive(false);
 				break;
 			}
-
-			m_pickUp.SetPosition(position);
-			m_pickUp.SetVisible(true);
 		}
 		else
 		{
