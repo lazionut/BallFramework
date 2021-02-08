@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Vector2.h"
 #include <cstdint>
 #include <SDL.H>

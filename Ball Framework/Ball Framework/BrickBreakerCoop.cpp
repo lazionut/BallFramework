@@ -232,7 +232,6 @@ namespace BallFramework
 					difference = abs(OURBALL.GetPosition().GetX() - PLAYER1.GetPosition().GetX());
 
 					if (OURBALL.GetPosition().GetX() >= PLAYER1.GetPosition().GetX())
-						//mingea isi schimba dir  axa x in functie de unde pica pe paleta
 					{
 						OURBALL.GetDirection().SetX(difference);
 					}
@@ -246,7 +245,6 @@ namespace BallFramework
 				{
 					difference = abs(OURBALL.GetPosition().GetX() - PLAYER2.GetPosition().GetX());
 					if (OURBALL.GetPosition().GetX() >= PLAYER2.GetPosition().GetX())
-						//mingea isi schimba dir  axa x in functie de unde pica pe paleta
 					{
 						OURBALL.GetDirection().SetX(difference);
 					}

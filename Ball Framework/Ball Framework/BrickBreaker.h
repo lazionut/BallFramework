@@ -1,6 +1,5 @@
 #pragma once
-#include <SDL_ttf.h>
-#include <optional>
+
 #include "BallGame.h"
 
 namespace BallFramework

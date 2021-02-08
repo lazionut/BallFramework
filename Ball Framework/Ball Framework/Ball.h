@@ -1,4 +1,5 @@
 #pragma once
+
 #include "MovableObject.h"
 #include "Rectangle.h"
 

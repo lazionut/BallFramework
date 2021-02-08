@@ -1,16 +1,6 @@
 #pragma once
-#include <SDL_ttf.h>
-#include <optional>
-#include "Game.h"
+
 #include "BallGame.h"
-#include "ScreenScale.h"
-#include "Paddle.h"
-#include "Ball.h"
-#include "PickUpGenerator.h"
-#include "Score.h"
-#include "Button.h"
-#include "PlayersStatistics.h"
-#include "Paths.h"
 
 namespace BallFramework
 {

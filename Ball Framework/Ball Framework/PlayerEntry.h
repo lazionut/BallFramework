@@ -1,4 +1,5 @@
 #pragma once
+
 #include<string>
 
 namespace BallFramework
@@ -34,7 +35,6 @@ namespace BallFramework
 	private:
 		std::string m_playerName;
 		int m_gamesPlayed, m_gamesWon, m_gamesLost;
-		//TO DO : highscore;
 	};
 
 }

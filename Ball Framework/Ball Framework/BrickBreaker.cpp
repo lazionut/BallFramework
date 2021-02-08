@@ -156,7 +156,7 @@ namespace BallFramework
 	{
 		if (OURBALL.CheckCollision(OURPLAYER))
 		{
-			if (OURBALL.GetPosition().GetY() >= OURPLAYER.GetPosition().GetY() + OURPLAYER.GetHeight() / 2) //temporary solution to a bug
+			if (OURBALL.GetPosition().GetY() >= OURPLAYER.GetPosition().GetY() + OURPLAYER.GetHeight() / 2) 
 			{
 				float difference = abs(OURBALL.GetPosition().GetX() - OURPLAYER.GetPosition().GetX());
 				OURBALL.GetDirection().GetY() *= -1;

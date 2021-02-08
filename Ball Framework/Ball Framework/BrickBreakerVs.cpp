@@ -150,13 +150,12 @@ namespace BallFramework
 	{
 		if (BALL1.CheckCollision(PLAYER1))
 		{
-			if (BALL1.GetPosition().GetY() >= PLAYER1.GetPosition().GetY() + PLAYER1.GetHeight() / 2) //temporary solution to a bug
+			if (BALL1.GetPosition().GetY() >= PLAYER1.GetPosition().GetY() + PLAYER1.GetHeight() / 2)
 			{
 				float difference = abs(BALL1.GetPosition().GetX() - PLAYER1.GetPosition().GetX());
 				BALL1.GetDirection().GetY() *= -1;
 
 				if (BALL1.GetPosition().GetX() >= PLAYER1.GetPosition().GetX())
-					// mingea isi schimba dir pe axa x in functie de unde pica pe paleta
 				{
 					BALL1.GetDirection().SetX(difference);
 				}
@@ -176,13 +175,12 @@ namespace BallFramework
 
 		if (BALL2.CheckCollision(PLAYER2))
 		{
-			if (BALL2.GetPosition().GetY() >= PLAYER2.GetPosition().GetY() + PLAYER2.GetHeight() / 2) //temporary solution to a bug
+			if (BALL2.GetPosition().GetY() >= PLAYER2.GetPosition().GetY() + PLAYER2.GetHeight() / 2) 
 			{
 				float difference = abs(BALL2.GetPosition().GetX() - PLAYER2.GetPosition().GetX());
 				BALL2.GetDirection().GetY() *= -1;
 
 				if (BALL2.GetPosition().GetX() >= PLAYER2.GetPosition().GetX())
-					//mingea isi schimba dir pe axa x in functie de unde pica pe paleta
 				{
 					BALL2.GetDirection().SetX(difference);
 				}
@@ -444,8 +442,8 @@ namespace BallFramework
 
 	void BrickBreakerVS::LoadBrickBreakerVSImages()
 	{
-		BALL1.SetImage(LoadGameImage(Paths::ReturnObjectPath("redBall"))); //first red
-		BALL2.SetImage(LoadGameImage(Paths::ReturnObjectPath("ball"))); // second white
+		BALL1.SetImage(LoadGameImage(Paths::ReturnObjectPath("redBall")));
+		BALL2.SetImage(LoadGameImage(Paths::ReturnObjectPath("ball")));
 		m_ballImages.push_back(LoadGameImage(Paths::ReturnObjectPath("redHeart")));
 		m_pickUpImage = LoadGameImage(Paths::ReturnObjectPath("star"));
 
