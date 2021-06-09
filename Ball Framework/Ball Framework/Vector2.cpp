@@ -72,9 +72,9 @@ namespace BallFramework
 
 	void Vector2::Normalize()
 	{
-		float length = GetLength();
-		m_x /= length;
-		m_y /= length;
+		float length = FastInverseSqrt(GetSquareLength());
+		m_x *= length;
+		m_y *= length;
 	}
 
 	Vector2 Vector2::GetNormalized()
@@ -167,6 +167,23 @@ namespace BallFramework
 	bool Vector2::operator!=(const Vector2& other) const
 	{
 		return GetSquareLength() != other.GetSquareLength();
+	}
+
+	float Vector2::FastInverseSqrt(float number) const noexcept
+	{
+		long i;
+		float x2, y;
+		const float threehalfs = 1.5F;
+
+		x2 = number * 0.5F;
+		y = number;
+		i = *(long*)&y;                       // evil floating point bit level hacking
+		i = 0x5f3759df - (i >> 1);               // what the fuck? 
+		y = *(float*)&i;
+		y = y * (threehalfs - (x2 * y * y));   // 1st iteration
+	//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
+
+		return y;
 	}
 
 	std::istream& operator>>(std::istream& input, Vector2& other)

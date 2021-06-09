@@ -53,6 +53,8 @@ namespace BallFramework
 	private:
 		float m_x;
 		float m_y;
+
+		float FastInverseSqrt(float number) const noexcept;
 	};
 
 }

@@ -3,11 +3,10 @@
 #include <chrono>
 #include "Time.h"
 
+using namespace std::chrono;
+
 namespace BallFramework
 {
-
-	using namespace std::chrono;
-
 	class TimeManager
 	{
 	private:
@@ -25,5 +24,4 @@ namespace BallFramework
 
 		double GetRealDelta() const noexcept;
 	};
-
 }
