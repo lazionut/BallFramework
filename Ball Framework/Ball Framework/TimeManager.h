@@ -12,8 +12,8 @@ namespace BallFramework
 	private:
 		double m_realDelta;
 
-		time_point<system_clock> m_last;
-		time_point<system_clock> m_now;
+		time_point<steady_clock> m_last;
+		time_point<steady_clock> m_now;
 
 	public:
 		TimeManager() noexcept;

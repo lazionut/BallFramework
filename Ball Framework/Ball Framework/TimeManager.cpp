@@ -4,7 +4,7 @@ namespace BallFramework
 {
 
 	TimeManager::TimeManager() noexcept
-		: m_realDelta{ 0.0 }, m_now{ system_clock::now() }, m_last{ system_clock::now() } {}
+		: m_realDelta{ 0.0 }, m_now{ steady_clock::now() }, m_last{ steady_clock::now() } {}
 
 	void TimeManager::ResetTime() noexcept
 	{
@@ -17,7 +17,7 @@ namespace BallFramework
 
 	void TimeManager::UpdateTime() noexcept
 	{
-		m_now = system_clock::now();
+		m_now = steady_clock::now();
 
 		duration<double> dif = m_now - m_last;
 		m_realDelta = dif.count();

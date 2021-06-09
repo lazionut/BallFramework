@@ -37,8 +37,7 @@ namespace BallFramework
 	private:
 		void Clean();
 
-		[[nodiscard("SDL Font")]]
-		void LoadFont();
+		void LoadFont(std::string path);
 
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;

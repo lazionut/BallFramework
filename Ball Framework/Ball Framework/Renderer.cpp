@@ -20,8 +20,9 @@ namespace BallFramework
 			{
 				LOGGING_WARN("Renderer created!");
 				m_scale.Set(width, height);
-				if (m_renderer) {
-					LoadFont();
+				if (m_renderer) 
+				{
+					LoadFont("../Assets/Pixel7.ttf");
 					return true;
 				}
 			}
@@ -121,15 +122,13 @@ namespace BallFramework
 		TTF_CloseFont(m_font);
 	}
 
-	[[nodiscard("SDL Font")]]
-	void Renderer::LoadFont()
+	void Renderer::LoadFont(std::string path)
 	{
-		m_font = TTF_OpenFont("../Assets/Pixel7.ttf", 24);
+		m_font = TTF_OpenFont(path.c_str(), 24);
 		if (m_font == nullptr)
 		{
 			LOGGING_ERROR("Font not found!");
 			TTF_CloseFont(m_font);
 		}
 	}
-
 }

@@ -158,7 +158,7 @@ namespace BallFramework
 				MouseReleased(m_gameEvent->button);
 				break;
 			case SDL_WINDOWEVENT:
-				HandleWindowEvents(m_gameEvent);
+				HandleWindowEvents();
 				break;
 			default:
 				break;
@@ -166,9 +166,9 @@ namespace BallFramework
 		}
 	}
 
-	void Game::HandleWindowEvents(std::unique_ptr<SDL_Event>& gameEvent)
+	void Game::HandleWindowEvents()
 	{
-		switch (gameEvent->window.event)
+		switch (m_gameEvent->window.event)
 		{
 		//case SDL_WINDOWEVENT_SHOWN:
 		//	SDL_Log("Window %d shown", gameEvent->window.windowID);
@@ -184,7 +184,7 @@ namespace BallFramework
 			LOGGING_WARN("Window moved!");
 			break;
 		case SDL_WINDOWEVENT_RESIZED:
-			m_renderer.SetSize(gameEvent->window.data1, gameEvent->window.data2);
+			m_renderer.SetSize(m_gameEvent->window.data1, m_gameEvent->window.data2);
 			break;
 		case SDL_WINDOWEVENT_MINIMIZED:
 			m_lastTime = Time::GetTimeScale();
@@ -200,10 +200,10 @@ namespace BallFramework
 			LOGGING_WARN("Window maximazed!");
 			break;
 		case SDL_WINDOWEVENT_ENTER:
-			LOGGING_WARN("Window entered, window id: {0}", gameEvent->window.windowID);
+			LOGGING_WARN("Window entered, window id: {0}", m_gameEvent->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_LEAVE:
-			LOGGING_WARN("Window leave, window id: {0}", gameEvent->window.windowID);
+			LOGGING_WARN("Window leave, window id: {0}", m_gameEvent->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
 			break;
@@ -214,7 +214,7 @@ namespace BallFramework
 			LOGGING_WARN("Window closed!");
 			break;
 		default:
-			LOGGING_WARN("unknown event: {0}", gameEvent->window.event);
+			LOGGING_WARN("unknown event: {0}", m_gameEvent->window.event);
 			break;
 		}
 	}

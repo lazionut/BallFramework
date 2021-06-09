@@ -55,7 +55,7 @@ namespace BallFramework
 		void GameLoop();
 
 		void HandleEvents();
-		void HandleWindowEvents(std::unique_ptr<SDL_Event>& gameEvent);
+		void HandleWindowEvents();
 
 		void InitGame(const std::string& title, int32_t x, int32_t y, uint16_t width, uint16_t height, uint32_t flags, uint16_t maxFPS);
 		void Clean();
