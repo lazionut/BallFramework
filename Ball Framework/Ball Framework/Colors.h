@@ -34,8 +34,8 @@ namespace BallFramework
 		static SDL_Color ReturnCustomColor(std::string colorName);
 
 	private:
-		Colors();
-		static std::unordered_map<std::string, std::tuple<uint8_t, uint8_t, uint8_t, uint8_t>> s_CustomColors;
+		Colors() = delete;
+		static std::unordered_map<std::string, SDL_Color> s_CustomColors;
 	};
 
 }

@@ -348,8 +348,12 @@ namespace BallFramework
 			case Actions::PADDLESPEEDCHANGE:
 			case Actions::BALLSIZECHANGE:
 			case Actions::BALLSPEEDCHANGE:
-			case Actions::BONUSPOINTS:m_pickUp.SetVisible(false);
-			case Actions::REMOVEPOINTS:m_pickUp.SetVisible(false);
+			case Actions::BONUSPOINTS:
+				m_pickUp.SetVisible(false);
+				break;
+			case Actions::REMOVEPOINTS:
+				m_pickUp.SetVisible(false);
+				break;
 			default:
 				m_pickUp.SetActive(false);
 				break;

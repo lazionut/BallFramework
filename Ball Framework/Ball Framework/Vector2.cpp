@@ -11,13 +11,11 @@ namespace BallFramework
 	const Vector2 Vector2::left = Vector2{ -1.0f, 0.0f };
 	const Vector2 Vector2::right = Vector2{ 1.0f, 0.0f };
 
-	Vector2::Vector2() :
-		m_x{ 0.0f }, m_y{ 0.0f } {
-	}
+	Vector2::Vector2() 
+		: m_x{ 0.0f }, m_y{ 0.0f } {}
 
-	Vector2::Vector2(float x, float y) :
-		m_x{ x }, m_y{ y } {
-	}
+	Vector2::Vector2(float x, float y) 
+		: m_x{ x }, m_y{ y } {}
 
 	Vector2::Vector2(const Vector2& other)
 	{

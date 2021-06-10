@@ -6,7 +6,6 @@
 
 namespace BallFramework
 {
-
 	class PickUpActions
 	{
 	public:
@@ -30,5 +29,4 @@ namespace BallFramework
 
 		static void RemovePoints(Score& score, int points);
 	};
-
 }

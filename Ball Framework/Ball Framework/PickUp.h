@@ -8,7 +8,6 @@
 
 namespace BallFramework
 {
-
 	class PickUp : public Ball
 	{
 	public:
@@ -43,5 +42,4 @@ namespace BallFramework
 
 		Actions m_actionType;
 	};
-
 }

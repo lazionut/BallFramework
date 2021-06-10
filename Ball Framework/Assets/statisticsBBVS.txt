@@ -1,7 +1,9 @@
-6
+8
 anon 2 2 0
 dny 1 1 0
+achi 1 1 0
 hello 3 1 2
+andrei 1 0 1
 marius 2 0 2
 marius 2 0 2
 marius 2 0 2

@@ -4,7 +4,6 @@
 
 namespace BallFramework
 {
-
 	enum class Actions : uint8_t
 	{
 		NONE,
@@ -20,8 +19,6 @@ namespace BallFramework
 		BONUSPOINTS,
 		REMOVEPOINTS,
 
-		//numarul de actiuni
 		ACTIONSNUMBER
 	};
-
 }

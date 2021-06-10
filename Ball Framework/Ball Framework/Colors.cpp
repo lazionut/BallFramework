@@ -2,7 +2,6 @@
 
 namespace BallFramework
 {
-
 	const SDL_Color Colors::white = SDL_Color{ 255, 255, 255, 255 };
 	const SDL_Color Colors::black = SDL_Color{ 0, 0, 0, 255 };
 	const SDL_Color Colors::red = SDL_Color{ 255, 0, 0, 255 };
@@ -18,17 +17,17 @@ namespace BallFramework
 	const SDL_Color Colors::brown = SDL_Color{ 130, 65, 65, 255 };
 	const SDL_Color Colors::gray = SDL_Color{ 130, 130, 130, 255 };
 
-	std::unordered_map<std::string, std::tuple<uint8_t, uint8_t, uint8_t, uint8_t>> Colors::s_CustomColors;
+	std::unordered_map<std::string, SDL_Color> Colors::s_CustomColors;
 
 	void Colors::AddCustomColor(std::string colorName, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t a = 255)
 	{
-		s_CustomColors[colorName] = std::make_tuple(r, g, b, a);
+		s_CustomColors[colorName] = SDL_Color{ r, b, b, a };
 	}
 
 	void Colors::AddCustomColor(std::string colorName, SDL_Color color)
 	{
 		auto&& [r, g, b, a] = color;
-		s_CustomColors[colorName] = std::make_tuple(r, g, b, a);
+		s_CustomColors[colorName] = color;
 	}
 
 	bool Colors::RemoveCustomColor(std::string colorName)
@@ -52,9 +51,4 @@ namespace BallFramework
 		}
 		return SDL_Color{ 0,0,0,0 };
 	}
-
-	Colors::Colors()
-	{
-	}
-
 }

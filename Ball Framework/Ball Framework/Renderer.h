@@ -9,7 +9,6 @@
 
 namespace BallFramework
 {
-
 	class Renderer
 	{
 	public:
@@ -46,5 +45,4 @@ namespace BallFramework
 		SDL_Color m_backgroundColor;
 		TTF_Font* m_font;
 	};
-
 }

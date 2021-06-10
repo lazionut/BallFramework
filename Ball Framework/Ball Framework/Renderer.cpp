@@ -110,7 +110,6 @@ namespace BallFramework
 
 	Renderer::~Renderer()
 	{
-		LOGGING_WARN("Renderer cleaned!");
 		Clean();
 	}
 
@@ -120,6 +119,8 @@ namespace BallFramework
 		SDL_DestroyRenderer(m_renderer);
 		SDL_DestroyTexture(m_backgroundImage);
 		TTF_CloseFont(m_font);
+
+		LOGGING_WARN("Renderer cleaned!");
 	}
 
 	void Renderer::LoadFont(std::string path)

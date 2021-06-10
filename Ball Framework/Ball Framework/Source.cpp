@@ -32,11 +32,7 @@ bool initializeSDL()
 int main(int argc, char** argv)
 {
 	Logger::Initialize();
-
 	Paths::SetFilePath("../Assets/assetsPaths.txt");
-
-	srand(time(nullptr));
-
 	Random::SetRandomSeed();
 
 	if (initializeSDL())
